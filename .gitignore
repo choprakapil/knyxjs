@@ -1,36 +1,58 @@
-# NEXT.JS BUILD
+# ===============================
+# Dependencies
+# ===============================
+node_modules/
+
+# ===============================
+# Next.js
+# ===============================
 .next/
 out/
-dist/
+build/
 
-next.config.zip
+# ===============================
+# Environment files
+# ===============================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# NODE
-node_modules/
+# ===============================
+# Logs
+# ===============================
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# ENV FILES
-.env
-.env.local
-.env.development
-.env.production
-.env.test
-
-# LOG FILES
-*.log
-logs/
-
-# MAC SYSTEM FILES
+# ===============================
+# OS / Editor junk
+# ===============================
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
 
-# EDITOR FILES
-.idea/
+# ===============================
+# IDEs
+# ===============================
 .vscode/
+.idea/
 *.swp
+*.swo
 
-# OPTIONAL (exported builds)
-export/
+# ===============================
+# Cache
+# ===============================
+.cache/
+.eslintcache
 
+# ===============================
+# Optional (keep ignored)
+# ===============================
+coverage/
+dist/
