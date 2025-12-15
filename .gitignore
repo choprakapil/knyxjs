@@ -1,0 +1,36 @@
+# NEXT.JS BUILD
+.next/
+out/
+dist/
+
+next.config.zip
+
+# NODE
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ENV FILES
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# LOG FILES
+*.log
+logs/
+
+# MAC SYSTEM FILES
+.DS_Store
+
+# EDITOR FILES
+.idea/
+.vscode/
+*.swp
+
+# OPTIONAL (exported builds)
+export/
+
