@@ -46,7 +46,7 @@ export default function HomePage() {
             {/* <PortfolioSection /> */}
             {/* <PricingSection /> */}
             <TestimonialSection />
-            <FaqSection />
+            {/* <FaqSection /> */}
             <CtaSection />
             <BlogSection />
           </main>

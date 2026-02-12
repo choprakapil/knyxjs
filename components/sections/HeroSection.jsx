@@ -89,11 +89,22 @@ const HeroSection = () => (
           <div className="tp-brand-wrap tp-hero-ai-brand pt-75">
             <div className="swiper tp-brand-slide-active">
               <div className="swiper-wrapper slide-transtion">
-                {['logo.png', 'logo-3.png', 'logo.png', 'logo-3.png', 'logo.png', 'logo-3.png', 'logo.png', 'logo-3.png', 'logo.png'].map((logo, index) => (
-                  <div key={`${logo}-${index}`} className="swiper-slide">
-                    <div className="tp-brand-item">
-                      <a href="javascript:void(0)">
-                        <img src={withBasePath(`/assets/img/brands/${logo}`)} alt="" />
+                {[
+                  { img: 'logo.png', name: 'TACTICAL FACEGUARD' },
+                  { img: 'logo-1.png', name: 'RIM (RADIAL IMPACT MITIGATION)' },
+                  { img: 'logo-2.png', name: 'NECK SHIELD PRO' },
+                  { img: 'logo-3.png', name: 'MAGLOCK' },
+                  { img: 'logo-4.png', name: 'CARBON COMPOSITE' },
+                  { img: 'logo-5.png', name: 'IVS (IMPROVED VENTILATION SYSTEM)' },
+                  { img: 'logo-6.png', name: 'KOOLFORM' },
+                  { img: 'logo-7.png', name: 'EPP' },
+                  { img: 'logo-8.png', name: 'ISOFIT' },
+                ].map((brand, index) => (
+                  <div key={index} className="swiper-slide">
+                    <div className="tp-brand-item text-center">
+                      <a href="javascript:void(0)" className="d-flex flex-column align-items-center">
+                        <img src={withBasePath(`/assets/img/brands/${brand.img}`)} alt={brand.name} />
+                        <span className="tp-text-common-white mt-10">{brand.name}</span>
                       </a>
                     </div>
                   </div>

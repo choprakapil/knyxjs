@@ -37,10 +37,10 @@ const Footer = () => (
             <div className="tp-footer-ai-menu d-flex justify-content-lg-end mb-40 tp_fade_anim" data-delay=".7">
               <ul>
                 <li>
-                  <a href="">Home</a>
+                  <a href="/">Home</a>
                 </li>
                 <li>
-                  <a href="">About</a>
+                  <a href="/about">Brand Story</a>
                 </li>
                 <li>
                   <a href="">Services</a>

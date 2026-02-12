@@ -24,7 +24,7 @@ const TextSliderSection = () => (
         </div>
       </div>
     </div>
-    <div className="tp-text-ai-slider-single tp-text-ai-slider-single-2 tp-bg-grey-8" dir="rtl">
+    {/* <div className="tp-text-ai-slider-single tp-text-ai-slider-single-2 tp-bg-grey-8" dir="rtl">
       <div className="swiper-container tp-text-ai-slider-active">
         <div className="swiper-wrapper slide-transtion">
           {secondarySlides.map((text, index) => (
@@ -36,7 +36,7 @@ const TextSliderSection = () => (
           ))}
         </div>
       </div>
-    </div>
+    </div> */}
   </div>
 );
 

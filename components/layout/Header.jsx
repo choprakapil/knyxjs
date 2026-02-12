@@ -2,8 +2,8 @@ import { withBasePath } from "@/lib/asset";
 
 const desktopMenuHtml = `
 <ul>
-  <li><a href="/homepage">Home</a></li>
-  <li><a href="/homepage">About Us</a></li>
+  <li><a href="/">Home</a></li>
+  <li><a href="/about">Brand Story</a></li>
   <li class="has-dropdown p-inherit">
     <a href="/homepage">
       Products
