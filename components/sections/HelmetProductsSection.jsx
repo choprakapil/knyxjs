@@ -1,11 +1,49 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { withBasePath } from "@/lib/asset";
+
+/**
+ * Sidebar rendered via portal OUTSIDE #smooth-content so that 
+ * position:fixed actually works (CSS transforms on ancestors 
+ * break fixed/sticky positioning).
+ */
+const SidebarPortal = ({ children, sidebarStyle }) => {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return null;
+
+    return createPortal(
+        <div
+            className="tp-product-sidebar-portal"
+            style={{
+                position: "fixed",
+                top: "120px",
+                left: "0",
+                width: "350px",
+                maxHeight: "calc(100vh - 150px)",
+                overflowY: "auto",
+                zIndex: 100,
+                padding: "0 15px 0 calc((100vw - 1524px) / 2 + 15px)",
+                transition: "opacity 0.3s ease, transform 0.3s ease",
+                ...sidebarStyle,
+            }}
+        >
+            {children}
+        </div>,
+        document.body
+    );
+};
 
 const HelmetProductsSection = () => {
     const [activeProductId, setActiveProductId] = useState("");
-    const sidebarRef = useRef(null);
     const contentRef = useRef(null);
+    const sectionRef = useRef(null);
+    const [sidebarVisible, setSidebarVisible] = useState(true);
 
     const scrollToProduct = (e, id) => {
         e.preventDefault();
@@ -23,61 +61,51 @@ const HelmetProductsSection = () => {
     };
 
     useEffect(() => {
-        const localTriggers = [];
         let timeout;
-        const initSticky = () => {
+        const localTriggers = [];
+        let animFrame;
+
+        const contentEl = contentRef.current;
+
+        // Track whether the PRODUCT CONTENT (not breadcrumb/footer) is in view
+        const updateSidebarVisibility = () => {
+            if (!contentEl) return;
+            const rect = contentEl.getBoundingClientRect();
+            // Only show sidebar when the product list content area is active:
+            // - top of content has scrolled above viewport top (past breadcrumb)
+            // - bottom of content is still well below the header (not at footer yet)
+            const sidebarHeight = 700; // approximate sidebar height
+            const isVisible = rect.top < 200 && rect.bottom > (sidebarHeight + 120);
+            setSidebarVisible(isVisible);
+            animFrame = requestAnimationFrame(updateSidebarVisibility);
+        };
+        animFrame = requestAnimationFrame(updateSidebarVisibility);
+
+        // ScrollTrigger for progress bar only
+        const initAnimations = () => {
             if (window.gsap && window.ScrollTrigger) {
-                // Pin entire sidebar
-                const stSidebar = window.ScrollTrigger.create({
-                    trigger: sidebarRef.current,
-                    start: "top 120px",
-                    end: "bottom bottom",
-                    endTrigger: contentRef.current,
-                    pin: sidebarRef.current,
-                    pinSpacing: false,
-                    markers: false,
-                });
-                localTriggers.push(stSidebar);
-
-                // Pin category titles dynamically
-                document.querySelectorAll(".pin-category").forEach((section) => {
-                    const title = section.querySelector(".sticky-category-title");
-                    if (title) {
-                        const stTitle = window.ScrollTrigger.create({
-                            trigger: title,
-                            start: "top 100px",
-                            end: "bottom 200px",
-                            endTrigger: section,
-                            pin: true,
-                            pinSpacing: false, // Don't push products further down, just overlay
-                            markers: false
-                        });
-                        localTriggers.push(stTitle);
-                    }
-                });
-
-                // Continuous Scroll Progress Line
                 const progressBar = document.querySelector(".sidebar-scroll-progress");
-                if (progressBar && contentRef.current) {
+                if (progressBar && contentEl) {
                     const stProgress = window.ScrollTrigger.create({
-                        trigger: contentRef.current,
+                        trigger: contentEl,
                         start: "top 40%",
                         end: "bottom 60%",
-                        scrub: 1, // Smooth scrub tracking
+                        scrub: 1,
                         animation: window.gsap.to(progressBar, {
                             height: "100%",
                             ease: "none"
                         }),
                     });
+                    localTriggers.push(stProgress);
                 }
             } else {
-                timeout = setTimeout(initSticky, 100);
+                timeout = setTimeout(initAnimations, 100);
             }
         };
 
-        timeout = setTimeout(initSticky, 100);
+        timeout = setTimeout(initAnimations, 100);
 
-        // Intersection Observer to track active product on scroll
+        // Intersection Observer for active product tracking
         const handleIntersect = (entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
@@ -98,6 +126,7 @@ const HelmetProductsSection = () => {
 
         return () => {
             clearTimeout(timeout);
+            cancelAnimationFrame(animFrame);
             observer.disconnect();
             if (window.ScrollTrigger) {
                 localTriggers.forEach((st) => {
@@ -151,178 +180,145 @@ const HelmetProductsSection = () => {
         );
     };
 
-    return (
-        <div className="tp-product-area pt-120 pb-120 p-relative z-index-1">
-            <div className="container-fluid container-1524">
-                <div className="row">
-                    {/* Left Sidebar - Categories */}
-                    <div className="col-lg-3">
-                        <div ref={sidebarRef} className="tp-product-sidebar" style={{ height: "calc(100vh - 150px)", paddingRight: "10px" }}>
-                            <div className="category-widget mb-50 position-relative" style={{ minHeight: "100%", padding: '40px 30px', borderRadius: '24px', background: 'linear-gradient(145deg, #1A1F2B 0%, #0F1218 100%)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 20px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05)' }}>
-                                {/* Continuous Background Track */}
-                                <div style={{ position: 'absolute', left: '30px', top: '100px', bottom: '60px', width: '3px', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '3px' }}>
-                                    <div
-                                        className="sidebar-scroll-progress"
-                                        style={{
-                                            width: '100%',
-                                            height: '0%',
-                                            background: 'var(--tp-theme-primary)',
-                                            boxShadow: '0 0 20px var(--tp-theme-primary)',
-                                            borderRadius: '3px',
-                                            position: 'relative'
-                                        }}
-                                    >
-                                        <div style={{ position: 'absolute', bottom: '-4px', left: '50%', transform: 'translateX(-50%)', width: '10px', height: '10px', borderRadius: '50%', background: '#fff', boxShadow: '0 0 15px 5px var(--tp-theme-primary)' }}></div>
-                                    </div>
-                                </div>
-                                <div style={{ paddingLeft: '24px' }}>
-                                    {/* Professional Category Tracker */}
-                                    <div className="category-group">
-                                        <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15" style={{ letterSpacing: '-0.5px' }}>
-                                            Professional
-                                        </h5>
-                                        {renderNavList(professionalProducts)}
-                                    </div>
-
-                                    {/* Amateurs Category Tracker */}
-                                    <div className="category-group mt-30">
-                                        <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15" style={{ letterSpacing: '-0.5px' }}>
-                                            Amateurs
-                                        </h5>
-                                        {renderNavList(amateurProducts)}
-                                    </div>
-                                </div>
-                            </div>
+    const renderProductCard = (product, isAlternate = false) => (
+        <div id={product.id} key={product.id} className="product-item-container w-100" style={{ height: "100vh", display: "flex", alignItems: "flex-end", paddingBottom: "8vh" }}>
+            <div className={`product-item p-4 tp-round-10 transition-3 ${activeProductId === product.id ? 'active-product-card' : ''}`} style={{ height: "60vh", minHeight: "450px", width: "100%", display: "flex", alignItems: "center", backgroundColor: activeProductId === product.id ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.01)", backdropFilter: activeProductId === product.id ? "blur(20px)" : "none", border: activeProductId === product.id ? "1px solid var(--tp-theme-primary)" : "1px solid transparent", boxShadow: activeProductId === product.id ? "0 20px 60px rgba(0,0,0,0.6), inset 0 0 20px rgba(25, 135, 84, 0.1)" : "none", transform: activeProductId === product.id ? "scale(1) translateY(0)" : "scale(0.85) translateY(100px)", opacity: activeProductId === product.id ? 1 : 0, borderRadius: "24px", transition: "all 0.8s cubic-bezier(0.25, 1, 0.5, 1)", position: "relative" }}>
+                <div className="row align-items-center w-100 m-0">
+                    <div className={`col-lg-6 mb-4 mb-lg-0 ${isAlternate ? 'order-lg-2' : ''}`}>
+                        <div className="product-image p-relative overflow-hidden tp-round-10" style={{ backgroundColor: "rgba(0,0,0,0.5)", mixBlendMode: 'screen', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <img
+                                src={withBasePath(`/assets/img/products/${product.image}`)}
+                                alt={product.name}
+                                className="img-fluid transition-3"
+                                style={{ maxHeight: '100%', objectFit: 'contain', transform: activeProductId === product.id ? 'scale(1.05)' : 'scale(1)' }}
+                            />
                         </div>
                     </div>
-
-                    {/* Right Content - Products List */}
-                    <div className="col-lg-8 offset-lg-1">
-                        <div ref={contentRef} className="tp-product-list-content">
-
-                            {/* Professional Category Section */}
-                            <div className="pin-category position-relative" style={{ paddingTop: "20px" }}>
-                                {/* Sticky Title */}
-                                <div className="product-category-title mb-60 sticky-category-title" style={{ zIndex: 99, background: 'rgba(18, 18, 20, 0.95)', padding: '20px 0', backdropFilter: 'blur(15px)', margin: '0 -20px 40px -20px', paddingLeft: '20px', paddingRight: '20px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                    <h2 className="tp-ff-jakarta fw-600 tp-text-common-white fs-50">Professional Helmets</h2>
-                                    <div style={{ height: "4px", width: "80px", backgroundColor: "var(--tp-theme-primary)", marginTop: "15px", borderRadius: "2px", boxShadow: "0 0 10px var(--tp-theme-primary)" }}></div>
-                                </div>
-
-                                {/* Professional Products Mapping */}
-                                {professionalProducts.map((product) => (
-                                    <div id={product.id} key={product.id} className="product-item-container w-100" style={{ height: "100vh", display: "flex", alignItems: "flex-end", paddingBottom: "8vh" }}>
-                                        <div className={`product-item p-4 tp-round-10 transition-3 ${activeProductId === product.id ? 'active-product-card' : ''}`} style={{ height: "60vh", minHeight: "450px", width: "100%", display: "flex", alignItems: "center", backgroundColor: activeProductId === product.id ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.01)", backdropFilter: activeProductId === product.id ? "blur(20px)" : "none", border: activeProductId === product.id ? "1px solid var(--tp-theme-primary)" : "1px solid transparent", boxShadow: activeProductId === product.id ? "0 20px 60px rgba(0,0,0,0.6), inset 0 0 20px rgba(25, 135, 84, 0.1)" : "none", transform: activeProductId === product.id ? "scale(1) translateY(0)" : "scale(0.85) translateY(100px)", opacity: activeProductId === product.id ? 1 : 0, borderRadius: "24px", transition: "all 0.8s cubic-bezier(0.25, 1, 0.5, 1)", position: "relative" }}>
-                                            <div className="row align-items-center w-100 m-0">
-                                                <div className="col-lg-6 mb-4 mb-lg-0">
-                                                    <div className="product-image p-relative overflow-hidden tp-round-10" style={{ backgroundColor: "rgba(0,0,0,0.5)", mixBlendMode: 'screen', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                        <img
-                                                            src={withBasePath(`/assets/img/products/${product.image}`)}
-                                                            alt={product.name}
-                                                            className="img-fluid transition-3"
-                                                            style={{ maxHeight: '100%', objectFit: 'contain', transform: activeProductId === product.id ? 'scale(1.05)' : 'scale(1)' }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-6">
-                                                    <div className="product-content pl-30">
-                                                        <h3 className="tp-ff-jakarta fw-600 fs-36 mb-20 tp-text-common-white">{product.name}</h3>
-                                                        <p className="tp-ff-dm fw-400 fs-18 lh-150-per tp-text-grey-2 mb-30">
-                                                            Engineered for maximum protection and undeniable style. Features advanced impact absorption, an ultra-lightweight titanium/steel blend grille, and a multi-layer inner foam system for unmatched comfort.
-                                                        </p>
-                                                        <div className="product-features mb-40">
-                                                            <ul className="list-unstyled tp-text-grey-2 tp-ff-dm fs-18">
-                                                                <li className="mb-10 d-flex align-items-center"><i className="fas fa-check-circle" style={{ color: "var(--tp-theme-primary)", marginRight: "10px" }}></i> Impact Resistance</li>
-                                                                <li className="mb-10 d-flex align-items-center"><i className="fas fa-check-circle" style={{ color: "var(--tp-theme-primary)", marginRight: "10px" }}></i> Optimal Ventilation</li>
-                                                                <li className="d-flex align-items-center"><i className="fas fa-check-circle" style={{ color: "var(--tp-theme-primary)", marginRight: "10px" }}></i> Sweat-wicking Padding</li>
-                                                            </ul>
-                                                        </div>
-                                                        <a href={`/products/helmet/${product.id}`} className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
-                                                            <span className="d-flex align-items-center justify-content-center">
-                                                                <span className="btn-text">View Product</span>
-                                                                <span className="btn-icon">
-                                                                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                        <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
-                                                                    </svg>
-                                                                </span>
-                                                                <span className="btn-icon">
-                                                                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                        <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
-                                                                    </svg>
-                                                                </span>
-                                                            </span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
+                    <div className={`col-lg-6 ${isAlternate ? 'order-lg-1' : ''}`}>
+                        <div className={`product-content ${isAlternate ? 'pr-30' : 'pl-30'}`}>
+                            <h3 className="tp-ff-jakarta fw-600 fs-36 mb-20 tp-text-common-white">{product.name}</h3>
+                            <p className="tp-ff-dm fw-400 fs-18 lh-150-per tp-text-grey-2 mb-30">
+                                {isAlternate
+                                    ? "The perfect starting point for new and aspiring cricketers. Designed giving priority to essential safety without compromising on visibility and airflow, crafted for long practice sessions."
+                                    : "Engineered for maximum protection and undeniable style. Features advanced impact absorption, an ultra-lightweight titanium/steel blend grille, and a multi-layer inner foam system for unmatched comfort."
+                                }
+                            </p>
+                            <div className="product-features mb-40">
+                                <ul className="list-unstyled tp-text-grey-2 tp-ff-dm fs-18">
+                                    {isAlternate ? (
+                                        <>
+                                            <li className="mb-10 d-flex align-items-center"><i className="fas fa-check-circle" style={{ color: "var(--tp-theme-primary)", marginRight: "10px" }}></i> Basic Impact Guard</li>
+                                            <li className="mb-10 d-flex align-items-center"><i className="fas fa-check-circle" style={{ color: "var(--tp-theme-primary)", marginRight: "10px" }}></i> Lightweight Frame</li>
+                                            <li className="d-flex align-items-center"><i className="fas fa-check-circle" style={{ color: "var(--tp-theme-primary)", marginRight: "10px" }}></i> Adjustable Sizing</li>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <li className="mb-10 d-flex align-items-center"><i className="fas fa-check-circle" style={{ color: "var(--tp-theme-primary)", marginRight: "10px" }}></i> Impact Resistance</li>
+                                            <li className="mb-10 d-flex align-items-center"><i className="fas fa-check-circle" style={{ color: "var(--tp-theme-primary)", marginRight: "10px" }}></i> Optimal Ventilation</li>
+                                            <li className="d-flex align-items-center"><i className="fas fa-check-circle" style={{ color: "var(--tp-theme-primary)", marginRight: "10px" }}></i> Sweat-wicking Padding</li>
+                                        </>
+                                    )}
+                                </ul>
                             </div>
-
-                            {/* Amateur Category Section */}
-                            <div className="pin-category position-relative pt-40 mb-60" style={{ paddingTop: "60px" }}>
-                                {/* Sticky Title */}
-                                <div className="product-category-title mb-60 sticky-category-title" style={{ zIndex: 99, background: 'rgba(18, 18, 20, 0.95)', padding: '20px 0', backdropFilter: 'blur(15px)', margin: '0 -20px 40px -20px', paddingLeft: '20px', paddingRight: '20px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                    <h2 className="tp-ff-jakarta fw-600 tp-text-common-white fs-50">Amateur Helmets</h2>
-                                    <div style={{ height: "4px", width: "80px", backgroundColor: "var(--tp-theme-primary)", marginTop: "15px", borderRadius: "2px", boxShadow: "0 0 10px var(--tp-theme-primary)" }}></div>
-                                </div>
-
-                                {/* Amateur Products Mapping */}
-                                {amateurProducts.map((product) => (
-                                    <div id={product.id} key={product.id} className="product-item-container w-100" style={{ height: "100vh", display: "flex", alignItems: "flex-end", paddingBottom: "8vh" }}>
-                                        <div className={`product-item p-4 tp-round-10 transition-3 ${activeProductId === product.id ? 'active-product-card' : ''}`} style={{ height: "60vh", minHeight: "450px", width: "100%", display: "flex", alignItems: "center", backgroundColor: activeProductId === product.id ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.01)", backdropFilter: activeProductId === product.id ? "blur(20px)" : "none", border: activeProductId === product.id ? "1px solid var(--tp-theme-primary)" : "1px solid transparent", boxShadow: activeProductId === product.id ? "0 20px 60px rgba(0,0,0,0.6), inset 0 0 20px rgba(25, 135, 84, 0.1)" : "none", transform: activeProductId === product.id ? "scale(1) translateY(0)" : "scale(0.85) translateY(100px)", opacity: activeProductId === product.id ? 1 : 0, borderRadius: "24px", transition: "all 0.8s cubic-bezier(0.25, 1, 0.5, 1)", position: "relative" }}>
-                                            <div className="row align-items-center w-100 m-0">
-                                                <div className="col-lg-6 mb-4 mb-lg-0 order-lg-2">
-                                                    <div className="product-image p-relative overflow-hidden tp-round-10" style={{ backgroundColor: "rgba(0,0,0,0.5)", mixBlendMode: 'screen', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                        <img
-                                                            src={withBasePath(`/assets/img/products/${product.image}`)}
-                                                            alt={product.name}
-                                                            className="img-fluid transition-3"
-                                                            style={{ maxHeight: '100%', objectFit: 'contain', transform: activeProductId === product.id ? 'scale(1.05)' : 'scale(1)' }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-6 order-lg-1">
-                                                    <div className="product-content pr-30">
-                                                        <h3 className="tp-ff-jakarta fw-600 fs-36 mb-20 tp-text-common-white">{product.name}</h3>
-                                                        <p className="tp-ff-dm fw-400 fs-18 lh-150-per tp-text-grey-2 mb-30">
-                                                            The perfect starting point for new and aspiring cricketers. Designed giving priority to essential safety without compromising on visibility and airflow, crafted for long practice sessions.
-                                                        </p>
-                                                        <div className="product-features mb-40">
-                                                            <ul className="list-unstyled tp-text-grey-2 tp-ff-dm fs-18">
-                                                                <li className="mb-10 d-flex align-items-center"><i className="fas fa-check-circle" style={{ color: "var(--tp-theme-primary)", marginRight: "10px" }}></i> Basic Impact Guard</li>
-                                                                <li className="mb-10 d-flex align-items-center"><i className="fas fa-check-circle" style={{ color: "var(--tp-theme-primary)", marginRight: "10px" }}></i> Lightweight Frame</li>
-                                                                <li className="d-flex align-items-center"><i className="fas fa-check-circle" style={{ color: "var(--tp-theme-primary)", marginRight: "10px" }}></i> Adjustable Sizing</li>
-                                                            </ul>
-                                                        </div>
-                                                        <a href={`/products/helmet/${product.id}`} className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
-                                                            <span className="d-flex align-items-center justify-content-center">
-                                                                <span className="btn-text">View Product</span>
-                                                                <span className="btn-icon">
-                                                                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                        <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
-                                                                    </svg>
-                                                                </span>
-                                                                <span className="btn-icon">
-                                                                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                        <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
-                                                                    </svg>
-                                                                </span>
-                                                            </span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-
+                            <a href={`/products/helmet/${product.id}`} className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
+                                <span className="d-flex align-items-center justify-content-center">
+                                    <span className="btn-text">View Product</span>
+                                    <span className="btn-icon">
+                                        <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
+                                        </svg>
+                                    </span>
+                                    <span className="btn-icon">
+                                        <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
+                                        </svg>
+                                    </span>
+                                </span>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    );
+
+    const sidebarPortalStyle = sidebarVisible
+        ? { opacity: 1, transform: "translateX(0)" }
+        : { opacity: 0, transform: "translateX(-20px)", pointerEvents: "none" };
+
+    return (
+        <>
+            {/* Sidebar rendered via portal — outside #smooth-content to avoid transform */}
+            <SidebarPortal sidebarStyle={sidebarPortalStyle}>
+                <div className="category-widget position-relative" style={{ padding: '40px 30px', borderRadius: '24px', background: 'linear-gradient(145deg, #1A1F2B 0%, #0F1218 100%)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 20px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05)' }}>
+                    {/* Continuous Background Track */}
+                    <div style={{ position: 'absolute', left: '30px', top: '100px', bottom: '60px', width: '3px', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '3px' }}>
+                        <div
+                            className="sidebar-scroll-progress"
+                            style={{
+                                width: '100%',
+                                height: '0%',
+                                background: 'var(--tp-theme-primary)',
+                                boxShadow: '0 0 20px var(--tp-theme-primary)',
+                                borderRadius: '3px',
+                                position: 'relative'
+                            }}
+                        >
+                            <div style={{ position: 'absolute', bottom: '-4px', left: '50%', transform: 'translateX(-50%)', width: '10px', height: '10px', borderRadius: '50%', background: '#fff', boxShadow: '0 0 15px 5px var(--tp-theme-primary)' }}></div>
+                        </div>
+                    </div>
+                    <div style={{ paddingLeft: '24px' }}>
+                        <div className="category-group">
+                            <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15" style={{ letterSpacing: '-0.5px' }}>
+                                Professional
+                            </h5>
+                            {renderNavList(professionalProducts)}
+                        </div>
+                        <div className="category-group mt-30">
+                            <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15" style={{ letterSpacing: '-0.5px' }}>
+                                Amateurs
+                            </h5>
+                            {renderNavList(amateurProducts)}
+                        </div>
+                    </div>
+                </div>
+            </SidebarPortal>
+
+            {/* Main content area (stays inside #smooth-content) */}
+            <div ref={sectionRef} className="tp-product-area pt-120 pb-120 p-relative z-index-1">
+                <div className="container-fluid container-1524">
+                    <div className="row">
+                        {/* Left spacer for sidebar width */}
+                        <div className="col-lg-3 d-none d-lg-block" />
+
+                        {/* Right Content - Products List */}
+                        <div className="col-lg-8 offset-lg-1">
+                            <div ref={contentRef} className="tp-product-list-content">
+
+                                {/* Professional Category Section */}
+                                <div className="pin-category position-relative" style={{ paddingTop: "20px" }}>
+                                    <div className="product-category-title mb-60" style={{ zIndex: 99, background: 'rgba(18, 18, 20, 0.95)', padding: '20px 0', backdropFilter: 'blur(15px)', margin: '0 -20px 40px -20px', paddingLeft: '20px', paddingRight: '20px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                        <h2 className="tp-ff-jakarta fw-600 tp-text-common-white fs-50">Professional Helmets</h2>
+                                        <div style={{ height: "4px", width: "80px", backgroundColor: "var(--tp-theme-primary)", marginTop: "15px", borderRadius: "2px", boxShadow: "0 0 10px var(--tp-theme-primary)" }}></div>
+                                    </div>
+                                    {professionalProducts.map((product) => renderProductCard(product, false))}
+                                </div>
+
+                                {/* Amateur Category Section */}
+                                <div className="pin-category position-relative" style={{ paddingTop: "60px" }}>
+                                    <div className="product-category-title mb-60" style={{ zIndex: 99, background: 'rgba(18, 18, 20, 0.95)', padding: '20px 0', backdropFilter: 'blur(15px)', margin: '0 -20px 40px -20px', paddingLeft: '20px', paddingRight: '20px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                        <h2 className="tp-ff-jakarta fw-600 tp-text-common-white fs-50">Amateur Helmets</h2>
+                                        <div style={{ height: "4px", width: "80px", backgroundColor: "var(--tp-theme-primary)", marginTop: "15px", borderRadius: "2px", boxShadow: "0 0 10px var(--tp-theme-primary)" }}></div>
+                                    </div>
+                                    {amateurProducts.map((product) => renderProductCard(product, true))}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 };
 
