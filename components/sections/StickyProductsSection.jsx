@@ -4,10 +4,38 @@ import { useRef, useState, useEffect } from "react";
 import { withBasePath } from "@/lib/asset";
 
 const products = [
-  { id: "001", title: "Insight Engine", image: "/assets/img/service/ai/thumb.jpg" },
-  { id: "002", title: "Vision Suite", image: "/assets/img/service/ai/thumb-2.jpg" },
-  { id: "003", title: "Automation Cloud", image: "/assets/img/service/ai/thumb-3.jpg" },
-  { id: "004", title: "Data Hub", image: "/assets/img/service/ai/thumb-4.jpg" },
+  {
+    id: "001",
+    title: "KNYX Pro Elite V1",
+    category: "Professional",
+    image: "/assets/img/products/1.png",
+    description: "Engineered for maximum protection with advanced impact absorption and ultra-lightweight titanium grille.",
+    link: "/products/helmet",
+  },
+  {
+    id: "002",
+    title: "KNYX Pro Elite V2",
+    category: "Professional",
+    image: "/assets/img/products/2.png",
+    description: "Next-gen helmet featuring enhanced ventilation system and multi-layer inner foam for unmatched comfort.",
+    link: "/products/helmet",
+  },
+  {
+    id: "003",
+    title: "KNYX Pro Master",
+    category: "Professional",
+    image: "/assets/img/products/3.png",
+    description: "Premium carbon fiber shell with steel blend grille, designed for elite-level cricketers.",
+    link: "/products/helmet",
+  },
+  {
+    id: "004",
+    title: "KNYX Pro Titanium",
+    category: "Professional",
+    image: "/assets/img/products/4.png",
+    description: "Our flagship titanium-grade helmet with sweat-wicking padding and 360° impact protection.",
+    link: "/products/helmet",
+  },
 ];
 
 export default function StickyProductsSection() {
@@ -46,9 +74,28 @@ export default function StickyProductsSection() {
           >
             <div className="tp-snap-content">
               <div className="tp-snap-text">
-                <span>{item.id}</span>
+                <span style={{ color: "var(--tp-theme-primary)", fontWeight: 600, fontSize: "14px", textTransform: "uppercase", letterSpacing: "2px" }}>{item.category}</span>
                 <h2>{item.title}</h2>
-                <p>High-performance module engineered for scale & outcomes.</p>
+                <p>{item.description}</p>
+                <a
+                  href={item.link}
+                  className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-14 fw-700 tp-ff-dm"
+                  style={{ marginTop: "20px" }}
+                >
+                  <span className="d-flex align-items-center justify-content-center">
+                    <span className="btn-text">View Details</span>
+                    <span className="btn-icon">
+                      <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
+                      </svg>
+                    </span>
+                    <span className="btn-icon">
+                      <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
+                      </svg>
+                    </span>
+                  </span>
+                </a>
               </div>
               <div className="tp-snap-media">
                 <img src={withBasePath(item.image)} alt={item.title} />
