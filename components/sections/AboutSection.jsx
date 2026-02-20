@@ -1,7 +1,8 @@
 import { withBasePath } from "@/lib/asset";
+import BrandStorySection from "@/components/sections/BrandStorySection";
 
 const AboutSection = ({ showButton = true }) => (
-  <div className="tp-about-area pt-150 pb-130 p-relative z-index-1">
+  <div className="tp-about-area pt-150 pb-60 p-relative z-index-1">
     <div className="container-fluid container-1524">
       <div className="row">
         <div className="col-12">
@@ -15,7 +16,7 @@ const AboutSection = ({ showButton = true }) => (
         </div>
       </div>
       <div className="row align-items-center">
-        <div className="col-lg-5">
+        {/* <div className="col-lg-5">
           <div className="tp-about-ai-subtitle mb-30 text-lg-center tp_fade_anim" data-delay=".3">
             <span className="tp-ff-inter fw-500 fs-18 ls-m-4 tp-text-common-white">/ Brand Story /</span>
             <div className="about_bgcontainer">
@@ -72,7 +73,8 @@ const AboutSection = ({ showButton = true }) => (
               </div>
             )}
           </div>
-        </div>
+        </div> */}
+        <BrandStorySection isHomePage={true} />
       </div>
     </div>
   </div>

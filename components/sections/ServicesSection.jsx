@@ -8,7 +8,7 @@ const products = [
 ];
 
 const ServicesSection = () => (
-  <div className="tp-service-area pt-150 pb-170 p-relative z-index-1">
+  <div className="tp-service-area pt-50 pb-170 p-relative z-index-1">
     <img className="tp-service-ai-ring p-absolute" src={withBasePath('/assets/img/about/ai/ball.png')} alt="ball" />
     <div className="container-fluid container-1524">
       <div className="row align-items-end">

@@ -4,6 +4,10 @@ const desktopMenuHtml = `
 <ul>
   <li><a href="/">Home</a></li>
   <li><a href="/about">Brand Story</a></li>
+
+
+  <li><a href="/">Technology</a></li>
+
   <li class="has-dropdown p-inherit">
     <a href="/homepage">
       Products
@@ -14,12 +18,40 @@ const desktopMenuHtml = `
       </span>
     </a>
     <ul class="tp-submenu submenu">
-      <li><a href="/homepage">Product One</a></li>
-     <li><a href="/homepage">Product Two</a></li>
-     <li><a href="/homepage">Product Three</a></li>
-      
+      <li class="has-dropdown">
+        <a href="/products/helmet" class="d-flex justify-content-between align-items-center">
+          Helmet
+          <span class="nested-arrow" style="transform: rotate(-90deg); transition: all 0.3s ease;">
+            <svg width="7" height="6" viewBox="0 0 7 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.7 4.93333L0.2 1.6C-0.294427 0.940764 0.175955 0 1 0H6C6.82405 0 7.29443 0.940764 6.8 1.6L4.3 4.93333C3.9 5.46667 3.1 5.46667 2.7 4.93333Z" fill="currentColor" />
+            </svg>
+          </span>
+        </a>
+        <ul class="tp-submenu submenu">
+          <li><a href="/products/helmet">Professional</a></li>
+          <li><a href="/products/helmet">Amateurs</a></li>
+        </ul>
+      </li>
+      <li class="has-dropdown">
+        <a href="#" class="d-flex justify-content-between align-items-center">
+          Groin Protection
+          <span class="nested-arrow" style="transform: rotate(-90deg); transition: all 0.3s ease;">
+            <svg width="7" height="6" viewBox="0 0 7 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.7 4.93333L0.2 1.6C-0.294427 0.940764 0.175955 0 1 0H6C6.82405 0 7.29443 0.940764 6.8 1.6L4.3 4.93333C3.9 5.46667 3.1 5.46667 2.7 4.93333Z" fill="currentColor" />
+            </svg>
+          </span>
+        </a>
+        <ul class="tp-submenu submenu">
+          <li><a href="#">Professional</a></li>
+          <li><a href="#">Amateurs</a></li>
+        </ul>
+      </li>
     </ul>
   </li>
+
+
+  <li><a href="/">Stockists</a></li>
+
 </ul>
 `;
 

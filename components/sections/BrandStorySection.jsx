@@ -1,7 +1,7 @@
 import { withBasePath } from "@/lib/asset";
 
-const BrandStorySection = () => (
-    <div className="tp-about-area pt-150 pb-130 p-relative z-index-1">
+const BrandStorySection = ({ isHomePage = false }) => (
+    <div className={`tp-about-area ${isHomePage ? 'pt-10' : 'pt-150'} ${isHomePage ? 'pb-0' : 'pb-130'} p-relative z-index-1`}>
         <div className="container-fluid container-1524">
             {/* Introduction Section */}
             <div className="row align-items-start">
@@ -24,14 +24,36 @@ const BrandStorySection = () => (
                         <div className="tp_fade_anim" data-delay=".5">
                             <p className="tp-about-ai-para tp-ff-dm mb-40 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
                                 At KNYX, protection is a craft, and performance is a promise.
-                            </p>
-                            <p className="tp-about-ai-para tp-ff-dm mb-40 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
+
                                 Born from the spirit of knight, KNYX reflects strength, precision, and timeless honour. We represent the modern athlete — focused, fearless, and equipped.
-                            </p>
-                            <p className="tp-about-ai-para tp-ff-dm mb-55 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
                                 KNYX was created with a singular vision: to build elite sports protection that blends advanced engineering with the classic elegance.
                             </p>
                         </div>
+                        {isHomePage && (
+                            <div className="tp_fade_anim" data-delay=".7" data-fade-from="bottom" data-ease="bounce">
+                                <a href="/about" className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
+                                    <span className="d-flex align-items-center justify-content-center">
+                                        <span className="btn-text">Know More</span>
+                                        <span className="btn-icon">
+                                            <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z"
+                                                    fill="currentColor"
+                                                />
+                                            </svg>
+                                        </span>
+                                        <span className="btn-icon">
+                                            <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z"
+                                                    fill="currentColor"
+                                                />
+                                            </svg>
+                                        </span>
+                                    </span>
+                                </a>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -51,6 +73,32 @@ const BrandStorySection = () => (
                             Every KNYX product is meticulously engineered to deliver uncompromising safety without sacrificing style.
                         </p>
 
+
+                        <h3 className="tp-ff-jakarta fw-600 fs-32 ls-m-2 mb-20 tp-text-common-white">Our Philosophy</h3>
+                        <p className="tp-about-ai-para tp-ff-dm mb-10 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">We believe in:</p>
+                        <ul className="tp-about-ai-para tp-ff-dm mb-40 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2 pl-20" style={{ listStyleType: 'disc' }}>
+                            <li>Precision over compromise</li>
+                            <li>Innovation with purpose</li>
+                            <li>Tradition with relevance</li>
+                            <li>Excellence without exception</li>
+                        </ul>
+                        <p className="tp-about-ai-para tp-ff-dm mb-55 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
+                            These principles guide every product we create.
+                        </p>
+
+                        <h3 className="tp-ff-jakarta fw-600 fs-32 ls-m-2 mb-20 tp-text-common-white">For the New Age Knight</h3>
+                        <p className="tp-about-ai-para tp-ff-dm mb-40 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
+                            Every cricketer who steps onto the field is a warrior of the game.
+                        </p>
+                        <p className="tp-about-ai-para tp-ff-dm mb-55 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
+                            KNYX equips them with refined protection — designed to perform under pressure and endure every challenge. When you wear KNYX, you carry confidence, composure, and control.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="col-lg-6">
+                    <div className="tp_fade_anim" data-delay=".5">
+
                         <h3 className="tp-ff-jakarta fw-600 fs-32 ls-m-2 mb-20 tp-text-common-white">Crafted for Performance</h3>
                         <p className="tp-about-ai-para tp-ff-dm mb-40 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
                             Every KNYX product is shaped by precision engineering, rigorous testing, and an uncompromising pursuit of perfection. From material selection to final finish, nothing is left to chance.
@@ -67,29 +115,8 @@ const BrandStorySection = () => (
                             Because true confidence begins with trust in your gear.
                         </p>
 
-                        <h3 className="tp-ff-jakarta fw-600 fs-32 ls-m-2 mb-20 tp-text-common-white">For the New Age Knight</h3>
-                        <p className="tp-about-ai-para tp-ff-dm mb-40 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
-                            Every cricketer who steps onto the field is a warrior of the game.
-                        </p>
-                        <p className="tp-about-ai-para tp-ff-dm mb-55 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
-                            KNYX equips them with refined protection — designed to perform under pressure and endure every challenge. When you wear KNYX, you carry confidence, composure, and control.
-                        </p>
-                    </div>
-                </div>
 
-                <div className="col-lg-6">
-                    <div className="tp_fade_anim" data-delay=".5">
-                        <h3 className="tp-ff-jakarta fw-600 fs-32 ls-m-2 mb-20 tp-text-common-white">Our Philosophy</h3>
-                        <p className="tp-about-ai-para tp-ff-dm mb-10 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">We believe in:</p>
-                        <ul className="tp-about-ai-para tp-ff-dm mb-40 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2 pl-20" style={{ listStyleType: 'disc' }}>
-                            <li>Precision over compromise</li>
-                            <li>Innovation with purpose</li>
-                            <li>Tradition with relevance</li>
-                            <li>Excellence without exception</li>
-                        </ul>
-                        <p className="tp-about-ai-para tp-ff-dm mb-55 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
-                            These principles guide every product we create.
-                        </p>
+
 
                         <h3 className="tp-ff-jakarta fw-600 fs-32 ls-m-2 mb-20 tp-text-common-white">The KNYX Promise</h3>
                         <p className="tp-about-ai-para tp-ff-dm mb-40 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">

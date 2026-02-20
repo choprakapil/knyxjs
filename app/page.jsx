@@ -39,13 +39,13 @@ export default function HomePage() {
           <main>
             <HeroSection />
             <AboutSection />
-            <BannerSection />
+            {/* <BannerSection /> */}
             <ServicesSection />
             <StickyProductsSection />
-            <TextSliderSection />
+            {/* <TextSliderSection /> */}
             {/* <PortfolioSection /> */}
             {/* <PricingSection /> */}
-            <TestimonialSection />
+            {/* <TestimonialSection /> */}
             {/* <FaqSection /> */}
             <CtaSection />
             <BlogSection />
