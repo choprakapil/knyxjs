@@ -22,10 +22,10 @@ const SidebarPortal = ({ children, sidebarStyle }) => {
             className="tp-product-sidebar-portal"
             style={{
                 position: "fixed",
-                top: "120px",
+                top: "100px",
                 left: "0",
                 width: "350px",
-                maxHeight: "calc(100vh - 150px)",
+                maxHeight: "calc(100vh - 110px)",
                 overflowY: "auto",
                 zIndex: 100,
                 padding: "0 15px 0 calc((100vw - 1524px) / 2 + 15px)",
@@ -73,9 +73,8 @@ const HelmetProductsSection = () => {
             const rect = contentEl.getBoundingClientRect();
             // Only show sidebar when the product list content area is active:
             // - top of content has scrolled above viewport top (past breadcrumb)
-            // - bottom of content is still well below the header (not at footer yet)
-            const sidebarHeight = 700; // approximate sidebar height
-            const isVisible = rect.top < 200 && rect.bottom > (sidebarHeight + 120);
+            // - bottom of content is still visible (hide only very close to footer)
+            const isVisible = rect.top < 200 && rect.bottom > 200;
             setSidebarVisible(isVisible);
             animFrame = requestAnimationFrame(updateSidebarVisibility);
         };
@@ -154,16 +153,16 @@ const HelmetProductsSection = () => {
 
     const renderNavList = (products) => {
         return (
-            <ul className="list-unstyled position-relative m-0 mt-15" style={{ paddingLeft: "0" }}>
+            <ul className="list-unstyled position-relative m-0 mt-10" style={{ paddingLeft: "0" }}>
                 {products.map((product) => {
                     const isActive = activeProductId === product.id;
 
                     return (
-                        <li key={product.id} className="position-relative" style={{ paddingTop: "12px", paddingBottom: "12px" }}>
+                        <li key={product.id} className="position-relative" style={{ paddingTop: "6px", paddingBottom: "6px" }}>
                             <a
                                 href={`#${product.id}`}
                                 onClick={(e) => scrollToProduct(e, product.id)}
-                                className={`tp-ff-inter fw-500 fs-16 transition-3 d-inline-block position-relative ${isActive ? 'tp-text-common-white' : 'tp-text-grey-2 hover-text-primary'}`}
+                                className={`tp-ff-inter fw-500 fs-14 transition-3 d-inline-block position-relative ${isActive ? 'tp-text-common-white' : 'tp-text-grey-2 hover-text-primary'}`}
                                 style={{
                                     transform: isActive ? 'translateX(10px)' : 'translateX(0)',
                                     transition: 'all 0.3s ease',
