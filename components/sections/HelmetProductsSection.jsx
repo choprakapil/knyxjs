@@ -39,11 +39,65 @@ const SidebarPortal = ({ children, sidebarStyle }) => {
     );
 };
 
+/**
+ * Floating category heading portal — stays pinned at the top of the
+ * content area while scrolling through products. Switches between
+ * "Professional Helmets" and "Amateur Helmets" based on scroll position.
+ */
+const CategoryHeadingPortal = ({ label, visible }) => {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return null;
+
+    return createPortal(
+        <div
+            className="tp-category-heading-portal"
+            style={{
+                position: "fixed",
+                top: "105px",
+                left: "350px",
+                right: "0",
+                zIndex: 99,
+                padding: "14px calc((100vw - 1524px) / 2 + 15px) 14px 80px",
+                background: "linear-gradient(180deg, rgba(6, 8, 13, 0.97) 0%, rgba(6, 8, 13, 0.92) 70%, rgba(6, 8, 13, 0) 100%)",
+                transition: "opacity 0.35s ease, transform 0.35s ease",
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateY(0)" : "translateY(-20px)",
+                pointerEvents: "none",
+            }}
+        >
+            <h2
+                className="tp-ff-jakarta fw-600 tp-text-common-white m-0"
+                style={{ fontSize: "28px", letterSpacing: "-0.5px" }}
+            >
+                {label}
+            </h2>
+            <div style={{
+                height: "3px",
+                width: "60px",
+                background: "var(--tp-theme-primary)",
+                marginTop: "8px",
+                borderRadius: "2px",
+                boxShadow: "0 0 8px var(--tp-theme-primary)",
+            }}></div>
+        </div>,
+        document.body
+    );
+};
+
 const HelmetProductsSection = () => {
     const [activeProductId, setActiveProductId] = useState("");
     const contentRef = useRef(null);
     const sectionRef = useRef(null);
     const [sidebarVisible, setSidebarVisible] = useState(true);
+    const [activeCategoryLabel, setActiveCategoryLabel] = useState("Professional Helmets");
+    const [categoryHeadingVisible, setCategoryHeadingVisible] = useState(false);
+    const proSectionRef = useRef(null);
+    const amateurSectionRef = useRef(null);
 
     const scrollToProduct = (e, id) => {
         e.preventDefault();
@@ -67,18 +121,38 @@ const HelmetProductsSection = () => {
 
         const contentEl = contentRef.current;
 
-        // Track whether the PRODUCT CONTENT (not breadcrumb/footer) is in view
-        const updateSidebarVisibility = () => {
+        const proSection = proSectionRef.current;
+        const amateurSection = amateurSectionRef.current;
+
+        // Track sidebar visibility AND active category heading
+        const updateVisibility = () => {
             if (!contentEl) return;
             const rect = contentEl.getBoundingClientRect();
-            // Only show sidebar when the product list content area is active:
-            // - top of content has scrolled above viewport top (past breadcrumb)
-            // - bottom of content is still visible (hide only very close to footer)
             const isVisible = rect.top < 200 && rect.bottom > 200;
             setSidebarVisible(isVisible);
-            animFrame = requestAnimationFrame(updateSidebarVisibility);
+
+            // Determine active category heading based on which section is in view
+            if (proSection && amateurSection) {
+                const proRect = proSection.getBoundingClientRect();
+                const amateurRect = amateurSection.getBoundingClientRect();
+                // The heading that has scrolled past the top gets "pinned"
+                const headingPinLine = 140; // just below header
+
+                if (amateurRect.top < headingPinLine) {
+                    setActiveCategoryLabel("Amateur Helmets");
+                } else if (proRect.top < headingPinLine) {
+                    setActiveCategoryLabel("Professional Helmets");
+                }
+
+                // Show the floating heading only when content is in the product zone
+                // AND the original inline heading has scrolled above the pin line
+                const showHeading = isVisible && proRect.top < headingPinLine;
+                setCategoryHeadingVisible(showHeading);
+            }
+
+            animFrame = requestAnimationFrame(updateVisibility);
         };
-        animFrame = requestAnimationFrame(updateSidebarVisibility);
+        animFrame = requestAnimationFrame(updateVisibility);
 
         // ScrollTrigger for progress bar only
         const initAnimations = () => {
@@ -136,7 +210,7 @@ const HelmetProductsSection = () => {
     }, []);
 
     const professionalProducts = [
-        { id: "product-1", name: "KNYX Pro Elite V1", image: "1.png" },
+        { id: "product-1", name: "C7 Iso Pro", image: "1.png" },
         { id: "product-2", name: "KNYX Pro Elite V2", image: "2.png" },
         { id: "product-3", name: "KNYX Pro Master", image: "3.png" },
         { id: "product-4", name: "KNYX Pro Titanium", image: "4.png" },
@@ -247,6 +321,9 @@ const HelmetProductsSection = () => {
 
     return (
         <>
+            {/* Floating category heading — pinned at top via portal */}
+            <CategoryHeadingPortal label={activeCategoryLabel} visible={categoryHeadingVisible} />
+
             {/* Sidebar rendered via portal — outside #smooth-content to avoid transform */}
             <SidebarPortal sidebarStyle={sidebarPortalStyle}>
                 <div className="category-widget position-relative" style={{ padding: '40px 30px', borderRadius: '24px', background: 'linear-gradient(145deg, #1A1F2B 0%, #0F1218 100%)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 20px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05)' }}>
@@ -295,20 +372,12 @@ const HelmetProductsSection = () => {
                             <div ref={contentRef} className="tp-product-list-content">
 
                                 {/* Professional Category Section */}
-                                <div className="pin-category position-relative" style={{ paddingTop: "20px" }}>
-                                    <div className="product-category-title mb-60" style={{ zIndex: 99, background: 'rgba(18, 18, 20, 0.95)', padding: '20px 0', backdropFilter: 'blur(15px)', margin: '0 -20px 40px -20px', paddingLeft: '20px', paddingRight: '20px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                        <h2 className="tp-ff-jakarta fw-600 tp-text-common-white fs-50">Professional Helmets</h2>
-                                        <div style={{ height: "4px", width: "80px", backgroundColor: "var(--tp-theme-primary)", marginTop: "15px", borderRadius: "2px", boxShadow: "0 0 10px var(--tp-theme-primary)" }}></div>
-                                    </div>
+                                <div ref={proSectionRef} className="pin-category position-relative" style={{ paddingTop: "10px" }}>
                                     {professionalProducts.map((product) => renderProductCard(product, false))}
                                 </div>
 
                                 {/* Amateur Category Section */}
-                                <div className="pin-category position-relative" style={{ paddingTop: "60px" }}>
-                                    <div className="product-category-title mb-60" style={{ zIndex: 99, background: 'rgba(18, 18, 20, 0.95)', padding: '20px 0', backdropFilter: 'blur(15px)', margin: '0 -20px 40px -20px', paddingLeft: '20px', paddingRight: '20px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                        <h2 className="tp-ff-jakarta fw-600 tp-text-common-white fs-50">Amateur Helmets</h2>
-                                        <div style={{ height: "4px", width: "80px", backgroundColor: "var(--tp-theme-primary)", marginTop: "15px", borderRadius: "2px", boxShadow: "0 0 10px var(--tp-theme-primary)" }}></div>
-                                    </div>
+                                <div ref={amateurSectionRef} className="pin-category position-relative" style={{ paddingTop: "20px" }}>
                                     {amateurProducts.map((product) => renderProductCard(product, true))}
                                 </div>
 

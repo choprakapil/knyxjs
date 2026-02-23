@@ -1,5 +1,5 @@
 const allProducts = [
-    { id: "product-1", name: "KNYX Pro Elite V1" },
+    { id: "product-1", name: "C7 Iso Pro" },
     { id: "product-2", name: "KNYX Pro Elite V2" },
     { id: "product-3", name: "KNYX Pro Master" },
     { id: "product-4", name: "KNYX Pro Titanium" },

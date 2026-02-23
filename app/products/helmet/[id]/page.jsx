@@ -13,7 +13,7 @@ import Link from "next/link";
 import { withBasePath } from "@/lib/asset";
 
 const allProducts = [
-    { id: "product-1", name: "KNYX Pro Elite V1", image: "1.png", category: "Professional" },
+    { id: "product-1", name: "C7 Iso Pro", image: "1.png", category: "Professional" },
     { id: "product-2", name: "KNYX Pro Elite V2", image: "2.png", category: "Professional" },
     { id: "product-3", name: "KNYX Pro Master", image: "3.png", category: "Professional" },
     { id: "product-4", name: "KNYX Pro Titanium", image: "4.png", category: "Professional" },
@@ -75,7 +75,139 @@ export default function HelmetProductDetails({ params }) {
     const [activeTab, setActiveTab] = useState("features");
     const [isCertificateOpen, setIsCertificateOpen] = useState(false);
     const [sidebarVisible, setSidebarVisible] = useState(false);
+    const [activeFeature, setActiveFeature] = useState(null);
     const contentRef = React.useRef(null);
+
+    const featureDetails = [
+        {
+            icon: "fa-diamond",
+            title: "Carbon Composite Shell",
+            desc: "Reinforced shell with premium matte painted finish for maximum structural integrity",
+            detail: {
+                headline: "Carbon Composite Reinforced Shell",
+                intro: "The C7 Iso Pro features a state-of-the-art carbon composite reinforced shell that offers an unmatched balance of lightweight design and extreme durability. The exterior is finished with a premium matte paint for a sleek, professional look.",
+                highlights: [
+                    "Carbon fibre-reinforced polymer construction for superior strength-to-weight ratio",
+                    "Matte painted finish resists scratches, scuffs, and UV degradation",
+                    "Aerodynamic shell profile reduces drag and wind noise",
+                    "Impact-tested to exceed international safety standards",
+                ],
+                specs: { "Material": "Carbon Composite Polymer", "Finish": "Premium Matte Paint", "Weight Savings": "Up to 20% lighter than traditional shells", "Standard": "Exceeds BS 7928:2013" },
+            },
+        },
+        {
+            icon: "fa-helmet-safety",
+            title: "High Density EPP Liner",
+            desc: "Shock absorbing liner engineered to dissipate impact energy across a wider surface area",
+            detail: {
+                headline: "High Density EPP Shock Absorbing Liner",
+                intro: "Expanded Polypropylene (EPP) is a high-performance foam used in the most demanding safety applications. Our high-density EPP liner is precision-molded to the inner contour of the shell, providing consistent, reliable energy absorption on every impact.",
+                highlights: [
+                    "Multi-impact capable — retains protective properties after repeated strikes",
+                    "Uniform energy dissipation across the entire liner surface area",
+                    "Lightweight closed-cell foam structure won't absorb sweat or moisture",
+                    "Precision-molded for a seamless fit against the inner shell",
+                ],
+                specs: { "Material": "Expanded Polypropylene (EPP)", "Density": "High-density, multi-impact grade", "Moisture Resistance": "Closed-cell, non-absorbent", "Coverage": "Full cranial coverage" },
+            },
+        },
+        {
+            icon: "fa-burst",
+            title: "RIM System",
+            desc: "Radial Impact Mitigation system provides elastic shock absorption for multi-directional hits",
+            detail: {
+                headline: "RIM — Radial Impact Mitigation System",
+                intro: "The proprietary RIM (Radial Impact Mitigation) system is an advanced elastic shock absorption technology designed to handle impacts from every direction. It works in concert with the EPP liner to dramatically reduce the transfer of rotational and linear forces to the head.",
+                highlights: [
+                    "Elastic polymer network absorbs and redirects radial impact energy",
+                    "Multi-directional protection against linear and rotational forces",
+                    "Integrates seamlessly between the shell and EPP liner",
+                    "Designed to significantly reduce peak G-force on impact",
+                ],
+                specs: { "Technology": "Elastic Polymer Network", "Protection": "Multi-directional (radial + linear)", "Integration": "Shell-liner interface", "Performance": "Reduces peak G-force significantly" },
+            },
+        },
+        {
+            icon: "fa-wind",
+            title: "IVS Ventilation",
+            desc: "Improved Ventilation System strategically channels airflow to keep you cool under pressure",
+            detail: {
+                headline: "IVS — Improved Ventilation System",
+                intro: "The IVS (Improved Ventilation System) uses a network of strategically placed intake and exhaust vents to create a continuous, cooling airflow across the head. This ensures maximum comfort and concentration even during the most intense sessions under the sun.",
+                highlights: [
+                    "Strategically placed intake vents at the front draw in cool air",
+                    "Internal channeling system directs airflow across the scalp",
+                    "Rear exhaust ports expel warm, humid air efficiently",
+                    "Designed to reduce internal temperature by up to 15%",
+                ],
+                specs: { "System": "Multi-channel intake & exhaust", "Vent Count": "12+ precision-placed vents", "Airflow": "Continuous front-to-back circulation", "Cooling": "Up to 15% internal temperature reduction" },
+            },
+        },
+        {
+            icon: "fa-sliders",
+            title: "ISOFIT Comfort System",
+            desc: "Precision comfort liner fit system that adapts and conforms to your unique head shape",
+            detail: {
+                headline: "ISOFIT Comfort Liner Fit System",
+                intro: "The ISOFIT system is a precision-engineered internal fit mechanism that allows the helmet to be adjusted for a personalized, secure fit. It adapts to the unique contours of your head, eliminating pressure points and ensuring the helmet stays locked in place during play.",
+                highlights: [
+                    "Micro-adjustable dial system for a personalized, secure fit",
+                    "Conforms to unique head contours to eliminate pressure points",
+                    "Easy one-handed adjustment even while wearing gloves",
+                    "Ensures zero helmet shift or wobble during fast play",
+                ],
+                specs: { "Adjustment": "Micro-dial precision system", "Fit": "Adaptive contouring", "Operation": "One-handed, glove-compatible", "Stability": "Zero-shift lock" },
+            },
+        },
+        {
+            icon: "fa-snowflake",
+            title: "KoolForm Padding",
+            desc: "Advanced liner comfort padding with moisture-wicking technology for extended wear",
+            detail: {
+                headline: "KoolForm Liner Comfort Padding",
+                intro: "KoolForm padding uses advanced moisture-wicking fabrics and memory foam inserts to deliver exceptional comfort for prolonged use. The pads are removable and washable, making it easy to keep your helmet fresh and hygienic.",
+                highlights: [
+                    "Moisture-wicking fabric draws sweat away from the skin",
+                    "Memory foam inserts provide a plush, custom fit over time",
+                    "Anti-microbial treated to prevent odor and bacteria build-up",
+                    "Fully removable and machine-washable for easy hygiene",
+                ],
+                specs: { "Fabric": "Moisture-wicking, anti-microbial", "Foam": "Memory foam inserts", "Maintenance": "Removable & machine-washable", "Comfort": "Long-session rated" },
+            },
+        },
+        {
+            icon: "fa-shield-halved",
+            title: "Titanium Tactical Faceguard",
+            desc: "Lightweight yet incredibly strong titanium grille offering superior facial protection",
+            detail: {
+                headline: "Titanium Tactical Faceguard",
+                intro: "The titanium tactical faceguard provides unparalleled facial protection without compromising on weight or visibility. Titanium's exceptional strength-to-weight ratio means the grille can be thinner, lighter, and stronger than traditional steel alternatives.",
+                highlights: [
+                    "Aerospace-grade titanium construction for extreme durability",
+                    "Up to 40% lighter than comparable steel faceguards",
+                    "Optimized bar spacing for maximum visibility and ball tracking",
+                    "Corrosion-resistant finish for longevity in all conditions",
+                ],
+                specs: { "Material": "Aerospace-grade Titanium", "Weight": "Up to 40% lighter than steel", "Visibility": "Optimized bar spacing", "Finish": "Corrosion-resistant coating" },
+            },
+        },
+        {
+            icon: "fa-lock",
+            title: "Maglock Buckle System",
+            desc: "Quick fastening and release magnetic buckle system for effortless one-handed operation",
+            detail: {
+                headline: "Maglock Quick Fastening & Release Buckle System",
+                intro: "The Maglock buckle system uses powerful, self-aligning magnets for instant fastening and release. No more fumbling with traditional clips — just snap to secure, and pull to release. Designed for one-handed operation even with batting gloves.",
+                highlights: [
+                    "Self-aligning magnetic closure snaps securely into place",
+                    "Instant one-pull release for quick helmet removal",
+                    "Operable with one hand, even while wearing batting gloves",
+                    "Reinforced strap rated for high-tension loads",
+                ],
+                specs: { "Mechanism": "Self-aligning magnetic closure", "Operation": "One-handed, glove-compatible", "Release": "Instant one-pull release", "Strap": "Reinforced high-tension rated" },
+            },
+        },
+    ];
 
     const tabs = [
         { id: "features", label: "Features", icon: "fa-star" },
@@ -330,15 +462,15 @@ export default function HelmetProductDetails({ params }) {
                                                         <span className="d-inline-block px-3 py-1 tp-round-10 tp-ff-inter fw-600 fs-12 text-uppercase mb-20" style={{ backgroundColor: "rgba(200,255,0,0.08)", color: "#c8ff00" }}>{product.category}</span>
                                                         <h2 className="tp-ff-jakarta fw-700 fs-40 tp-text-common-white mb-20">{product.name}</h2>
                                                         <p className="tp-ff-dm fw-400 fs-18 lh-150-per tp-text-grey-2 mb-30">
-                                                            Experience the pinnacle of protective sports gear. This helmet is precisely engineered using advanced aerodynamic casing and reinforced multi-layer shock absorption to guarantee maximum safety seamlessly blended with elite performance and undeniable aesthetic appeal.
+                                                            Carbon Composite Reinforced Shell with matte painted finish. Precision-engineered for elite professional cricketers who demand uncompromising protection, superior ventilation, and an advanced fit system.
                                                         </p>
 
                                                         <div className="tech-specs mb-40 p-4 tp-round-10" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
                                                             <h5 className="tp-ff-jakarta fw-600 fs-20 tp-text-common-white mb-15">Core Technology</h5>
                                                             <ul className="list-unstyled tp-text-common-white tp-ff-dm m-0 p-0 fs-16">
-                                                                <li className="d-flex align-items-center mb-10"><i className="fa-solid fa-microchip me-2" style={{ color: "#c8ff00" }}></i> Titanium-Steel Hybrid Grille</li>
-                                                                <li className="d-flex align-items-center mb-10"><i className="fa-solid fa-shield-halved me-2" style={{ color: "#c8ff00" }}></i> Polycarbonate Outer Shell</li>
-                                                                <li className="d-flex align-items-center"><i className="fa-solid fa-wind me-2" style={{ color: "#c8ff00" }}></i> Omni-Directional Airflow Channels</li>
+                                                                <li className="d-flex align-items-center mb-10"><i className="fa-solid fa-shield-halved me-2" style={{ color: "#c8ff00" }}></i> Carbon Composite Shell</li>
+                                                                <li className="d-flex align-items-center mb-10"><i className="fa-solid fa-burst me-2" style={{ color: "#c8ff00" }}></i> RIM Elastic Shock Absorption</li>
+                                                                <li className="d-flex align-items-center"><i className="fa-solid fa-wind me-2" style={{ color: "#c8ff00" }}></i> IVS Enhanced Air Flow</li>
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -346,9 +478,77 @@ export default function HelmetProductDetails({ params }) {
                                             </div>
 
                                             {/* Tab Content Sections - All rendered inline for scroll-based navigation */}
-                                            <div id="tab-features" className="tab-section mb-60 p-5 tp-round-10" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
-                                                <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-28 mb-20">Key Features</h3>
-                                                <p className="tp-ff-dm tp-text-common-white fs-18 lh-lg" style={{ opacity: 0.85 }}>From its expertly sculpted aerodynamic shell to its impact-resistant core structure, every line and contour is designed to deflect force rather than absorb it completely. Enjoy unparalleled visibility with strategically placed eye ports, and unparalleled comfort with sweat-wicking padding that adapts to the shape of your head over time.</p>
+                                            <div id="tab-features" className="tab-section mb-60">
+                                                <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-28 mb-15">Key Features</h3>
+                                                <p className="tp-ff-dm tp-text-grey-2 fs-16 mb-40" style={{ maxWidth: "650px" }}>Every component of the C7 Iso Pro is designed for professional-level performance, protection, and comfort.</p>
+
+                                                <div className="features-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px" }}>
+                                                    {featureDetails.map((feature, index) => (
+                                                        <div
+                                                            key={feature.title}
+                                                            className="feature-card-item"
+                                                            style={{
+                                                                background: "linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)",
+                                                                border: "1px solid rgba(255,255,255,0.06)",
+                                                                borderRadius: "16px",
+                                                                padding: "28px 24px",
+                                                                position: "relative",
+                                                                overflow: "hidden",
+                                                                animation: `featureSlideIn 0.5s ease ${index * 0.08}s both`,
+                                                                transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+                                                                cursor: "pointer",
+                                                            }}
+                                                            onClick={() => setActiveFeature(feature)}
+                                                        >
+                                                            {/* Glow accent */}
+                                                            <div style={{
+                                                                position: "absolute",
+                                                                top: 0,
+                                                                left: 0,
+                                                                width: "3px",
+                                                                height: "100%",
+                                                                background: "linear-gradient(180deg, #c8ff00 0%, transparent 100%)",
+                                                                opacity: 0.6,
+                                                                borderRadius: "3px 0 0 3px",
+                                                            }}></div>
+
+                                                            <div className="d-flex align-items-start gap-3">
+                                                                <div style={{
+                                                                    width: "44px",
+                                                                    height: "44px",
+                                                                    borderRadius: "12px",
+                                                                    background: "rgba(200, 255, 0, 0.08)",
+                                                                    border: "1px solid rgba(200, 255, 0, 0.15)",
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    flexShrink: 0,
+                                                                }}>
+                                                                    <i className={`fa-solid ${feature.icon}`} style={{ color: "#c8ff00", fontSize: "18px" }}></i>
+                                                                </div>
+                                                                <div style={{ flex: 1 }}>
+                                                                    <h5 className="tp-ff-jakarta fw-600 tp-text-common-white mb-8" style={{ fontSize: "16px", letterSpacing: "-0.2px" }}>{feature.title}</h5>
+                                                                    <p className="tp-ff-dm mb-10" style={{ fontSize: "14px", lineHeight: 1.6, color: "rgba(255,255,255,0.5)" }}>{feature.desc}</p>
+                                                                    <span
+                                                                        className="tp-ff-inter fw-600 feature-details-link"
+                                                                        style={{
+                                                                            fontSize: "12px",
+                                                                            color: "#c8ff00",
+                                                                            textTransform: "uppercase",
+                                                                            letterSpacing: "1px",
+                                                                            display: "inline-flex",
+                                                                            alignItems: "center",
+                                                                            gap: "6px",
+                                                                            transition: "all 0.3s ease",
+                                                                        }}
+                                                                    >
+                                                                        Details <i className="fa-solid fa-arrow-right" style={{ fontSize: "10px", transition: "transform 0.3s ease" }}></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
 
                                             <div id="tab-sizing" className="tab-section mb-60 p-5 tp-round-10" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
@@ -413,6 +613,30 @@ export default function HelmetProductDetails({ params }) {
                 @keyframes modalZoomIn {
                     from { transform: scale(0.8); opacity: 0; }
                     to { transform: scale(1); opacity: 1; }
+                }
+                @keyframes featureSlideIn {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                @keyframes featureModalIn {
+                    from { opacity: 0; transform: scale(0.92) translateY(20px); }
+                    to { opacity: 1; transform: scale(1) translateY(0); }
+                }
+                @keyframes featureModalOverlayIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .feature-card-item .feature-details-link:hover i {
+                    transform: translateX(4px);
+                }
+                .feature-card-item:hover .feature-details-link {
+                    gap: 8px;
+                }
+                .feature-card-item:hover {
+                    transform: translateY(-4px) !important;
+                    border-color: rgba(200, 255, 0, 0.2) !important;
+                    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 20px rgba(200, 255, 0, 0.06);
+                    background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%) !important;
                 }
                 .product-detail-sidebar-portal::-webkit-scrollbar {
                     width: 3px;
@@ -498,6 +722,206 @@ export default function HelmetProductDetails({ params }) {
                                         <span style={{ fontSize: "14px", color: "#666" }}>Date of Issuance</span>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Feature Detail Modal */}
+            {activeFeature && (
+                <div
+                    className="feature-detail-overlay"
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100vw",
+                        height: "100vh",
+                        backgroundColor: "rgba(0, 0, 0, 0.85)",
+                        backdropFilter: "blur(12px)",
+                        WebkitBackdropFilter: "blur(12px)",
+                        zIndex: 999999,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "30px",
+                        animation: "featureModalOverlayIn 0.25s ease both",
+                    }}
+                    onClick={() => setActiveFeature(null)}
+                    onKeyDown={(e) => { if (e.key === "Escape") setActiveFeature(null); }}
+                >
+                    {/* Close Button */}
+                    <button
+                        style={{
+                            position: "absolute",
+                            top: "24px",
+                            right: "32px",
+                            background: "rgba(255,255,255,0.06)",
+                            border: "1px solid rgba(255,255,255,0.1)",
+                            color: "#fff",
+                            fontSize: "20px",
+                            width: "44px",
+                            height: "44px",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "all 0.3s ease",
+                            zIndex: 10,
+                        }}
+                        onClick={(e) => { e.stopPropagation(); setActiveFeature(null); }}
+                        onMouseEnter={(e) => { e.target.style.background = "rgba(200, 255, 0, 0.15)"; e.target.style.borderColor = "rgba(200, 255, 0, 0.3)"; }}
+                        onMouseLeave={(e) => { e.target.style.background = "rgba(255,255,255,0.06)"; e.target.style.borderColor = "rgba(255,255,255,0.1)"; }}
+                    >
+                        <i className="fa-solid fa-xmark"></i>
+                    </button>
+
+                    {/* Modal Content */}
+                    <div
+                        style={{
+                            maxWidth: "720px",
+                            width: "100%",
+                            maxHeight: "85vh",
+                            overflowY: "auto",
+                            background: "linear-gradient(165deg, rgba(20, 24, 35, 0.98) 0%, rgba(10, 12, 18, 0.99) 100%)",
+                            border: "1px solid rgba(255,255,255,0.08)",
+                            borderRadius: "24px",
+                            padding: "0",
+                            animation: "featureModalIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both",
+                            boxShadow: "0 40px 100px rgba(0,0,0,0.6), 0 0 60px rgba(200, 255, 0, 0.04)",
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Header with Icon */}
+                        <div style={{
+                            padding: "40px 40px 0 40px",
+                            position: "relative",
+                        }}>
+                            {/* Glow background behind icon */}
+                            <div style={{
+                                position: "absolute",
+                                top: "20px",
+                                left: "30px",
+                                width: "100px",
+                                height: "100px",
+                                background: "radial-gradient(circle, rgba(200, 255, 0, 0.08) 0%, transparent 70%)",
+                                borderRadius: "50%",
+                                filter: "blur(20px)",
+                            }}></div>
+
+                            <div className="d-flex align-items-center gap-3 mb-20" style={{ position: "relative" }}>
+                                <div style={{
+                                    width: "56px",
+                                    height: "56px",
+                                    borderRadius: "16px",
+                                    background: "rgba(200, 255, 0, 0.1)",
+                                    border: "1px solid rgba(200, 255, 0, 0.2)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    flexShrink: 0,
+                                }}>
+                                    <i className={`fa-solid ${activeFeature.icon}`} style={{ color: "#c8ff00", fontSize: "24px" }}></i>
+                                </div>
+                                <div>
+                                    <span className="tp-ff-inter fw-600" style={{
+                                        fontSize: "11px",
+                                        color: "#c8ff00",
+                                        textTransform: "uppercase",
+                                        letterSpacing: "2px",
+                                    }}>Feature Detail</span>
+                                    <h3 className="tp-ff-jakarta fw-700 tp-text-common-white m-0" style={{ fontSize: "24px", letterSpacing: "-0.5px", lineHeight: 1.3 }}>
+                                        {activeFeature.detail.headline}
+                                    </h3>
+                                </div>
+                            </div>
+
+                            {/* Divider */}
+                            <div style={{
+                                height: "1px",
+                                background: "linear-gradient(90deg, rgba(200, 255, 0, 0.3) 0%, rgba(255,255,255,0.05) 100%)",
+                            }}></div>
+                        </div>
+
+                        {/* Body */}
+                        <div style={{ padding: "28px 40px 40px 40px" }}>
+                            {/* Intro Paragraph */}
+                            <p className="tp-ff-dm" style={{
+                                fontSize: "15px",
+                                lineHeight: 1.8,
+                                color: "rgba(255,255,255,0.65)",
+                                marginBottom: "30px",
+                            }}>
+                                {activeFeature.detail.intro}
+                            </p>
+
+                            {/* Highlights */}
+                            <h5 className="tp-ff-jakarta fw-600 tp-text-common-white mb-15" style={{ fontSize: "16px", letterSpacing: "-0.2px" }}>
+                                <i className="fa-solid fa-check-double" style={{ color: "#c8ff00", marginRight: "8px", fontSize: "14px" }}></i>
+                                Key Highlights
+                            </h5>
+                            <div style={{
+                                display: "grid",
+                                gridTemplateColumns: "1fr 1fr",
+                                gap: "10px",
+                                marginBottom: "30px",
+                            }}>
+                                {activeFeature.detail.highlights.map((h, i) => (
+                                    <div key={i} className="d-flex align-items-start gap-2" style={{
+                                        padding: "12px 14px",
+                                        background: "rgba(255,255,255,0.02)",
+                                        borderRadius: "10px",
+                                        border: "1px solid rgba(255,255,255,0.04)",
+                                    }}>
+                                        <i className="fa-solid fa-circle-check" style={{
+                                            color: "#c8ff00",
+                                            fontSize: "14px",
+                                            marginTop: "3px",
+                                            flexShrink: 0,
+                                        }}></i>
+                                        <span className="tp-ff-dm" style={{
+                                            fontSize: "13px",
+                                            lineHeight: 1.6,
+                                            color: "rgba(255,255,255,0.55)",
+                                        }}>{h}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Specs Table */}
+                            <h5 className="tp-ff-jakarta fw-600 tp-text-common-white mb-15" style={{ fontSize: "16px", letterSpacing: "-0.2px" }}>
+                                <i className="fa-solid fa-list-check" style={{ color: "#c8ff00", marginRight: "8px", fontSize: "14px" }}></i>
+                                Technical Specifications
+                            </h5>
+                            <div style={{
+                                borderRadius: "12px",
+                                overflow: "hidden",
+                                border: "1px solid rgba(255,255,255,0.06)",
+                            }}>
+                                {Object.entries(activeFeature.detail.specs).map(([key, val], i) => (
+                                    <div key={key} className="d-flex" style={{
+                                        borderBottom: i < Object.entries(activeFeature.detail.specs).length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
+                                    }}>
+                                        <div className="tp-ff-inter fw-600" style={{
+                                            width: "200px",
+                                            flexShrink: 0,
+                                            padding: "14px 18px",
+                                            fontSize: "13px",
+                                            color: "rgba(255,255,255,0.45)",
+                                            background: "rgba(255,255,255,0.02)",
+                                            textTransform: "uppercase",
+                                            letterSpacing: "0.5px",
+                                        }}>{key}</div>
+                                        <div className="tp-ff-dm" style={{
+                                            flex: 1,
+                                            padding: "14px 18px",
+                                            fontSize: "14px",
+                                            color: "rgba(255,255,255,0.7)",
+                                        }}>{val}</div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>

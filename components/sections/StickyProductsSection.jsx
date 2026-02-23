@@ -6,7 +6,7 @@ import { withBasePath } from "@/lib/asset";
 const products = [
   {
     id: "001",
-    title: "KNYX Pro Elite V1",
+    title: "C7 Iso Pro",
     category: "Professional",
     image: "/assets/img/products/1.png",
     description: "Engineered for maximum protection with advanced impact absorption and ultra-lightweight titanium grille.",
