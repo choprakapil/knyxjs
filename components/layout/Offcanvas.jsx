@@ -62,23 +62,23 @@ const Offcanvas = () => (
             </li>
             <li>
               <a href="#" onClick={(e) => e.preventDefault()}>
-                
-                 A16 Adarsh Nagar, New Delhi. Delhi, India 110088
+
+                A16 Adarsh Nagar, New Delhi. Delhi, India 110088
               </a>
             </li>
           </ul>
         </div>
         <div className="tp-offcanvas-social">
-          <h3 className="tp-offcanvas-title sm">Follow Us</h3>
+          <h3 className="tp-offcanvas-title sm">Stalk Us</h3>
           <div className="tp-footer-wd-social tp-footer-ai-social d-flex justify-content-lg-start mb-40">
-              {["facebook", "twitter", "instagram", "linkedin"].map((network, index) => (
-                <div key={network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
-                  <a href="">
-                    <i className={`fa-brands fa-${network}`}></i>
-                  </a>
-                </div>
-              ))}
-            </div>
+            {["facebook", "twitter", "instagram", "linkedin"].map((network, index) => (
+              <div key={network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
+                <a href="">
+                  <i className={`fa-brands fa-${network}`}></i>
+                </a>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
