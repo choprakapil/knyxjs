@@ -9,9 +9,10 @@ const CtaSection = () => (
           <div className="col-12">
             <div className="tp-cta-ai-wrap text-center">
               <h2 className="tp-ff-inter fw-600 fs-62 fs-md-50 fs-sm-40 fs-xs-30 ls-m-4 lh-120-per tp-text-grey-5 mb-65 tp_fade_anim" data-delay=".3">
-                Play Safe, Play Bold <br /> with KNYX Helmets
+                Engineered
+                Excellence
               </h2>
-              <div className="tp_fade_anim" data-delay=".5" data-fade-from="bottom" data-ease="bounce">
+              {/* <div className="tp_fade_anim" data-delay=".5" data-fade-from="bottom" data-ease="bounce">
                 <a href="javascript:void(0)" className="tp-btn-ai-xxl tp-bg-common-angry tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-grey-5 lh-1 fs-16 fw-700 tp-ff-dm">
                   <span className="d-flex align-items-center justify-content-center">
                     <span className="btn-text">Get Your Helmet Now</span>
@@ -33,7 +34,7 @@ const CtaSection = () => (
                     </span>
                   </span>
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

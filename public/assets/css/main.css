@@ -33576,3 +33576,7 @@ img.tp-service-ai-ring.p-absolute.object-contain {
   opacity: 1;
   transform: scale(1);
 }
+
+.tp-snap-text h2 {
+  color: white !important;
+}
