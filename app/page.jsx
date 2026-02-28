@@ -40,15 +40,15 @@ export default function HomePage() {
             <HeroSection />
             <AboutSection />
             {/* <BannerSection /> */}
-            <ServicesSection />
-            <StickyProductsSection />
+            {/* <ServicesSection /> */}
+            {/* <StickyProductsSection /> */}
             {/* <TextSliderSection /> */}
             {/* <PortfolioSection /> */}
             {/* <PricingSection /> */}
             {/* <TestimonialSection /> */}
             {/* <FaqSection /> */}
-            <CtaSection />
-            <BlogSection />
+            {/* <CtaSection />
+            <BlogSection /> */}
           </main>
           <Footer />
         </div>
