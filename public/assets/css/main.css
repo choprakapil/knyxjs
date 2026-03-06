@@ -5115,8 +5115,8 @@ only screen and (min-width: 576px) and (max-width: 767px),
 /*  2.9 Preloader
 /*----------------------------------------*/
 body.loaded {
-  overflow: hidden !important;
-  height: 100% !important;
+  overflow: auto !important;
+  height: auto !important;
 }
 
 .loader-wrap {
@@ -33579,4 +33579,18 @@ img.tp-service-ai-ring.p-absolute.object-contain {
 
 .tp-snap-text h2 {
   color: white !important;
+}
+
+.loader-wrap {
+  transition: transform 0.7s ease-in-out, opacity 0.7s ease-in-out;
+}
+
+.loader-wrap.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+section.pt-80.pb-100.tp-breadcrumb-area.tp-bg-common-black.p-relative.z-index-1 {
+  background: grey;
 }

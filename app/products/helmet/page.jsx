@@ -17,21 +17,18 @@ export default function HelmetProductsPage() {
             <BackToTop />
             <Offcanvas />
             <Header />
-            <ClientRuntime />
-            <div id="smooth-wrapper">
-                <div id="smooth-content">
-                    <main>
-                        <Breadcrumb
-                            title="KNYX Helmets"
-                            eyebrow="Products"
-                            description="Explore our premium range of professional and amateur cricket helmets."
-                        />
-                        <HelmetProductsSection />
-                    </main>
-                    <Footer />
-                </div>
-            </div>
-            <LegacyScripts />
+            {/* Legacy Runtime Disabled for Refactor */}
+            {/* <ClientRuntime /> */}
+            <main>
+                <Breadcrumb
+                    title="Cricket Helmets"
+                    eyebrow="Products"
+                    description="Explore our premium range of professional and amateur cricket helmets."
+                />
+                <HelmetProductsSection />
+            </main>
+            <Footer />
+            {/* <LegacyScripts /> */}
         </>
     );
 }

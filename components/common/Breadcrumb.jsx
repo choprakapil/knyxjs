@@ -1,5 +1,5 @@
 const Breadcrumb = ({ title, eyebrow = "Explore", description }) => (
-  <section className="pt-150 pb-100 tp-breadcrumb-area tp-bg-common-black p-relative z-index-1" data-background="/assets/img/breadcrumb/thumb.webp">
+  <section className="pt-80 pb-100 tp-breadcrumb-area tp-bg-common-black p-relative z-index-1" data-background="/assets/img/breadcrumb/thumb.webp">
     <div className="container">
       <div className="tp-breadcrumb-content text-center">
         <span className="tp-ff-inter fw-500 fs-16 ls-m-4 tp-text-grey-5 d-inline-block mb-15 text-uppercase">{eyebrow}</span>

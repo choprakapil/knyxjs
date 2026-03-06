@@ -22,7 +22,7 @@ const SidebarPortal = ({ children, sidebarStyle }) => {
             className="tp-product-sidebar-portal"
             style={{
                 position: "fixed",
-                top: "100px",
+                bottom: "10px",
                 left: "0",
                 width: "350px",
                 maxHeight: "calc(100vh - 110px)",
@@ -254,7 +254,7 @@ const HelmetProductsSection = () => {
     };
 
     const renderProductCard = (product, isAlternate = false) => (
-        <div id={product.id} key={product.id} className="product-item-container w-100" style={{ height: "100vh", display: "flex", alignItems: "flex-end", paddingBottom: "8vh" }}>
+        <div id={product.id} key={product.id} className="product-item-container w-100" style={{ height: "70vh", display: "flex", alignItems: "flex-end" }}>
             <div className={`product-item p-4 tp-round-10 transition-3 ${activeProductId === product.id ? 'active-product-card' : ''}`} style={{ height: "60vh", minHeight: "450px", width: "100%", display: "flex", alignItems: "center", backgroundColor: activeProductId === product.id ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.01)", backdropFilter: activeProductId === product.id ? "blur(20px)" : "none", border: activeProductId === product.id ? "1px solid var(--tp-theme-primary)" : "1px solid transparent", boxShadow: activeProductId === product.id ? "0 20px 60px rgba(0,0,0,0.6), inset 0 0 20px rgba(25, 135, 84, 0.1)" : "none", transform: activeProductId === product.id ? "scale(1) translateY(0)" : "scale(0.85) translateY(100px)", opacity: activeProductId === product.id ? 1 : 0, borderRadius: "24px", transition: "all 0.8s cubic-bezier(0.25, 1, 0.5, 1)", position: "relative" }}>
                 <div className="row align-items-center w-100 m-0">
                     <div className={`col-lg-6 mb-4 mb-lg-0 ${isAlternate ? 'order-lg-2' : ''}`}>

@@ -1,9 +1,9 @@
 import { withBasePath } from "@/lib/asset";
 
-const Offcanvas = () => (
+const Offcanvas = ({ open, onClose }) => (
   <>
     <div className="tp-offcanvas-area">
-      <div className="tp-offcanvas offcanvas-black-bg">
+      <div className={`tp-offcanvas offcanvas-black-bg ${open ? "opened" : ""}`}>
         <div className="tp-offcanvas-top d-flex align-items-center justify-content-between">
           <div className="tp-offcanvas-logo">
             <a href="#" onClick={(e) => e.preventDefault()}>
@@ -11,7 +11,7 @@ const Offcanvas = () => (
             </a>
           </div>
           <div className="tp-offcanvas-close-btn">
-            <button className="close-btn">
+            <button className="close-btn" onClick={onClose}>
               <svg width="37" height="38" viewBox="0 0 37 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M9.19141 9.80762L27.5762 28.1924"
@@ -82,7 +82,7 @@ const Offcanvas = () => (
         </div>
       </div>
     </div>
-    <div className="body-overlay"></div>
+    <div className={`body-overlay ${open ? "apply" : ""}`} onClick={onClose}></div>
   </>
 );
 
