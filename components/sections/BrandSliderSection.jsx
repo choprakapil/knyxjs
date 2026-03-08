@@ -7,7 +7,7 @@ import 'swiper/css';
 
 const BrandSliderSection = () => {
     return (
-        <section className="brand-slider-section" style={{ paddingTop: '80px', paddingBottom: '10px' }}>
+        <section className="brand-slider-section" style={{ paddingTop: '10px', paddingBottom: '10px' }}>
             <div className="container-fluid container-1824 containers">
                 <div className="row">
                     <div className="col-12">
