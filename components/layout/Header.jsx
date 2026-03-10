@@ -12,7 +12,7 @@ const desktopMenuHtml = `
   <li><a href="/">Technology</a></li>
 
   <li class="has-dropdown p-inherit">
-    <a href="/homepage">
+    <a href="javascript:void(0)" style="cursor: default;">
       Products
       <span>
         <svg width="7" height="6" viewBox="0 0 7 6" fill="none" xmlns="http://www.w3.org/2000/svg">

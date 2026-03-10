@@ -6,7 +6,6 @@ import Header from "@/components/layout/Header";
 import LegacyScripts from "@/components/layout/LegacyScripts";
 import MagicCursor from "@/components/layout/MagicCursor";
 import Offcanvas from "@/components/layout/Offcanvas";
-import Breadcrumb from "@/components/common/Breadcrumb";
 import HelmetProductsSection from "@/components/sections/HelmetProductsSection";
 
 export default function HelmetProductsPage() {
@@ -20,11 +19,6 @@ export default function HelmetProductsPage() {
             {/* Legacy Runtime Disabled for Refactor */}
             {/* <ClientRuntime /> */}
             <main>
-                <Breadcrumb
-                    title="Cricket Helmets"
-                    eyebrow="Products"
-                    description="Explore our premium range of professional and amateur cricket helmets."
-                />
                 <HelmetProductsSection />
             </main>
             <Footer />

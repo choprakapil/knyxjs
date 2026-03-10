@@ -58,14 +58,33 @@ header {
 }
 
 video.bg_video {
-  /* position: absolute; */
-  top: 0;
-  max-width: 100%;
-  width: 100%;
-  min-width: 100%;
   z-index: 0;
 }
 
 .opacity0 {
   opacity: 0;
+}
+
+.brand-story-wrapper {
+  width: 65%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .brand-story-wrapper {
+    width: 75%;
+  }
+}
+
+@media (max-width: 991px) {
+  .brand-story-wrapper {
+    width: 85%;
+  }
+}
+
+@media (max-width: 767px) {
+  .brand-story-wrapper {
+    width: 100%;
+    padding: 0 15px;
+  }
 }

@@ -14602,7 +14602,7 @@ only screen and (min-width: 576px) and (max-width: 767px),
 }
 
 .tp-brand-item a {
-  opacity: 0.5;
+  opacity: 1;
 }
 
 .tp-brand-item a:hover {
@@ -14612,19 +14612,19 @@ only screen and (min-width: 576px) and (max-width: 767px),
 .tp-brand-slide-active .swiper-slide {
   display: inline-block;
   width: auto;
-  margin: 0 80px;
+  margin: 0 40px;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px),
 only screen and (min-width: 576px) and (max-width: 767px) {
   .tp-brand-slide-active .swiper-slide {
-    margin: 0 50px;
+    margin: 0 25px;
   }
 }
 
 @media (max-width: 574.98px) {
   .tp-brand-slide-active .swiper-slide {
-    margin: 0 30px;
+    margin: 0 15px;
   }
 }
 

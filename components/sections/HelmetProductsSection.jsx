@@ -19,16 +19,16 @@ const SidebarPortal = ({ children, sidebarStyle }) => {
 
     return createPortal(
         <div
-            className="tp-product-sidebar-portal"
+            className="tp-product-sidebar-portal d-none d-xl-block"
             style={{
                 position: "fixed",
-                bottom: "10px",
-                left: "0",
-                width: "350px",
-                maxHeight: "calc(100vh - 110px)",
+                top: "50%",
+                left: "max(30px, calc((100vw - 1524px) / 2 + 15px))",
+                width: "250px",
+                maxHeight: "80vh",
                 overflowY: "auto",
                 zIndex: 100,
-                padding: "0 15px 0 calc((100vw - 1524px) / 2 + 15px)",
+                padding: "0",
                 transition: "opacity 0.3s ease, transform 0.3s ease",
                 ...sidebarStyle,
             }}
@@ -58,12 +58,12 @@ const CategoryHeadingPortal = ({ label, visible }) => {
             className="tp-category-heading-portal"
             style={{
                 position: "fixed",
-                top: "105px",
-                left: "350px",
-                right: "0",
+                top: "140px",
+                left: "max(280px, calc((100vw - 1524px) / 2 + 280px))",
+                right: "auto",
                 zIndex: 99,
-                padding: "14px calc((100vw - 1524px) / 2 + 15px) 14px 80px",
-                background: "linear-gradient(180deg, rgba(6, 8, 13, 0.97) 0%, rgba(6, 8, 13, 0.92) 70%, rgba(6, 8, 13, 0) 100%)",
+                padding: "0",
+                background: "transparent",
                 transition: "opacity 0.35s ease, transform 0.35s ease",
                 opacity: visible ? 1 : 0,
                 transform: visible ? "translateY(0)" : "translateY(-20px)",
@@ -72,7 +72,7 @@ const CategoryHeadingPortal = ({ label, visible }) => {
         >
             <h2
                 className="tp-ff-jakarta fw-600 tp-text-common-white m-0"
-                style={{ fontSize: "28px", letterSpacing: "-0.5px" }}
+                style={{ fontSize: "28px", letterSpacing: "-0.5px", textShadow: "0 4px 20px rgba(0,0,0,0.8)" }}
             >
                 {label}
             </h2>
@@ -90,7 +90,7 @@ const CategoryHeadingPortal = ({ label, visible }) => {
 };
 
 const HelmetProductsSection = () => {
-    const [activeProductId, setActiveProductId] = useState("");
+    const [activeProductId, setActiveProductId] = useState("product-1");
     const contentRef = useRef(null);
     const sectionRef = useRef(null);
     const [sidebarVisible, setSidebarVisible] = useState(true);
@@ -128,7 +128,7 @@ const HelmetProductsSection = () => {
         const updateVisibility = () => {
             if (!contentEl) return;
             const rect = contentEl.getBoundingClientRect();
-            const isVisible = rect.top < 200 && rect.bottom > 200;
+            const isVisible = rect.top < window.innerHeight && rect.bottom > 200;
             setSidebarVisible(isVisible);
 
             // Determine active category heading based on which section is in view
@@ -255,7 +255,7 @@ const HelmetProductsSection = () => {
 
     const renderProductCard = (product, isAlternate = false) => (
         <div id={product.id} key={product.id} className="product-item-container w-100" style={{ height: "70vh", display: "flex", alignItems: "flex-end" }}>
-            <div className={`product-item p-4 tp-round-10 transition-3 ${activeProductId === product.id ? 'active-product-card' : ''}`} style={{ height: "60vh", minHeight: "450px", width: "100%", display: "flex", alignItems: "center", backgroundColor: activeProductId === product.id ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.01)", backdropFilter: activeProductId === product.id ? "blur(20px)" : "none", border: activeProductId === product.id ? "1px solid var(--tp-theme-primary)" : "1px solid transparent", boxShadow: activeProductId === product.id ? "0 20px 60px rgba(0,0,0,0.6), inset 0 0 20px rgba(25, 135, 84, 0.1)" : "none", transform: activeProductId === product.id ? "scale(1) translateY(0)" : "scale(0.85) translateY(100px)", opacity: activeProductId === product.id ? 1 : 0, borderRadius: "24px", transition: "all 0.8s cubic-bezier(0.25, 1, 0.5, 1)", position: "relative" }}>
+            <div className={`product-item p-4 tp-round-10 transition-3 ${activeProductId === product.id ? 'active-product-card' : ''}`} style={{ height: "60vh", minHeight: "450px", width: "100%", display: "flex", alignItems: "center", backgroundColor: activeProductId === product.id ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.01)", backdropFilter: activeProductId === product.id ? "blur(20px)" : "none", border: activeProductId === product.id ? "1px solid var(--tp-theme-primary)" : "1px solid transparent", boxShadow: activeProductId === product.id ? "0 20px 60px rgba(0,0,0,0.6), inset 0 0 20px rgba(25, 135, 84, 0.1)" : "none", transform: activeProductId === product.id ? "scale(1) translateY(0)" : "scale(0.92) translateY(40px)", opacity: activeProductId === product.id ? 1 : 0.35, borderRadius: "24px", transition: "all 0.8s cubic-bezier(0.25, 1, 0.5, 1)", position: "relative" }}>
                 <div className="row align-items-center w-100 m-0">
                     <div className={`col-lg-6 mb-4 mb-lg-0 ${isAlternate ? 'order-lg-2' : ''}`}>
                         <div className="product-image p-relative overflow-hidden tp-round-10" style={{ backgroundColor: "rgba(0,0,0,0.5)", mixBlendMode: 'screen', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -316,8 +316,8 @@ const HelmetProductsSection = () => {
     );
 
     const sidebarPortalStyle = sidebarVisible
-        ? { opacity: 1, transform: "translateX(0)" }
-        : { opacity: 0, transform: "translateX(-20px)", pointerEvents: "none" };
+        ? { opacity: 1, transform: "translateY(-50%) translateX(0)" }
+        : { opacity: 0, transform: "translateY(-50%) translateX(-20px)", pointerEvents: "none" };
 
     return (
         <>
@@ -326,24 +326,8 @@ const HelmetProductsSection = () => {
 
             {/* Sidebar rendered via portal — outside #smooth-content to avoid transform */}
             <SidebarPortal sidebarStyle={sidebarPortalStyle}>
-                <div className="category-widget position-relative" style={{ padding: '40px 30px', borderRadius: '24px', background: 'linear-gradient(145deg, #1A1F2B 0%, #0F1218 100%)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 20px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05)' }}>
-                    {/* Continuous Background Track */}
-                    <div style={{ position: 'absolute', left: '30px', top: '100px', bottom: '60px', width: '3px', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '3px' }}>
-                        <div
-                            className="sidebar-scroll-progress"
-                            style={{
-                                width: '100%',
-                                height: '0%',
-                                background: 'var(--tp-theme-primary)',
-                                boxShadow: '0 0 20px var(--tp-theme-primary)',
-                                borderRadius: '3px',
-                                position: 'relative'
-                            }}
-                        >
-                            <div style={{ position: 'absolute', bottom: '-4px', left: '50%', transform: 'translateX(-50%)', width: '10px', height: '10px', borderRadius: '50%', background: '#fff', boxShadow: '0 0 15px 5px var(--tp-theme-primary)' }}></div>
-                        </div>
-                    </div>
-                    <div style={{ paddingLeft: '24px' }}>
+                <div className="category-widget position-relative" style={{ padding: '10px 0px' }}>
+                    <div style={{ paddingLeft: '0px' }}>
                         <div className="category-group">
                             <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15" style={{ letterSpacing: '-0.5px' }}>
                                 Professional
@@ -365,10 +349,10 @@ const HelmetProductsSection = () => {
                 <div className="container-fluid container-1524">
                     <div className="row">
                         {/* Left spacer for sidebar width */}
-                        <div className="col-lg-3 d-none d-lg-block" />
+                        <div className="col-lg-2 d-none d-lg-block" />
 
                         {/* Right Content - Products List */}
-                        <div className="col-lg-8 offset-lg-1">
+                        <div className="col-lg-9 offset-lg-1">
                             <div ref={contentRef} className="tp-product-list-content">
 
                                 {/* Professional Category Section */}
