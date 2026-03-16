@@ -6,7 +6,7 @@ const AboutSection = ({ showButton = true }) => (
       <div className="row">
         <div className="col-12">
           <div className="tp-about-ai-text-wrap mb-10 text-center">
-            <h3 className="tp-about-ai-text tp-ff-jakarta fw-600 fs-40 fs-xl-60 fs-md-38 lh-120-per ls-m-4 tp-text-common-white">
+            <h3 className="tp-about-ai-text tp-ff-jakarta fw-600 fs-40 fs-xl-60 fs-md-38 lh-120-per ls-m-4 tp-text-common-white tet-left">
               Brand Story
             </h3>
           </div>

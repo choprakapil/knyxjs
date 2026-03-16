@@ -15,7 +15,8 @@ const brands = [
 ];
 
 /* Duplicate so the loop appears seamless */
-const track = [...brands, ...brands, ...brands];
+// const track = [...brands, ...brands, ...brands];
+const track = brands;
 
 const BrandSliderSection = () => (
     <section
@@ -50,13 +51,27 @@ const BrandSliderSection = () => (
                 width: 100%;
                 overflow: hidden;
             }
-            .knyx-ticker-track {
-                display: flex;
-                align-items: center;
-                /* one cycle = 9 items × (48px img + ~80px gap) ≈ width of one set */
-                animation: knyx-scroll 28s linear infinite;
-                will-change: transform;
-            }
+    //         .knyx-ticker-track {
+    //             display: flex;
+    //             align-items: center;
+    //             /* one cycle = 9 items × (48px img + ~80px gap) ≈ width of one set */
+    //             // animation: knyx-scroll 28s linear infinite;
+    //             // will-change: transform;
+
+
+    // justify-content: center;
+    // flex-wrap: wrap;
+    //         }
+
+
+
+
+    .knyx-ticker-track {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 40px;
+    justify-items: center;
+}
             .knyx-ticker-item {
                 flex: 0 0 auto;
                 width: 120px;
