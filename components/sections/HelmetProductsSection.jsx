@@ -94,7 +94,8 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
         cards.forEach((card, i) => {
             const start = i * step;
             const mid = start + step / 2;
-            const end = start + step;
+
+            const productItem = card.querySelector(".product-item");
 
             // Entrance and highlight
             tl.fromTo(
@@ -110,6 +111,20 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
                 start
             );
 
+            if (productItem) {
+                tl.fromTo(
+                    productItem,
+                    { borderColor: "rgba(255,255,255,0.05)", boxShadow: "0 0 0px rgba(25, 135, 84, 0)" },
+                    {
+                        borderColor: "var(--tp-theme-primary)",
+                        boxShadow: "0 0 30px rgba(25, 135, 84, 0.3)",
+                        ease: "power2.out",
+                        duration: step / 2,
+                    },
+                    start
+                );
+            }
+
             // Exit
             tl.to(
                 card,
@@ -122,6 +137,19 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
                 },
                 mid
             );
+
+            if (productItem) {
+                tl.to(
+                    productItem,
+                    {
+                        borderColor: "rgba(255,255,255,0.05)",
+                        boxShadow: "0 0 0px rgba(25, 135, 84, 0)",
+                        ease: "power2.in",
+                        duration: step / 2,
+                    },
+                    mid
+                );
+            }
         });
 
         return () => {
