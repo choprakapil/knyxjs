@@ -23,7 +23,7 @@ const BrandSliderSection = () => (
         className="brand-slider-section"
         style={{ paddingTop: '0px', paddingBottom: '0px', overflow: 'hidden' }}
     >
-        <div style={{ paddingTop: '30px', paddingBottom: '30px' }}>
+        <div style={{ paddingTop: '10px', paddingBottom: '30px' }}>
             {/* ── CSS-driven infinite ticker ── */}
             <div className="knyx-ticker-wrap">
                 <div className="knyx-ticker-track">
@@ -32,11 +32,11 @@ const BrandSliderSection = () => (
                             <img
                                 src={withBasePath(`/assets/img/brands/${brand.img}`)}
                                 alt={brand.name}
-                                style={{ maxWidth: '48px', height: 'auto', display: 'block', margin: '0 auto', filter: 'invert(1)' }}
+                                style={{ maxWidth: '48px', height: 'auto', display: 'block', margin: '0', filter: 'invert(1)' }}
                             />
                             <span
                                 className="tp-text-common-white"
-                                style={{ fontSize: '9px', letterSpacing: '0.06em', marginTop: '8px', display: 'block', textAlign: 'center', whiteSpace: 'nowrap' }}
+                                style={{ fontSize: '9px', letterSpacing: '0.06em', marginTop: '8px', display: 'block', textAlign: 'left', whiteSpace: 'nowrap' }}
                             >
                                 {brand.name}
                             </span>
@@ -69,16 +69,21 @@ const BrandSliderSection = () => (
     .knyx-ticker-track {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 40px;
-    justify-items: center;
+    gap: 0px;
+    justify-items: start;
 }
-            .knyx-ticker-item {
-                flex: 0 0 auto;
-                width: 120px;
-                margin: 0 40px;
-                pointer-events: none;
-                user-select: none;
-            }
+           .knyx-ticker-item {
+    flex: 0 0 auto;
+    width: 120px;
+    margin: 0 20px;
+    pointer-events: none;
+    user-select: none;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
             @keyframes knyx-scroll {
                 /* Each item: 120px wide + 80px margin (40px each side) = 200px × 9 items = 1800px */
                 0%   { transform: translateX(0); }

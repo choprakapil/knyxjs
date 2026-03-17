@@ -8,8 +8,9 @@ const BrandStorySection = ({ isHomePage = false }) => (
             <div className="row justify-content-center">
                 <div className="col-12">
                     <div className="brand-story-wrapper">
-                        <div className="tp-about-ai-content mb-30 text-center">
-                            <h2 className="tp-about-ai-title fw-600 tp-ff-jakarta ls-m-4 d-flex align-items-center justify-content-center mb-35 tp_fade_anim" data-delay=".3">
+                        <div className="tp-about-ai-content mb-30 text-start">
+                        <div className="tp-about-ai-text-wrap mb-10 text-start"><h3 className="tp-about-ai-text tp-ff-jakarta fw-600 fs-40 fs-xl-60 fs-md-38 lh-120-per ls-m-4 tp-text-common-white tet-left">Brand Story</h3></div>
+                            <h2 className="tp-about-ai-title fw-600 tp-ff-jakarta ls-m-4 d-flex align-items-center justify-content-start mb-35 tp_fade_anim" data-delay=".3">
                                 <span className="title-slide-gradient">KNYX</span>
                                 <span className="aleric-ai tp-text-common-white fs-22 ls-0 mt-35">Engineered Excellence</span>
                             </h2>
@@ -27,7 +28,7 @@ const BrandStorySection = ({ isHomePage = false }) => (
             </div>
 
             {/* ── Thin divider ── */}
-            <div className="row justify-content-center mt-40 mb-40">
+            <div className="row justify-content-center mt-10 mb-10">
                 <div className="col-12 brand-story-wrapper">
                     <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: 0 }} />
                 </div>
@@ -37,8 +38,8 @@ const BrandStorySection = ({ isHomePage = false }) => (
             <div className="row justify-content-center">
 
                 {/* Where Heritage Meets Innovation */}
-                <div className="col-12 mb-60">
-                    <div className="tp_fade_anim text-center brand-story-wrapper" data-delay=".3">
+                <div className="col-12 mb-40">
+                    <div className="tp_fade_anim text-start brand-story-wrapper" data-delay=".3">
                         <h3 className="tp-ff-jakarta fw-600 fs-32 ls-m-2 mb-20 tp-text-common-white">Where Heritage Meets Innovation</h3>
                         <p className="tp-about-ai-para tp-ff-dm mb-20 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
                             Cricket carries tradition in every stroke and every stance. We respect that legacy.
@@ -52,19 +53,19 @@ const BrandStorySection = ({ isHomePage = false }) => (
                     </div>
                 </div>
 
-                <div className="col-12 mb-60 brand-story-wrapper">
+                <div className="col-12 mb-20 brand-story-wrapper">
                     <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: 0 }} />
                 </div>
 
                 {/* Crafted for Performance */}
-                <div className="col-12 mb-60">
-                    <div className="tp_fade_anim text-center brand-story-wrapper" data-delay=".4">
+                <div className="col-12 mb-40">
+                    <div className="tp_fade_anim text-start brand-story-wrapper" data-delay=".4">
                         <h3 className="tp-ff-jakarta fw-600 fs-32 ls-m-2 mb-20 tp-text-common-white">Crafted for Performance</h3>
                         <p className="tp-about-ai-para tp-ff-dm mb-20 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
                             Every KNYX product is shaped by precision engineering, rigorous testing, and an uncompromising pursuit of perfection. From material selection to final finish, nothing is left to chance.
                         </p>
                         <p className="tp-about-ai-para tp-ff-dm mb-10 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">Our equipment offers:</p>
-                        <ul className="tp-about-ai-para tp-ff-dm mb-20 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2 list-unstyled">
+                        <ul className="tp-about-ai-para tp-ff-dm mb-20 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
                             <li>Advanced impact absorption</li>
                             <li>Lightweight construction</li>
                             <li>Improved Airflow and comfort</li>
@@ -77,16 +78,16 @@ const BrandStorySection = ({ isHomePage = false }) => (
                     </div>
                 </div>
 
-                <div className="col-12 mb-60 brand-story-wrapper">
+                <div className="col-12 mb-20 brand-story-wrapper">
                     <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: 0 }} />
                 </div>
 
                 {/* Our Philosophy */}
-                <div className="col-12 mb-60">
-                    <div className="tp_fade_anim text-center brand-story-wrapper" data-delay=".5">
+                <div className="col-12 mb-40">
+                    <div className="tp_fade_anim text-start brand-story-wrapper" data-delay=".5">
                         <h3 className="tp-ff-jakarta fw-600 fs-32 ls-m-2 mb-20 tp-text-common-white">Our Philosophy</h3>
                         <p className="tp-about-ai-para tp-ff-dm mb-10 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">We believe in:</p>
-                        <ul className="tp-about-ai-para tp-ff-dm mb-20 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2 list-unstyled">
+                        <ul className="tp-about-ai-para tp-ff-dm mb-20 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
                             <li>Precision over compromise</li>
                             <li>Innovation with purpose</li>
                             <li>Tradition with relevance</li>
@@ -98,13 +99,13 @@ const BrandStorySection = ({ isHomePage = false }) => (
                     </div>
                 </div>
 
-                <div className="col-12 mb-60 brand-story-wrapper">
+                <div className="col-12 mb-20 brand-story-wrapper">
                     <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: 0 }} />
                 </div>
 
                 {/* For the New Age Knight */}
-                <div className="col-12 mb-60">
-                    <div className="tp_fade_anim text-center brand-story-wrapper" data-delay=".6">
+                <div className="col-12 mb-40">
+                    <div className="tp_fade_anim text-start brand-story-wrapper" data-delay=".6">
                         <h3 className="tp-ff-jakarta fw-600 fs-32 ls-m-2 mb-20 tp-text-common-white">For the New Age Knight</h3>
                         <p className="tp-about-ai-para tp-ff-dm mb-20 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
                             Every cricketer who steps onto the field is a warrior of the game.
@@ -115,13 +116,13 @@ const BrandStorySection = ({ isHomePage = false }) => (
                     </div>
                 </div>
 
-                <div className="col-12 mb-60 brand-story-wrapper">
+                <div className="col-12 mb-20 brand-story-wrapper">
                     <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: 0 }} />
                 </div>
 
                 {/* The KNYX Promise */}
                 <div className="col-12 mb-30">
-                    <div className="tp_fade_anim text-center brand-story-wrapper" data-delay=".7">
+                    <div className="tp_fade_anim text-start brand-story-wrapper" data-delay=".7">
                         <h3 className="tp-ff-jakarta fw-600 fs-32 ls-m-2 mb-20 tp-text-common-white">The KNYX Promise</h3>
                         <p className="tp-about-ai-para tp-ff-dm mb-20 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
                             Our journey begins with cricket helmets, but our ambition extends far beyond.

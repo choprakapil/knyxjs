@@ -10731,12 +10731,12 @@ only screen and (min-width: 576px) and (max-width: 767px),
 }
 
 .tp-footer-ai-bigtitle {
-  font-size: 422px;
+  font-size: 211px;
 }
 
 @media only screen and (min-width: 1400px) and (max-width: 1599px) {
   .tp-footer-ai-bigtitle {
-    font-size: 370px;
+    font-size: 185px;
   }
 }
 
@@ -10746,7 +10746,7 @@ only screen and (min-width: 768px) and (max-width: 991px),
 only screen and (min-width: 576px) and (max-width: 767px),
 (max-width: 574.98px) {
   .tp-footer-ai-bigtitle {
-    font-size: 330px;
+    font-size: 165px;
   }
 }
 
@@ -10755,27 +10755,39 @@ only screen and (min-width: 768px) and (max-width: 991px),
 only screen and (min-width: 576px) and (max-width: 767px),
 (max-width: 574.98px) {
   .tp-footer-ai-bigtitle {
-    font-size: 267px;
+    font-size: 134px;
   }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .tp-footer-ai-bigtitle {
-    font-size: 200px;
+    font-size: 100px;
   }
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px),
 (max-width: 574.98px) {
   .tp-footer-ai-bigtitle {
-    font-size: 150px;
+    font-size: 75px;
   }
 }
 
 @media (max-width: 574.98px) {
   .tp-footer-ai-bigtitle {
-    font-size: 92px;
+    font-size: 46px;
   }
+}
+
+/* KNYX homepage: left-aligned content + readable lists (scoped) */
+.tp-about-area .brand-story-wrapper ul {
+  list-style: disc;
+  list-style-position: outside;
+  padding-left: 1.25rem;
+  margin-left: 0;
+}
+
+.tp-about-area .brand-story-wrapper li {
+  margin: 0.25rem 0;
 }
 
 .tp-footer-ai-copyright-border {

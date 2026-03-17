@@ -2,6 +2,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { withBasePath } from "@/lib/asset";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Sidebar rendered via portal OUTSIDE #smooth-content so that 
@@ -89,7 +93,15 @@ const CategoryHeadingPortal = ({ label, visible }) => {
     );
 };
 
-const HelmetProductsSection = () => {
+const slugify = (value) =>
+    String(value ?? "")
+        .trim()
+        .toLowerCase()
+        .replace(/&/g, "and")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
     const [activeProductId, setActiveProductId] = useState("product-1");
     const contentRef = useRef(null);
     const sectionRef = useRef(null);
@@ -132,13 +144,13 @@ const HelmetProductsSection = () => {
             setSidebarVisible(isVisible);
 
             // Determine active category heading based on which section is in view
-            if (proSection && amateurSection) {
+                if (proSection) {
                 const proRect = proSection.getBoundingClientRect();
-                const amateurRect = amateurSection.getBoundingClientRect();
+                    const amateurRect = amateurSection?.getBoundingClientRect();
                 // The heading that has scrolled past the top gets "pinned"
                 const headingPinLine = 140; // just below header
 
-                if (amateurRect.top < headingPinLine) {
+                    if (amateurRect && amateurRect.top < headingPinLine) {
                     setActiveCategoryLabel("Amateur Helmets");
                 } else if (proRect.top < headingPinLine) {
                     setActiveCategoryLabel("Professional Helmets");
@@ -210,7 +222,9 @@ const HelmetProductsSection = () => {
     }, []);
 
     const professionalProducts = [
-        { id: "product-1", name: "C7 Iso Pro", image: "1.png" },
+        { id: "product-1", name: "C7 Iso Pro", image: "1.png", slug: "c7-iso-pro" },
+        { id: "product-1b", name: "C7", image: "2.png", slug: "c7" },
+        { id: "product-1c", name: "C5", image: "3.png", slug: "c5" },
         { id: "product-2", name: "KNYX Pro Elite V2", image: "2.png" },
         { id: "product-3", name: "KNYX Pro Master", image: "3.png" },
         { id: "product-4", name: "KNYX Pro Titanium", image: "4.png" },
@@ -224,6 +238,94 @@ const HelmetProductsSection = () => {
         { id: "product-9", name: "KNYX Academy Edition", image: "9.png" },
         { id: "product-10", name: "KNYX Starter Pro", image: "10.png" },
     ];
+
+    const normalizedCategorySlugFilter = categorySlugFilter ? slugify(categorySlugFilter) : null;
+    const allowProfessional = !normalizedCategorySlugFilter || normalizedCategorySlugFilter === "professional";
+    const allowAmateurs = !normalizedCategorySlugFilter || normalizedCategorySlugFilter === "amateurs";
+
+    const normalizedAllowedProductSlugs = Array.isArray(allowedProductSlugs)
+        ? allowedProductSlugs.map((s) => slugify(s)).filter(Boolean)
+        : null;
+
+    const getProductSlug = (product) => slugify(product?.slug ?? product?.name);
+
+    const buildFilteredProducts = (products) => {
+        if (!normalizedAllowedProductSlugs) return products;
+
+        const bySlug = new Map();
+        products.forEach((p) => {
+            const s = getProductSlug(p);
+            if (s && !bySlug.has(s)) bySlug.set(s, p);
+        });
+
+        // Preserve order and duplicates from the allowed list
+        return normalizedAllowedProductSlugs
+            .map((slug, idx) => {
+                const p = bySlug.get(slug);
+                if (!p) return null;
+                return {
+                    ...p,
+                    // ensure unique ids for scroll anchors + React keys, even for duplicates
+                    id: `${p.id}__allowed_${idx}`,
+                    routeId: p.id,
+                };
+            })
+            .filter(Boolean);
+    };
+
+    const filteredProfessionalProducts = allowProfessional ? buildFilteredProducts(professionalProducts) : [];
+    const filteredAmateurProducts = allowAmateurs ? buildFilteredProducts(amateurProducts) : [];
+
+    // Ensure the "active" state always points at a rendered product
+    useEffect(() => {
+        const renderedIds = new Set([
+            ...filteredProfessionalProducts.map((p) => p.id),
+            ...filteredAmateurProducts.map((p) => p.id),
+        ]);
+
+        if (renderedIds.size === 0) return;
+        if (!renderedIds.has(activeProductId)) {
+            const first = filteredProfessionalProducts[0]?.id || filteredAmateurProducts[0]?.id;
+            if (first) setActiveProductId(first);
+        }
+    }, [activeProductId, filteredProfessionalProducts, filteredAmateurProducts]);
+
+    // GSAP ScrollTrigger pinning for desktop-only storytelling experience
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+
+        const triggers = [];
+
+        ScrollTrigger.matchMedia({
+            "(min-width: 1024px)": () => {
+                const cards = gsap.utils.toArray(".helmet-product-card");
+
+                cards.forEach((card) => {
+                    const st = ScrollTrigger.create({
+                        trigger: card,
+                        start: "top top",
+                        end: "+=100%",
+                        pin: true,
+                        pinSpacing: false,
+                        scrub: true,
+                    });
+                    triggers.push(st);
+                });
+            },
+            "(max-width: 1023px)": () => {
+                // No pinning on mobile / tablet for smooth native scroll
+            },
+        });
+
+        return () => {
+            triggers.forEach((st) => {
+                if (st) st.kill();
+            });
+            if (ScrollTrigger.clearMatchMedia) {
+                ScrollTrigger.clearMatchMedia();
+            }
+        };
+    }, []);
 
     const renderNavList = (products) => {
         return (
@@ -293,7 +395,7 @@ const HelmetProductsSection = () => {
                                     )}
                                 </ul>
                             </div>
-                            <a href={`/products/helmet/${product.id}`} className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
+                            <a href={`/products/helmet/${product.routeId || product.id}`} className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
                                 <span className="d-flex align-items-center justify-content-center">
                                     <span className="btn-text">View Product</span>
                                     <span className="btn-icon">
@@ -326,20 +428,27 @@ const HelmetProductsSection = () => {
 
             {/* Sidebar rendered via portal — outside #smooth-content to avoid transform */}
             <SidebarPortal sidebarStyle={sidebarPortalStyle}>
-                <div className="category-widget position-relative" style={{ padding: '10px 0px' }}>
+                <div
+                    className="category-widget position-relative"
+                    style={{ padding: "10px 0px", position: "sticky", top: "120px", alignSelf: "flex-start" }}
+                >
                     <div style={{ paddingLeft: '0px' }}>
-                        <div className="category-group">
-                            <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15" style={{ letterSpacing: '-0.5px' }}>
-                                Professional
-                            </h5>
-                            {renderNavList(professionalProducts)}
-                        </div>
-                        <div className="category-group mt-30">
-                            <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15" style={{ letterSpacing: '-0.5px' }}>
-                                Amateurs
-                            </h5>
-                            {renderNavList(amateurProducts)}
-                        </div>
+                        {allowProfessional && (
+                            <div className="category-group">
+                                <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15" style={{ letterSpacing: '-0.5px' }}>
+                                    Professional
+                                </h5>
+                                {renderNavList(filteredProfessionalProducts)}
+                            </div>
+                        )}
+                        {allowAmateurs && (
+                            <div className="category-group mt-30">
+                                <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15" style={{ letterSpacing: '-0.5px' }}>
+                                    Amateurs
+                                </h5>
+                                {renderNavList(filteredAmateurProducts)}
+                            </div>
+                        )}
                     </div>
                 </div>
             </SidebarPortal>
@@ -357,19 +466,43 @@ const HelmetProductsSection = () => {
 
                                 {/* Professional Category Section */}
                                 <div ref={proSectionRef} className="pin-category position-relative" style={{ paddingTop: "10px" }}>
-                                    {professionalProducts.map((product) => renderProductCard(product, false))}
+                                    {filteredProfessionalProducts.map((product) => (
+                                        <div key={product.id} className="helmet-product-card">
+                                            {renderProductCard(product, false)}
+                                        </div>
+                                    ))}
                                 </div>
 
                                 {/* Amateur Category Section */}
-                                <div ref={amateurSectionRef} className="pin-category position-relative" style={{ paddingTop: "20px" }}>
-                                    {amateurProducts.map((product) => renderProductCard(product, true))}
-                                </div>
+                                {allowAmateurs && (
+                                    <div ref={amateurSectionRef} className="pin-category position-relative" style={{ paddingTop: "20px" }}>
+                                        {filteredAmateurProducts.map((product) => (
+                                            <div key={product.id} className="helmet-product-card">
+                                                {renderProductCard(product, true)}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
 
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <style jsx>{`
+                .helmet-product-card {
+                    min-height: 100vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                @media (max-width: 1023px) {
+                    .helmet-product-card {
+                        min-height: auto;
+                    }
+                }
+            `}</style>
         </>
     );
 };

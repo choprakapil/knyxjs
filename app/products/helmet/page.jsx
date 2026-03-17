@@ -9,6 +9,9 @@ import Offcanvas from "@/components/layout/Offcanvas";
 import HelmetProductsSection from "@/components/sections/HelmetProductsSection";
 
 export default function HelmetProductsPage() {
+    const categorySlugFilter = "professional";
+    const allowedProductSlugs = ["c7-iso-pro", "c7", "c5", "c7-iso-pro"];
+
     return (
         <>
             <div className="tp-hero-ai-body-overlay"></div>
@@ -19,7 +22,10 @@ export default function HelmetProductsPage() {
             {/* Legacy Runtime Disabled for Refactor */}
             {/* <ClientRuntime /> */}
             <main>
-                <HelmetProductsSection />
+                <HelmetProductsSection
+                    categorySlugFilter={categorySlugFilter}
+                    allowedProductSlugs={allowedProductSlugs}
+                />
             </main>
             <Footer />
             {/* <LegacyScripts /> */}
