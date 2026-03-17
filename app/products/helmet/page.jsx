@@ -19,16 +19,13 @@ export default function HelmetProductsPage() {
             <BackToTop />
             <Offcanvas />
             <Header />
-            {/* Legacy Runtime Disabled for Refactor */}
-            {/* <ClientRuntime /> */}
-            <main>
-                <HelmetProductsSection
-                    categorySlugFilter={categorySlugFilter}
-                    allowedProductSlugs={allowedProductSlugs}
-                />
-            </main>
+            <ClientRuntime />
+            <HelmetProductsSection
+                categorySlugFilter={categorySlugFilter}
+                allowedProductSlugs={allowedProductSlugs}
+            />
             <Footer />
-            {/* <LegacyScripts /> */}
+            <LegacyScripts />
         </>
     );
 }
