@@ -55,7 +55,7 @@ const PricingSection = () => (
         </div>
         <div className="col-lg-4">
           <div className="text-lg-end mb-60">
-            <a href="#" className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
+            <a href={withBasePath("/")} className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
               <span className="d-flex align-items-center justify-content-center">
                 <span className="btn-text">View Catalogue</span>
                 <span className="btn-icon">
@@ -91,7 +91,7 @@ const PricingSection = () => (
                   </li>
                 ))}
               </ul>
-              <a href="#" className="tp-btn-ai tp-btn-switch-2-animation p-relative d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
+              <a href={withBasePath("/")} className="tp-btn-ai tp-btn-switch-2-animation p-relative d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
                 <span className="d-flex align-items-center justify-content-center">
                   <span className="btn-text">{plan.cta}</span>
                   <span className="btn-icon">

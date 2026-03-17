@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
           <link key={href} rel="stylesheet" href={withBasePath(href)} />
         ))}
       </head>
-      <body className="tp-magic-cursor">{children}</body>
+      <body className="tp-magic-cursor" suppressHydrationWarning>{children}</body>
     </html>
   );
 }

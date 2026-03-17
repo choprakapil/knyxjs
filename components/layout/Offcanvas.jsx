@@ -1,3 +1,4 @@
+"use client";
 import { withBasePath } from "@/lib/asset";
 
 const Offcanvas = ({ open, onClose }) => (
@@ -73,7 +74,7 @@ const Offcanvas = ({ open, onClose }) => (
           <div className="tp-footer-wd-social tp-footer-ai-social d-flex justify-content-lg-start mb-40">
             {["facebook", "twitter", "instagram", "linkedin"].map((network, index) => (
               <div key={network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
-                <a href="">
+                <a href={withBasePath("/")}>
                   <i className={`fa-brands fa-${network}`}></i>
                 </a>
               </div>

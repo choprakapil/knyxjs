@@ -36,7 +36,7 @@ const BlogSection = () => (
         </div>
         <div className="col-lg-4">
           <div className="tp-service-ai-btn mb-40 text-lg-end tp_fade_anim" data-delay=".5" data-fade-from="top" data-ease="bounce">
-            <a href="" className="tp-btn-ai tp-btn-ai-black tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-grey-5 lh-1 fs-16 fw-700 tp-ff-dm">
+            <a href={withBasePath("/")} className="tp-btn-ai tp-btn-ai-black tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-grey-5 lh-1 fs-16 fw-700 tp-ff-dm">
               <span className="d-flex align-items-center justify-content-center">
                 <span className="btn-text">See All Blog</span>
                 <span className="btn-icon">

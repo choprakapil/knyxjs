@@ -274,7 +274,7 @@
 			let hash = href.substring(hashIndex);
 			if ($(hash).length) {
 				const path = window.location.pathname;
-				if (path === '/' || path === '/homepage' || href.startsWith('#')) {
+				if (path === '/' || path === '/' || href.startsWith('#')) {
 					e.preventDefault();
 					smoother.scrollTo(hash, true, "top top");
 					history.pushState(null, null, hash);

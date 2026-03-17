@@ -8,45 +8,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * Sidebar rendered via portal OUTSIDE #smooth-content so that 
- * position:fixed actually works (CSS transforms on ancestors 
- * break fixed/sticky positioning).
- */
-const SidebarPortal = ({ children, sidebarStyle }) => {
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    if (!mounted) return null;
-
-    return createPortal(
-        <div
-            className="tp-product-sidebar-portal d-none d-xl-block"
-            style={{
-                position: "fixed",
-                top: "50%",
-                left: "max(30px, calc((100vw - 1524px) / 2 + 15px))",
-                width: "250px",
-                maxHeight: "80vh",
-                overflowY: "auto",
-                zIndex: 100,
-                padding: "0",
-                transition: "opacity 0.3s ease, transform 0.3s ease",
-                ...sidebarStyle,
-            }}
-        >
-            {children}
-        </div>,
-        document.body
-    );
-};
-
-/**
- * Floating category heading portal — stays pinned at the top of the
- * content area while scrolling through products. Switches between
- * "Professional Helmets" and "Amateur Helmets" based on scroll position.
+ * Category heading rendered via portal OUTSIDE #smooth-content so that
+ * position:fixed works correctly (ScrollSmoother applies CSS transforms
+ * to #smooth-content which break fixed positioning inside it).
  */
 const CategoryHeadingPortal = ({ label, visible }) => {
     const [mounted, setMounted] = useState(false);
@@ -62,7 +26,7 @@ const CategoryHeadingPortal = ({ label, visible }) => {
             className="tp-category-heading-portal"
             style={{
                 position: "fixed",
-                top: "140px",
+                top: "100px",
                 left: "max(280px, calc((100vw - 1524px) / 2 + 280px))",
                 right: "auto",
                 zIndex: 99,
@@ -105,7 +69,6 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
     const [activeProductId, setActiveProductId] = useState("product-1");
     const contentRef = useRef(null);
     const sectionRef = useRef(null);
-    const [sidebarVisible, setSidebarVisible] = useState(true);
     const [activeCategoryLabel, setActiveCategoryLabel] = useState("Professional Helmets");
     const [categoryHeadingVisible, setCategoryHeadingVisible] = useState(false);
     const proSectionRef = useRef(null);
@@ -132,32 +95,26 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
         let animFrame;
 
         const contentEl = contentRef.current;
-
         const proSection = proSectionRef.current;
         const amateurSection = amateurSectionRef.current;
 
-        // Track sidebar visibility AND active category heading
+        // Track active category heading
         const updateVisibility = () => {
             if (!contentEl) return;
             const rect = contentEl.getBoundingClientRect();
             const isVisible = rect.top < window.innerHeight && rect.bottom > 200;
-            setSidebarVisible(isVisible);
 
-            // Determine active category heading based on which section is in view
-                if (proSection) {
+            if (proSection) {
                 const proRect = proSection.getBoundingClientRect();
-                    const amateurRect = amateurSection?.getBoundingClientRect();
-                // The heading that has scrolled past the top gets "pinned"
-                const headingPinLine = 140; // just below header
+                const amateurRect = amateurSection?.getBoundingClientRect();
+                const headingPinLine = 140;
 
-                    if (amateurRect && amateurRect.top < headingPinLine) {
+                if (amateurRect && amateurRect.top < headingPinLine) {
                     setActiveCategoryLabel("Amateur Helmets");
                 } else if (proRect.top < headingPinLine) {
                     setActiveCategoryLabel("Professional Helmets");
                 }
 
-                // Show the floating heading only when content is in the product zone
-                // AND the original inline heading has scrolled above the pin line
                 const showHeading = isVisible && proRect.top < headingPinLine;
                 setCategoryHeadingVisible(showHeading);
             }
@@ -258,14 +215,12 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
             if (s && !bySlug.has(s)) bySlug.set(s, p);
         });
 
-        // Preserve order and duplicates from the allowed list
         return normalizedAllowedProductSlugs
             .map((slug, idx) => {
                 const p = bySlug.get(slug);
                 if (!p) return null;
                 return {
                     ...p,
-                    // ensure unique ids for scroll anchors + React keys, even for duplicates
                     id: `${p.id}__allowed_${idx}`,
                     routeId: p.id,
                 };
@@ -290,30 +245,62 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
         }
     }, [activeProductId, filteredProfessionalProducts, filteredAmateurProducts]);
 
-    // GSAP ScrollTrigger pinning for desktop-only storytelling experience
+    // GSAP ScrollTrigger pinning — NO pinnedContainer, ScrollSmoother handles context
     useEffect(() => {
         if (typeof window === "undefined") return;
 
         const triggers = [];
 
+        // Clean up any existing helmet-card-specific triggers to avoid duplicates
+        if (window.ScrollTrigger && typeof window.ScrollTrigger.getAll === "function") {
+            window.ScrollTrigger.getAll().forEach((trigger) => {
+                const el = trigger.trigger;
+                if (el && el.classList && el.classList.contains("helmet-product-card")) {
+                    trigger.kill();
+                }
+            });
+        }
+
         ScrollTrigger.matchMedia({
             "(min-width: 1024px)": () => {
                 const cards = gsap.utils.toArray(".helmet-product-card");
 
-                cards.forEach((card) => {
+                cards.forEach((card, index) => {
+                    // Smooth entry animation for each card EXCEPT the first card
+                    if (index !== 0) {
+                        gsap.fromTo(
+                            card,
+                            { opacity: 0, y: 30 },
+                            {
+                                opacity: 1,
+                                y: 0,
+                                duration: 0.5,
+                                ease: "power2.out",
+                                scrollTrigger: {
+                                    trigger: card,
+                                    start: "top 85%",
+                                    toggleActions: "play none none reverse",
+                                },
+                            }
+                        );
+                    }
+
+                    // Pin — no pinnedContainer, ScrollSmoother handles it
                     const st = ScrollTrigger.create({
                         trigger: card,
                         start: "top top",
                         end: "+=100%",
                         pin: true,
-                        pinSpacing: false,
-                        scrub: true,
+                        pinSpacing: true,
+                        scrub: 1,
+                        anticipatePin: 1,
+                        invalidateOnRefresh: true,
                     });
                     triggers.push(st);
                 });
             },
             "(max-width: 1023px)": () => {
-                // No pinning on mobile / tablet for smooth native scroll
+                // No pinning on mobile / tablet
             },
         });
 
@@ -332,7 +319,6 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
             <ul className="list-unstyled position-relative m-0 mt-10" style={{ paddingLeft: "0" }}>
                 {products.map((product) => {
                     const isActive = activeProductId === product.id;
-
                     return (
                         <li key={product.id} className="position-relative" style={{ paddingTop: "6px", paddingBottom: "6px" }}>
                             <a
@@ -356,11 +342,11 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
     };
 
     const renderProductCard = (product, isAlternate = false) => (
-        <div id={product.id} key={product.id} className="product-item-container w-100" style={{ height: "70vh", display: "flex", alignItems: "flex-end" }}>
-            <div className={`product-item p-4 tp-round-10 transition-3 ${activeProductId === product.id ? 'active-product-card' : ''}`} style={{ height: "60vh", minHeight: "450px", width: "100%", display: "flex", alignItems: "center", backgroundColor: activeProductId === product.id ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.01)", backdropFilter: activeProductId === product.id ? "blur(20px)" : "none", border: activeProductId === product.id ? "1px solid var(--tp-theme-primary)" : "1px solid transparent", boxShadow: activeProductId === product.id ? "0 20px 60px rgba(0,0,0,0.6), inset 0 0 20px rgba(25, 135, 84, 0.1)" : "none", transform: activeProductId === product.id ? "scale(1) translateY(0)" : "scale(0.92) translateY(40px)", opacity: activeProductId === product.id ? 1 : 0.35, borderRadius: "24px", transition: "all 0.8s cubic-bezier(0.25, 1, 0.5, 1)", position: "relative" }}>
+        <div id={product.id} key={product.id} className="product-item-container w-100" style={{ padding: "20px 0", display: "flex", alignItems: "center" }}>
+            <div className={`product-item p-4 tp-round-10 transition-3 ${activeProductId === product.id ? 'active-product-card' : ''}`} style={{ minHeight: "420px", padding: "30px", width: "100%", display: "flex", alignItems: "center", backgroundColor: activeProductId === product.id ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.01)", backdropFilter: activeProductId === product.id ? "blur(20px)" : "none", border: activeProductId === product.id ? "1px solid var(--tp-theme-primary)" : "1px solid transparent", boxShadow: activeProductId === product.id ? "0 20px 60px rgba(0,0,0,0.6), inset 0 0 20px rgba(25, 135, 84, 0.1)" : "none", transform: activeProductId === product.id ? "scale(1)" : "scale(0.95)", opacity: activeProductId === product.id ? 1 : 0.35, borderRadius: "24px", transition: "all 0.8s cubic-bezier(0.25, 1, 0.5, 1)", position: "relative" }}>
                 <div className="row align-items-center w-100 m-0">
                     <div className={`col-lg-6 mb-4 mb-lg-0 ${isAlternate ? 'order-lg-2' : ''}`}>
-                        <div className="product-image p-relative overflow-hidden tp-round-10" style={{ backgroundColor: "rgba(0,0,0,0.5)", mixBlendMode: 'screen', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div className="product-image p-relative overflow-hidden tp-round-10" style={{ backgroundColor: "rgba(0,0,0,0.5)", mixBlendMode: 'screen', height: '350px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <img
                                 src={withBasePath(`/assets/img/products/${product.image}`)}
                                 alt={product.name}
@@ -378,7 +364,7 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
                                     : "Engineered for maximum protection and undeniable style. Features advanced impact absorption, an ultra-lightweight titanium/steel blend grille, and a multi-layer inner foam system for unmatched comfort."
                                 }
                             </p>
-                            <div className="product-features mb-40">
+                            <div className="product-features mb-30">
                                 <ul className="list-unstyled tp-text-grey-2 tp-ff-dm fs-18">
                                     {isAlternate ? (
                                         <>
@@ -417,88 +403,114 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
         </div>
     );
 
-    const sidebarPortalStyle = sidebarVisible
-        ? { opacity: 1, transform: "translateY(-50%) translateX(0)" }
-        : { opacity: 0, transform: "translateY(-50%) translateX(-20px)", pointerEvents: "none" };
-
     return (
         <>
-            {/* Floating category heading — pinned at top via portal */}
+            {/* Floating category heading — only this uses portal (position:fixed needs to be outside #smooth-content) */}
             <CategoryHeadingPortal label={activeCategoryLabel} visible={categoryHeadingVisible} />
 
-            {/* Sidebar rendered via portal — outside #smooth-content to avoid transform */}
-            <SidebarPortal sidebarStyle={sidebarPortalStyle}>
-                <div
-                    className="category-widget position-relative"
-                    style={{ padding: "10px 0px", position: "sticky", top: "120px", alignSelf: "flex-start" }}
-                >
-                    <div style={{ paddingLeft: '0px' }}>
-                        {allowProfessional && (
-                            <div className="category-group">
-                                <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15" style={{ letterSpacing: '-0.5px' }}>
-                                    Professional
-                                </h5>
-                                {renderNavList(filteredProfessionalProducts)}
-                            </div>
-                        )}
-                        {allowAmateurs && (
-                            <div className="category-group mt-30">
-                                <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15" style={{ letterSpacing: '-0.5px' }}>
-                                    Amateurs
-                                </h5>
-                                {renderNavList(filteredAmateurProducts)}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </SidebarPortal>
-
-            {/* Main content area (stays inside #smooth-content) */}
-            <div ref={sectionRef} className="tp-product-area pt-120 pb-120 p-relative z-index-1">
+            {/* Main content area — everything inside #smooth-content scroll flow */}
+            <div
+                id="helmet-products-section"
+                ref={sectionRef}
+                className="tp-product-area pt-120 pb-120 p-relative z-index-1"
+                style={{
+                    background: "rgba(255,255,255,0.02)",
+                    borderTop: "1px solid rgba(255,255,255,0.04)",
+                    borderBottom: "1px solid rgba(255,255,255,0.04)",
+                    position: "relative",
+                    overflow: "hidden",
+                }}
+            >
                 <div className="container-fluid container-1524">
                     <div className="row">
-                        {/* Left spacer for sidebar width */}
-                        <div className="col-lg-2 d-none d-lg-block" />
 
-                        {/* Right Content - Products List */}
-                        <div className="col-lg-9 offset-lg-1">
-                            <div ref={contentRef} className="tp-product-list-content">
-
-                                {/* Professional Category Section */}
-                                <div ref={proSectionRef} className="pin-category position-relative" style={{ paddingTop: "10px" }}>
-                                    {filteredProfessionalProducts.map((product) => (
-                                        <div key={product.id} className="helmet-product-card">
-                                            {renderProductCard(product, false)}
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* Amateur Category Section */}
+                        {/* Left Sidebar — INLINE, sticky, inside scroll flow */}
+                        <div className="col-xl-2 d-none d-xl-block">
+                            <div
+                                className="tp-product-sidebar"
+                                style={{
+                                    position: "sticky",
+                                    top: "30px",
+                                    alignSelf: "flex-start",
+                                    zIndex: 10,
+                                    maxHeight: "calc(100vh - 160px)",
+                                    overflowY: "auto",
+                                }}
+                            >
+                                {allowProfessional && (
+                                    <div className="category-group">
+                                        <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15" style={{ letterSpacing: '-0.5px' }}>
+                                            Professional
+                                        </h5>
+                                        {renderNavList(filteredProfessionalProducts)}
+                                    </div>
+                                )}
                                 {allowAmateurs && (
-                                    <div ref={amateurSectionRef} className="pin-category position-relative" style={{ paddingTop: "20px" }}>
-                                        {filteredAmateurProducts.map((product) => (
+                                    <div className="category-group mt-30">
+                                        <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15" style={{ letterSpacing: '-0.5px' }}>
+                                            Amateurs
+                                        </h5>
+                                        {renderNavList(filteredAmateurProducts)}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Right Content — Products List */}
+                        <div className="col-xl-9 offset-xl-1 col-lg-12">
+                            <div ref={contentRef} className="tp-product-list-content">
+                                <div className="helmet-pin-container">
+
+                                    {/* Professional Category Section */}
+                                    <div ref={proSectionRef} className="pin-category position-relative" style={{ paddingTop: "10px" }}>
+                                        {filteredProfessionalProducts.map((product) => (
                                             <div key={product.id} className="helmet-product-card">
-                                                {renderProductCard(product, true)}
+                                                {renderProductCard(product, false)}
                                             </div>
                                         ))}
                                     </div>
-                                )}
 
+                                    {/* Amateur Category Section */}
+                                    {allowAmateurs && (
+                                        <div ref={amateurSectionRef} className="pin-category position-relative" style={{ paddingTop: "20px" }}>
+                                            {filteredAmateurProducts.map((product) => (
+                                                <div key={product.id} className="helmet-product-card">
+                                                    {renderProductCard(product, true)}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
             <style jsx>{`
+                .helmet-pin-container {
+                    position: relative;
+                }
+
                 .helmet-product-card {
-                    min-height: 100vh;
+                    margin-bottom: 30px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                 }
 
+                @media (max-width: 1199px) {
+                    #helmet-products-section {
+                        padding-top: 20px !important;
+                        padding-bottom: 10px !important;
+                        margin-top: 2rem;
+                    }
+                }
+
                 @media (max-width: 1023px) {
                     .helmet-product-card {
+                        margin-bottom: 20px;
                         min-height: auto;
                     }
                 }

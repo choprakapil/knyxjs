@@ -22,7 +22,7 @@ const ServicesSection = () => (
         </div>
         <div className="col-lg-4">
           <div className="tp-service-ai-btn mb-80 text-lg-end tp_fade_anim" data-delay=".4" data-fade-from="bottom" data-ease="bounce">
-            <a href="#" className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
+            <a href={withBasePath("/")} className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
               <span className="d-flex align-items-center justify-content-center">
                 <span className="btn-text">Explore More</span>
                 <span className="btn-icon">
@@ -56,7 +56,7 @@ const ServicesSection = () => (
                   <div className="d-flex align-items-center">
                     <span className="tp-service-ai-count tp-ff-jakarta fw-600 fs-24 fs-sm-18 ls-m-4 mr-30">{product.id}</span>
                     <h2 className="tp-service-ai-title tp-ff-jakarta fs-72 fs-xl-60 fs-lg-50 fs-sm-35 fs-xs-25 ls-m-4">
-                      <a href="#">{product.title}</a>
+                      <a href={withBasePath("/")}>{product.title}</a>
                     </h2>
                   </div>
                 </div>
@@ -92,7 +92,7 @@ const ServicesSection = () => (
                       <img src={withBasePath(card.thumb)} alt={card.label} />
                     </div>
                     <div className="tp-service-ai-content-2">
-                      <a href="#" className="tp-ff-jakarta fw-700 fs-28 hover-text-white tp-text-grey-5 underline-black">
+                      <a href={withBasePath("/")} className="tp-ff-jakarta fw-700 fs-28 hover-text-white tp-text-grey-5 underline-black">
                         {card.label}
                       </a>
                     </div>

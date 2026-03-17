@@ -3,7 +3,7 @@ import { withBasePath } from "@/lib/asset";
 import gsap from "gsap";
 
 const Footer = () => (
-  <footer>
+  <footer style={{ position: "relative", zIndex: 2 }}>
     <div className="tp-footer-area pt-155 bg-position" style={{ backgroundImage: `url(${withBasePath('/assets/img/footer/ai/bg-black.jpg')})` }}>
       <div className="container-fluid container-1524">
         <div className="row">
@@ -11,7 +11,7 @@ const Footer = () => (
             <div className="tp-footer-ai-widget mb-40 tp_fade_anim" data-delay=".3">
               <h5 className="tp-ff-jakarta fw-600 fs-18 lh-140-per ls-m-2 text-uppercase tp-text-common-white mb-15">Location</h5>
               <a
-                href=""
+                href={withBasePath("/")}
                 className="tp-ff-dm fs-18 lh-140-per ls-m-2 tp-text-common-white hover-text-white opacity-8 underline-black"
               >
                 A16 Adarsh Nagar, New Delhi. Delhi,
@@ -41,19 +41,19 @@ const Footer = () => (
             <div className="tp-footer-ai-menu d-flex justify-content-lg-end mb-40 tp_fade_anim" data-delay=".7">
               <ul>
                 <li>
-                  <a href="/">Home</a>
+                  <a href={withBasePath("/")}>Home</a>
                 </li>
                 <li>
-                  <a href="/#brand-story">Brand Story</a>
+                  <a href={withBasePath("/#brand-story")}>Brand Story</a>
                 </li>
                 <li>
-                  <a href="">Services</a>
+                  <a href={withBasePath("/")}>Services</a>
                 </li>
                 <li>
-                  <a href="">Portfolio</a>
+                  <a href={withBasePath("/")}>Portfolio</a>
                 </li>
                 <li>
-                  <a href="">Contact</a>
+                  <a href={withBasePath("/")}>Contact</a>
                 </li>
               </ul>
             </div>
@@ -63,7 +63,7 @@ const Footer = () => (
             <div className="tp-footer-wd-social tp-footer-ai-social d-flex justify-content-lg-end mb-40">
               {["facebook", "twitter", "instagram", "linkedin"].map((network, index) => (
                 <div key={network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
-                  <a href="">
+                  <a href={withBasePath("/")}>
                     <i className={`fa-brands fa-${network}`}></i>
                   </a>
                 </div>
@@ -117,7 +117,7 @@ const Footer = () => (
                       />
                     </svg>
                   </span>
-                  Copyright 2025 <a href="" className="tp-text-theme-secondary">KNYX</a>. All Rights Reserved.
+                  Copyright 2025 <a href={withBasePath("/")} className="tp-text-theme-secondary">KNYX</a>. All Rights Reserved.
                 </p>
               </div>
             </div>
