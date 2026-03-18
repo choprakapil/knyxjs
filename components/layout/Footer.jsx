@@ -4,7 +4,7 @@ import gsap from "gsap";
 
 const Footer = () => (
   <footer style={{ position: "relative", zIndex: 2 }}>
-    <div className="tp-footer-area pt-155 bg-position" style={{ backgroundImage: `url(${withBasePath('/assets/img/footer/ai/bg-black.jpg')})` }}>
+    <div className="tp-footer-area pt-50 bg-position" style={{ backgroundImage: `url(${withBasePath('/assets/img/footer/ai/bg-black.jpg')})` }}>
       <div className="container-fluid container-1524">
         <div className="row">
           <div className="col-lg-3 col-md-6 col-sm-6">
@@ -72,7 +72,7 @@ const Footer = () => (
           </div>
 
           <div className="col-lg-12">
-            <div className="tp-footer-ai-title-wrap text-center pt-35 pb-80 tp_fade_anim" data-fade-from="top" data-delay=".7" data-ease="bounce">
+            <div className="tp-footer-ai-title-wrap text-center pt-15 pb-30 tp_fade_anim" data-fade-from="top" data-delay=".7" data-ease="bounce">
               <h2 className="tp-footer-ai-bigtitle tp-ff-jakarta fw-800 text-uppercase tp-text-common-white">
                 <a
                   href={withBasePath("/")}

@@ -2,8 +2,51 @@
 import React, { useEffect, useRef, useState } from "react";
 import { withBasePath } from "@/lib/asset";
 
+const slugify = (value) =>
+    String(value ?? "")
+        .trim()
+        .toLowerCase()
+        .replace(/&/g, "and")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
 const allProducts = [
-    { id: "product-1", name: "C7 Iso Pro", image: "1.png", category: "Professional" },
+    {
+        id: "product-1",
+        name: "C7 Iso Pro",
+        image: "1.png",
+        category: "Professional",
+        slug: "c7-iso-pro",
+        description: "Carbon Composite Reinforced Shell with premium matte painted finish...",
+        gallery: ["1.png","11.png","12.png","9.png"]
+    },
+    {
+        id: "product-1b",
+        name: "C7",
+        image: "2.png",
+        category: "Professional",
+        slug: "c7",
+        description: "Engineered for maximum protection and undeniable style...",
+        gallery: ["2.png","11.png","12.png","9.png"]
+    },
+    {
+        id: "product-1c",
+        name: "C5 Iso Pro",
+        image: "3.png",
+        category: "Professional",
+        slug: "c5-iso-pro",
+        description: "Designed with ISOFIT adjustable locks for critical stability...",
+        gallery: ["3.png","11.png","12.png","9.png"]
+    },
+    {
+        id: "product-1d",
+        name: "C5",
+        image: "4.png",
+        category: "Professional",
+        slug: "c5",
+        description: "The perfect starting point for new and aspiring cricketers...",
+        gallery: ["4.png","11.png","12.png","9.png"]
+    },
     { id: "product-2", name: "KNYX Pro Elite V2", image: "2.png", category: "Professional" },
     { id: "product-3", name: "KNYX Pro Master", image: "3.png", category: "Professional" },
     { id: "product-4", name: "KNYX Pro Titanium", image: "4.png", category: "Professional" },
@@ -16,7 +59,9 @@ const allProducts = [
 ];
 
 export default function HelmetProductDetailsClient({ id }) {
-    const product = allProducts.find((p) => p.id === id) || {
+    const getProductSlug = (p) => p.slug || slugify(p.name);
+    
+    const product = allProducts.find((p) => getProductSlug(p) === id) || {
         id: id,
         name: "Custom KNYX Helmet",
         image: "1.png",

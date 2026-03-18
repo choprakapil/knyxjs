@@ -7,7 +7,6 @@ import Header from "@/components/layout/Header";
 import LegacyScripts from "@/components/layout/LegacyScripts";
 import Loader from "@/components/layout/Loader";
 import LoaderInit from "@/components/layout/LoaderInit";
-import MagicCursor from "@/components/layout/MagicCursor";
 import Offcanvas from "@/components/layout/Offcanvas";
 import SnapSliderInit from "@/components/layout/SnapSliderInit";
 import AboutSection from "@/components/sections/AboutSection";
@@ -48,7 +47,6 @@ export default function HomePage() {
     <>
       <div className="tp-hero-ai-body-overlay"></div>
       <Loader hidden={hideLoader} />
-      <MagicCursor />
       <BackToTop />
       <Offcanvas />
       <Header />

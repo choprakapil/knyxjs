@@ -1,7 +1,6 @@
 import BackToTop from "@/components/layout/BackToTop";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
-import MagicCursor from "@/components/layout/MagicCursor";
 import Offcanvas from "@/components/layout/Offcanvas";
 import HelmetProductDetailsClient from "@/components/products/HelmetProductDetailsClient";
 
@@ -11,7 +10,6 @@ export default async function HelmetProductDetailsPage({ params }) {
   return (
     <>
       <div className="tp-hero-ai-body-overlay"></div>
-      <MagicCursor />
       <BackToTop />
       <Offcanvas />
       <Header />

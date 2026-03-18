@@ -21,7 +21,8 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
     const professionalProducts = [
         { id: "product-1", name: "C7 Iso Pro", image: "1.png", slug: "c7-iso-pro" },
         { id: "product-1b", name: "C7", image: "2.png", slug: "c7" },
-        { id: "product-1c", name: "C5", image: "3.png", slug: "c5" },
+        { id: "product-1c", name: "C5 Iso Pro", image: "3.png", slug: "c5-iso-pro" },
+        { id: "product-1d", name: "C5", image: "4.png", slug: "c5" },
         { id: "product-2", name: "KNYX Pro Elite V2", image: "2.png" },
         { id: "product-3", name: "KNYX Pro Master", image: "3.png" },
         { id: "product-4", name: "KNYX Pro Titanium", image: "4.png" },
@@ -160,6 +161,24 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
         };
     }, [allProducts.length]);
 
+    const scrollToProduct = (e, id, index) => {
+        e.preventDefault();
+
+        if (typeof window !== "undefined" && window.ScrollTrigger) {
+            const triggers = window.ScrollTrigger.getAll().filter(
+                st => st.trigger && st.trigger.classList.contains("helmet-product-card")
+            );
+
+            if (triggers[index]) {
+                window.scrollTo({
+                    top: triggers[index].start + 5,
+                    behavior: "smooth"
+                });
+                return;
+            }
+        }
+    };
+
     const renderNavList = (products, startIndex) => (
         <ul className="list-unstyled position-relative m-0 mt-10" style={{ paddingLeft: "0" }}>
             {products.map((product, idx) => {
@@ -169,7 +188,7 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
                     <li key={`${product.id}-${globalIdx}`} className="position-relative" style={{ paddingTop: "6px", paddingBottom: "6px" }}>
                         <a
                             href="#"
-                            onClick={(e) => e.preventDefault()}
+                            onClick={(e) => scrollToProduct(e, product.id, globalIdx)}
                             className={`tp-ff-inter fw-500 fs-14 transition-3 d-inline-block position-relative ${isActive ? "tp-text-common-white" : "tp-text-grey-2 hover-text-primary"}`}
                             style={{
                                 transform: isActive ? "translateX(10px)" : "translateX(0)",
@@ -206,7 +225,7 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
                                 ? "The perfect starting point for new and aspiring cricketers. Designed giving priority to essential safety without compromising on visibility and airflow."
                                 : "Engineered for maximum protection and undeniable style. Features advanced impact absorption and an ultra-lightweight titanium/steel blend grille."}
                         </p>
-                        <a href={`/products/helmet/${product.routeId || product.id}`} className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
+                        <a href={`/products/helmet/${getProductSlug(product)}`} className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
                             <span className="d-flex align-items-center justify-content-center">
                                 <span className="btn-text">View Product</span>
                                 <span className="btn-icon">

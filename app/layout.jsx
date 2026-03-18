@@ -1,5 +1,6 @@
 import "./globals.css";
 import { withBasePath } from "@/lib/asset";
+import MagicCursor from "@/components/layout/MagicCursor";
 
 const cssAssets = [
   "/assets/css/bootstrap.css",
@@ -29,7 +30,10 @@ export default function RootLayout({ children }) {
           <link key={href} rel="stylesheet" href={withBasePath(href)} />
         ))}
       </head>
-      <body className="tp-magic-cursor" suppressHydrationWarning>{children}</body>
+      <body className="tp-magic-cursor" suppressHydrationWarning>
+        <MagicCursor />
+        {children}
+      </body>
     </html>
   );
 }
