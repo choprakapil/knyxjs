@@ -88,3 +88,13 @@ video.bg_video {
     padding: 0 15px;
   }
 }
+/* Fix Horizontal Overflow Issues */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
+.tp-hero-ai-body-overlay {
+  width: 100% !important;
+  max-width: 100vw !important;
+}

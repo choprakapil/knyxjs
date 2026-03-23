@@ -36,7 +36,7 @@ const BrandSliderSection = () => (
                             />
                             <span
                                 className="tp-text-common-white"
-                                style={{ fontSize: '9px', letterSpacing: '0.06em', marginTop: '8px', display: 'block', textAlign: 'left', whiteSpace: 'nowrap' }}
+                                style={{ fontSize: '9px', letterSpacing: '0.06em', marginTop: '8px', display: 'block', textAlign: 'center', whiteSpace: 'normal', maxWidth: '100%', wordBreak: 'break-word' }}
                             >
                                 {brand.name}
                             </span>
