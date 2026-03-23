@@ -40,21 +40,11 @@ const Footer = () => (
           <div className="col-lg-4 col-md-6 col-sm-6">
             <div className="tp-footer-ai-menu d-flex justify-content-lg-end mb-40 tp_fade_anim" data-delay=".7">
               <ul>
-                <li>
-                  <a href={withBasePath("/")}>Home</a>
-                </li>
-                <li>
-                  <a href={withBasePath("/#brand-story")}>Brand Story</a>
-                </li>
-                <li>
-                  <a href={withBasePath("/")}>Services</a>
-                </li>
-                <li>
-                  <a href={withBasePath("/")}>Portfolio</a>
-                </li>
-                <li>
-                  <a href={withBasePath("/")}>Contact</a>
-                </li>
+                <li><a href={withBasePath("/")}>Home</a></li>
+                <li><a href={withBasePath("/#brand-story")}>Brand Story</a></li>
+                <li><a href={withBasePath("/technology")}>Technology</a></li>
+                <li><a href={withBasePath("/products/helmet")}>Products</a></li>
+                <li><a href={withBasePath("/")}>Stockists</a></li>
               </ul>
             </div>
           </div>

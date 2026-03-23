@@ -8,7 +8,7 @@ const DesktopMenu = () => (
     <li><a href={withBasePath("/")}>Home</a></li>
     <li><a href={withBasePath("/#brand-story")}>Brand Story</a></li>
 
-    <li><a href={withBasePath("/")}>Technology</a></li>
+    <li><a href={withBasePath("/technology")}>Technology</a></li>
 
     <li className="has-dropdown p-inherit">
       <a href="javascript:void(0)" style={{ cursor: "default" }}>
