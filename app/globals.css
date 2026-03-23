@@ -89,10 +89,7 @@ video.bg_video {
   }
 }
 /* Fix Horizontal Overflow Issues */
-html, body {
-  overflow-x: hidden !important;
-  max-width: 100vw !important;
-}
+/* Disabled to prevent ScrollTrigger breakout */
 
 .tp-hero-ai-body-overlay {
   width: 100% !important;
