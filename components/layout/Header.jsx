@@ -29,7 +29,7 @@ const DesktopMenu = () => (
       </ul>
     </li>
 
-    <li><a href={withBasePath("/")}>Stockists</a></li>
+    <li><a href={withBasePath("/stockists")}>Stockists</a></li>
   </ul>
 );
 

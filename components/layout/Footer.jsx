@@ -44,7 +44,7 @@ const Footer = () => (
                 <li><a href={withBasePath("/#brand-story")}>Brand Story</a></li>
                 <li><a href={withBasePath("/technology")}>Technology</a></li>
                 <li><a href={withBasePath("/products/helmet")}>Products</a></li>
-                <li><a href={withBasePath("/")}>Stockists</a></li>
+                <li><a href={withBasePath("/stockists")}>Stockists</a></li>
               </ul>
             </div>
           </div>
