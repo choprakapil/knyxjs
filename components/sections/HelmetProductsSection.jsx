@@ -97,11 +97,16 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
             const mid = start + step / 2;
 
             const productItem = card.querySelector(".product-item");
+            const isFirst = i === 0;
 
             // Entrance and highlight
             tl.fromTo(
                 card,
-                { y: 300, scale: 0.85, opacity: 0 },
+                { 
+                    y: isFirst ? 0 : 300, 
+                    scale: isFirst ? 1.05 : 0.85, 
+                    opacity: isFirst ? 1 : 0 
+                },
                 {
                     y: 0,
                     scale: 1.05,
@@ -115,7 +120,10 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
             if (productItem) {
                 tl.fromTo(
                     productItem,
-                    { borderColor: "rgba(255,255,255,0.05)", boxShadow: "0 0 0px rgba(25, 135, 84, 0)" },
+                    { 
+                        borderColor: isFirst ? "var(--tp-theme-primary)" : "rgba(255,255,255,0.05)", 
+                        boxShadow: isFirst ? "0 0 30px rgba(25, 135, 84, 0.3)" : "0 0 0px rgba(25, 135, 84, 0)" 
+                    },
                     {
                         borderColor: "var(--tp-theme-primary)",
                         boxShadow: "0 0 30px rgba(25, 135, 84, 0.3)",
