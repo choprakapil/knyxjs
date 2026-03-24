@@ -162,8 +162,8 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
         });
 
         return () => {
-            if (ScrollTrigger.getById(sectionRef.current.id)) {
-                ScrollTrigger.getById(sectionRef.current.id).kill();
+            if (tl.scrollTrigger) {
+                tl.scrollTrigger.kill();
             }
             tl.kill();
         };

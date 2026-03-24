@@ -23,7 +23,7 @@ const SnapSliderInit = () => {
         gsap.registerPlugin(ScrollTrigger);
       }
 
-      function ShowcaseSnapSlider() {
+      let ctx = gsap.context(() => {
         if ($(".tp-snap-slider-holder").length > 0) {
           const snapSliderHolder = document.querySelector(".tp-snap-slider-holder");
           if (!snapSliderHolder) return;
@@ -191,23 +191,25 @@ const SnapSliderInit = () => {
             }
           });
         }
-      }
+      }); // end of gsap.context
 
       if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", ShowcaseSnapSlider);
-      } else {
-        ShowcaseSnapSlider();
+        document.addEventListener("DOMContentLoaded", () => ctx.revert()); // dummy because context executes inline
       }
 
       setTimeout(() => {
-        ShowcaseSnapSlider();
         if (ScrollTrigger) {
           ScrollTrigger.refresh();
         }
       }, 500);
+
+      return () => {
+        ctx.revert();
+      };
     };
 
-    initSnapSlider();
+    const cleanup = initSnapSlider();
+    return cleanup;
   }, []);
 
   return null;

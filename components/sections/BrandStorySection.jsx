@@ -9,10 +9,10 @@ const BrandStorySection = ({ isHomePage = false }) => (
                 <div className="col-12">
                     <div className="brand-story-wrapper">
                         <div className="tp-about-ai-content mb-30 text-start">
-                        <div className="tp-about-ai-text-wrap mb-10 text-start"><h3 className="tp-about-ai-text tp-ff-jakarta fw-600 fs-40 fs-xl-60 fs-md-38 lh-120-per ls-m-4 tp-text-common-white tet-left">Brand Story</h3></div>
+                            <div className="tp-about-ai-text-wrap mb-10 text-start"><h3 className="tp-about-ai-text tp-ff-jakarta fw-600 fs-40 fs-xl-60 fs-md-38 lh-120-per ls-m-4 tp-text-common-white tet-left title-slide-gradient">Brand Story</h3></div>
                             <h2 className="tp-about-ai-title fw-600 tp-ff-jakarta ls-m-4 d-flex align-items-center justify-content-start mb-35 tp_fade_anim" data-delay=".3">
-                                <span className="title-slide-gradient">KNYX</span>
-                                <span className="aleric-ai tp-text-common-white fs-22 ls-0 mt-35">Engineered Excellence</span>
+                                <span className="tp-text-common-white">KNYX</span>
+                                {/* <span className="aleric-ai tp-text-common-white fs-22 ls-0 mt-35">Engineered Excellence</span> */}
                             </h2>
                             <div className="tp_fade_anim" data-delay=".5">
                                 <p className="tp-about-ai-para tp-ff-dm mb-0 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">

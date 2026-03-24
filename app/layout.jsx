@@ -1,6 +1,7 @@
 import "./globals.css";
 import { withBasePath } from "@/lib/asset";
 import MagicCursor from "@/components/layout/MagicCursor";
+import ScrollCleanup from "@/components/layout/ScrollCleanup";
 
 const cssAssets = [
   "/assets/css/bootstrap.css",
@@ -10,6 +11,13 @@ const cssAssets = [
   "/assets/css/spacing.css",
   "/assets/css/main.css",
 ];
+
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata = {
   title: "KNYX",
@@ -30,7 +38,8 @@ export default function RootLayout({ children }) {
           <link key={href} rel="stylesheet" href={withBasePath(href)} />
         ))}
       </head>
-      <body className="tp-magic-cursor" suppressHydrationWarning>
+      <body className={`tp-magic-cursor ${inter.className}`} suppressHydrationWarning>
+        <ScrollCleanup />
         <MagicCursor />
         {children}
       </body>

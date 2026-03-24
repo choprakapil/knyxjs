@@ -56,3 +56,4 @@ Thumbs.db
 # ===============================
 coverage/
 dist/
+/lib/generated/prisma

@@ -34,8 +34,8 @@ const TechnologySection = ({ title, content, image, reverse, isHero = false }) =
         );
 
         return () => {
-            if (ScrollTrigger.getById(sectionRef.current.id)) {
-                ScrollTrigger.getById(sectionRef.current.id).kill();
+            if (tl.scrollTrigger) {
+                tl.scrollTrigger.kill();
             }
             tl.kill();
         };
