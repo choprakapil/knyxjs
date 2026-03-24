@@ -3,98 +3,100 @@ import React, { useState, useEffect } from "react";
 import { withBasePath } from "@/lib/asset";
 import Offcanvas from "./Offcanvas";
 
-const DesktopMenu = () => (
-  <ul>
-    <li><a href={withBasePath("/")}>Home</a></li>
-    <li><a href={withBasePath("/#brand-story")}>Brand Story</a></li>
+export const MENU_ITEMS = [
+  { label: "Home", href: "/" },
+  { label: "Brand Story", href: "/#brand-story" },
+  { label: "Technology", href: "/technology" },
+  { 
+    label: "Products", 
+    href: "javascript:void(0)", 
+    dropdown: [
+      { label: "Helmet", href: "/products/helmet" },
+      { label: "Groin Protection", href: "#" }
+    ]
+  },
+  { label: "Stockists", href: "/stockists" }
+];
 
-    <li><a href={withBasePath("/technology")}>Technology</a></li>
-
-    <li className="has-dropdown p-inherit">
-      <a href="javascript:void(0)" style={{ cursor: "default" }}>
-        Products
-        <span>
-          <svg width="7" height="6" viewBox="0 0 7 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2.7 4.93333L0.2 1.6C-0.294427 0.940764 0.175955 0 1 0H6C6.82405 0 7.29443 0.940764 6.8 1.6L4.3 4.93333C3.9 5.46667 3.1 5.46667 2.7 4.93333Z" fill="currentColor" />
-          </svg>
-        </span>
-      </a>
-      <ul className="tp-submenu submenu">
-        <li>
-          <a href={withBasePath("/products/helmet")}>Helmet</a>
-        </li>
-        <li>
-          <a href="#">Groin Protection</a>
-        </li>
-      </ul>
-    </li>
-
-    <li><a href={withBasePath("/stockists")}>Stockists</a></li>
-  </ul>
-);
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSticky, setIsSticky] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsSticky(true);
-      } else {
-        setIsSticky(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  // Consolidated style rule for hamburger lines to maintain clean code standards
+  const barLineStyle = {
+    display: 'block',
+    width: '100%',
+    height: '2.5px',
+    background: '#ffffff',
+    borderRadius: '4px'
+  };
 
   return (
     <>
+      {/* Offcanvas Menu Integration (Unchanged logic) */}
       <Offcanvas open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <header className="main-header">
-        <div id="header-sticky" className={`tp-header-area pre-_header sticky-black-bg tp-header-ai-wrap ${isSticky ? "header-sticky" : ""}`}>
-          <div className="container-fluid container-1824">
-            <div className="tp-header-ai-bg">
-              <div className="row align-items-center">
-                <div className="col-xxl-3 col-xl-2 col-lg-4 col-md-4 col-sm-4 col-6">
-                  <div className="tp-header-logo">
-                    <a href={withBasePath("/")}>
-                      <img width="150" src={withBasePath('/assets/img/logo/logo-white-2.png')} alt="logo" />
-                    </a>
-                  </div>
-                </div>
-                <div className="col-xxl-6 col-xl-7 d-none d-xl-block">
-                  <div className="tp-main-menu tp-main-menu-ai tp-header-dropdown dropdown-black-bg d-flex justify-content-center">
-                    <nav className="tp-mobile-menu-active">
-                        <DesktopMenu />
-                    </nav>
-                  </div>
-                </div>
-                <div className="col-xxl-3 col-xl-3 col-lg-8 col-md-8 col-sm-8 col-6">
-                  <div className="tp-header-right d-flex align-items-center justify-content-end">
-                    <div className="tp-header-btn d-none d-sm-inline-block">
-                      <a
-                        href={withBasePath("/")}
-                        className="tp-btn-ai p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm"
-                      >
-                        Contact Us
-                      </a>
-                    </div>
-                    <button
-                      className="tp-menu-bar tp-header-sidebar-btn tp-header-2-menu-btn tp-header-ai-menu-btn ml-20"
-                      onClick={() => setIsMenuOpen(true)}
-                    >
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      
+      {/* 
+        Semantic Layout Layer 
+        Re-introduced critical target hooks (e.g., tp-header-area) for backwards template script hooks 
+        while preserving strict inline boundaries locking in the final visual layout pixel parity.
+      */}
+      <header 
+        className="main-header tp-header-area tp-header-ai-wrap"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 999,
+          padding: '28px 5%',
+          background: 'rgba(5, 5, 5, 0.4)', 
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}
+      >
+        {/* Left Spacer (Ensures perfectly calculated center balance) */}
+        <div style={{ flex: 1 }}></div>
+
+        {/* Center Logo */}
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+          <a href={withBasePath("/")} style={{ display: 'block', cursor: 'pointer' }}>
+            <img 
+              style={{ height: '36px', width: 'auto', display: 'block', objectFit: 'contain' }} 
+              src={withBasePath('/assets/img/logo/logo-white-2.png')} 
+              alt="KNYX Logo" 
+            />
+          </a>
+        </div>
+
+        {/* Right Action (Hamburger Menu) */}
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            aria-label="Open navigation menu"
+            className="tp-menu-bar"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '12px',      
+              marginRight: '-12px', 
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              height: '42px',       
+              width: '56px',        
+            }}
+          >
+            {/* Using consolidated style configuration with no alteration in dimensions */}
+            <span style={barLineStyle}></span>
+            <span style={barLineStyle}></span>
+            <span style={{ ...barLineStyle, width: '70%', alignSelf: 'flex-end' }}></span>
+          </button>
         </div>
       </header>
     </>

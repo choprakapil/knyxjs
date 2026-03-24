@@ -33606,3 +33606,8 @@ img.tp-service-ai-ring.p-absolute.object-contain {
 section.pt-80.pb-100.tp-breadcrumb-area.tp-bg-common-black.p-relative.z-index-1 {
   background: grey;
 }
+
+
+section.hero-section {
+  padding-top: 95px;
+}

@@ -1,90 +1,140 @@
 "use client";
+import React, { useState, useEffect } from "react";
 import { withBasePath } from "@/lib/asset";
+import { MENU_ITEMS } from "./Header";
 
-const Offcanvas = ({ open, onClose }) => (
-  <>
-    <div className="tp-offcanvas-area">
-      <div className={`tp-offcanvas offcanvas-black-bg ${open ? "opened" : ""}`}>
-        <div className="tp-offcanvas-top d-flex align-items-center justify-content-between">
-          <div className="tp-offcanvas-logo">
-            <a href="#" onClick={(e) => e.preventDefault()}>
-              <img data-width="150" src={withBasePath('/assets/img/logo/logo-white-2.png')} alt="logo" />
+const MobileMenu = () => {
+  const [openDropdown, setOpenDropdown] = useState(null);
+
+  const toggleDropdown = (label) => {
+    setOpenDropdown(prev => prev === label ? null : label);
+  };
+
+  return (
+    <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+      {MENU_ITEMS.map((item, index) => (
+        <li key={index} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '15px 0' }}>
+          {item.dropdown ? (
+            <>
+              <button
+                onClick={() => toggleDropdown(item.label)}
+                aria-expanded={openDropdown === item.label}
+                aria-controls={`dropdown-${index}`}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#ffffff',
+                  width: '100%',
+                  textAlign: 'left',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: 0,
+                  fontSize: '20px',
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                {item.label}
+                <span style={{ 
+                  transform: openDropdown === item.label ? 'rotate(180deg)' : 'rotate(0deg)', 
+                  transition: 'transform 0.3s ease' 
+                }}>
+                  ▼
+                </span>
+              </button>
+              <ul
+                id={`dropdown-${index}`}
+                style={{
+                  display: openDropdown === item.label ? 'block' : 'none',
+                  paddingLeft: '20px',
+                  marginTop: '15px',
+                  listStyle: 'none'
+                }}
+              >
+                {item.dropdown.map((sub, i) => (
+                  <li key={i} style={{ marginBottom: '10px' }}>
+                    <a href={withBasePath(sub.href)} style={{ color: '#bbb', fontSize: '16px' }}>
+                      {sub.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <a href={withBasePath(item.href)} style={{ display: 'block', padding: '0', fontSize: '20px', fontWeight: 600, color: '#ffffff' }}>
+              {item.label}
             </a>
-          </div>
-          <div className="tp-offcanvas-close-btn">
-            <button className="close-btn" onClick={onClose}>
-              <svg width="37" height="38" viewBox="0 0 37 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M9.19141 9.80762L27.5762 28.1924"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+          )}
+        </li>
+      ))}
+      <li style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '15px 0' }}>
+        <a href={withBasePath("/")} style={{ display: 'block', padding: '0', fontSize: '20px', fontWeight: 600, color: '#ffffff' }}>
+          Contact Us
+        </a>
+      </li>
+    </ul>
+  );
+};
+
+const Offcanvas = ({ open, onClose }) => {
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  return (
+    <>
+      <div className="tp-offcanvas-area">
+        <div className={`tp-offcanvas offcanvas-black-bg ${open ? "opened" : ""}`} style={{ display: 'flex', flexDirection: 'column' }}>
+          <div className="tp-offcanvas-top d-flex align-items-center justify-content-between mb-40">
+            <div className="tp-offcanvas-logo" style={{ maxWidth: '120px' }}>
+              <a href="#" onClick={(e) => e.preventDefault()}>
+                <img 
+                  src={withBasePath('/assets/img/logo/logo-white-2.png')} 
+                  alt="logo" 
+                  style={{ width: '100%', height: 'auto' }} 
                 />
-                <path
-                  d="M9.19141 28.1924L27.5762 9.80761"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
+              </a>
+            </div>
+            <div className="tp-offcanvas-close-btn">
+              <button className="close-btn" onClick={onClose} aria-label="Close menu">
+                <svg width="37" height="38" viewBox="0 0 37 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9.19141 9.80762L27.5762 28.1924" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M9.19141 28.1924L27.5762 9.80761" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="tp-offcanvas-content d-none d-xl-block">
-          <h3 className="tp-offcanvas-title">Hello There!</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, </p>
-        </div>
-        <div className="tp-offcanvas-menu d-xl-none">
-          <nav></nav>
-        </div>
-        <div className="tp-offcanvas-gallery d-none d-xl-block">
-          <div className="row gx-2">
-            {[1, 2, 3, 4].map((item) => (
-              <div key={item} className="col-md-3 col-3">
-                <div className="tp-offcanvas-gallery-img fix">
-                  <a className="popup-image" href={withBasePath(`/assets/img/service/ai/thumb-2.jpg`)}>
-                    <img src={withBasePath(`/assets/img/service/ai/thumb-2.jpg`)} alt="" />
+          
+          <div className="tp-offcanvas-menu mb-40">
+            <nav><MobileMenu /></nav>
+          </div>
+
+          <div className="tp-offcanvas-social" style={{ marginTop: 'auto' }}>
+            <h3 className="tp-offcanvas-title sm">Stalk Us</h3>
+            <div className="tp-footer-wd-social tp-footer-ai-social d-flex justify-content-lg-start mb-40">
+              {["facebook", "twitter", "instagram", "linkedin"].map((network, index) => (
+                <div key={network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
+                  <a href={withBasePath("/")}>
+                    <i className={`fa-brands fa-${network}`}></i>
                   </a>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="tp-offcanvas-contact">
-          <h3 className="tp-offcanvas-title sm">Information</h3>
-          <ul>
-            <li>
-              <a href="tel:1234567890">+1234567890</a>
-            </li>
-            <li>
-              <a href="mailto:hello@KNYX.com">hello@KNYX.com</a>
-            </li>
-            <li>
-              <a href="#" onClick={(e) => e.preventDefault()}>
-
-                A16 Adarsh Nagar, New Delhi. Delhi, India 110088
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="tp-offcanvas-social">
-          <h3 className="tp-offcanvas-title sm">Stalk Us</h3>
-          <div className="tp-footer-wd-social tp-footer-ai-social d-flex justify-content-lg-start mb-40">
-            {["facebook", "twitter", "instagram", "linkedin"].map((network, index) => (
-              <div key={network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
-                <a href={withBasePath("/")}>
-                  <i className={`fa-brands fa-${network}`}></i>
-                </a>
-              </div>
-            ))}
-          </div>
+          
         </div>
       </div>
-    </div>
-    <div className={`body-overlay ${open ? "apply" : ""}`} onClick={onClose}></div>
-  </>
-);
+      <div className={`body-overlay ${open ? "apply" : ""}`} onClick={onClose}></div>
+    </>
+  );
+};
 
 export default Offcanvas;
