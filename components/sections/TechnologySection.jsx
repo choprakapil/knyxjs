@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TechnologySection = ({ title, content, image, reverse, isHero = false }) => {
+const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, isHero = false }) => {
     const sectionRef = useRef(null);
 
     useEffect(() => {
@@ -54,7 +54,7 @@ const TechnologySection = ({ title, content, image, reverse, isHero = false }) =
                         <div className="tech-image-wrapper p-relative overflow-hidden tp-round-24">
                             <img 
                                 src={withBasePath(image)} 
-                                alt={title} 
+                                alt={imageAlt} 
                                 className="img-fluid" 
                             />
                         </div>
@@ -65,7 +65,7 @@ const TechnologySection = ({ title, content, image, reverse, isHero = false }) =
                         <div className={`tech-content ${reverse ? "pl-50" : "pr-50"}`}>
                             {isHero && (
                                 <span className="tp-ff-jakarta fw-600 fs-14 tp-text-theme-primary mb-15 d-inline-block text-uppercase ls-1">
-                                    CORE ENGINEERING
+                                    {badge}
                                 </span>
                             )}
                             <h2 className="tp-ff-jakarta fw-600 fs-42 fs-md-36 mb-25 tp-text-common-white">

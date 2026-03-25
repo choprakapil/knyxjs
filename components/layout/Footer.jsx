@@ -1,7 +1,7 @@
 "use client";
 import { withBasePath } from "@/lib/asset";
 import gsap from "gsap";
-import { productCategories } from "@/lib/data/products";
+import { siteData } from "@/lib/data/site";
 
 const Footer = () => (
   <footer style={{ position: "relative", zIndex: 2 }}>
@@ -11,14 +11,11 @@ const Footer = () => (
           <div className="col-lg-3 col-md-6 col-sm-6">
             <div className="tp-footer-ai-widget mb-40 tp_fade_anim" data-delay=".3">
               <h5 className="tp-ff-jakarta fw-600 fs-18 lh-140-per ls-m-2 text-uppercase tp-text-common-white mb-15">Location</h5>
-              <a
-                href={withBasePath("/")}
-                className="tp-ff-dm fs-18 lh-140-per ls-m-2 tp-text-common-white hover-text-white opacity-8 underline-black"
-              >
-                A16 Adarsh Nagar, New Delhi. Delhi,
+              <p className="tp-ff-dm fs-18 lh-140-per ls-m-2 tp-text-common-white opacity-8">
+                {siteData.contact.address.line1}
                 <br />
-                India 110088
-              </a>
+                {siteData.contact.address.line2}
+              </p>
             </div>
           </div>
 
@@ -26,13 +23,13 @@ const Footer = () => (
             <div className="tp-footer-ai-widget widget-2 mb-40 tp_fade_anim" data-delay=".5">
               <h5 className="tp-ff-jakarta fw-600 fs-18 lh-140-per ls-m-2 text-uppercase tp-text-common-white mb-15">Contact</h5>
               <div className="mb-10">
-                <a href="tel:+1234567890" className="tp-ff-dm fs-18 lh-140-per ls-m-2 tp-text-common-white hover-text-white opacity-8 underline-black">
-                  +1 (234) 567 890
+                <a href={`tel:${siteData.contact.phone.replace(/[^0-9+]/g, '')}`} className="tp-ff-dm fs-18 lh-140-per ls-m-2 tp-text-common-white hover-text-white opacity-8 underline-black">
+                  {siteData.contact.phone}
                 </a>
               </div>
               <div>
-                <a href="mailto:info@knyx.com" className="tp-ff-dm fs-18 lh-140-per ls-m-2 tp-text-common-white hover-text-white opacity-8 underline-black">
-                  info@knyx.com
+                <a href={`mailto:${siteData.contact.email}`} className="tp-ff-dm fs-18 lh-140-per ls-m-2 tp-text-common-white hover-text-white opacity-8 underline-black">
+                  {siteData.contact.email}
                 </a>
               </div>
             </div>
@@ -41,21 +38,22 @@ const Footer = () => (
           <div className="col-lg-4 col-md-6 col-sm-6">
             <div className="tp-footer-ai-menu d-flex justify-content-lg-end mb-40 tp_fade_anim" data-delay=".7">
               <ul>
-                <li><a href={withBasePath("/")}>Home</a></li>
-                <li><a href={withBasePath("/#brand-story")}>Brand Story</a></li>
-                <li><a href={withBasePath("/technology")}>Technology</a></li>
-                <li><a href={withBasePath(`/products/${productCategories[0]?.slug || 'helmet'}`)}>Products</a></li>
-                <li><a href={withBasePath("/stockists")}>Stockists</a></li>
+                {siteData.menus.main.map((item, i) => {
+                  const href = item.href === "javascript:void(0)" && item.dropdown ? withBasePath(item.dropdown[0].href) : withBasePath(item.href);
+                  return (
+                    <li key={i}><a href={href}>{item.label}</a></li>
+                  )
+                })}
               </ul>
             </div>
           </div>
 
           <div className="col-lg-2 col-md-6 col-sm-6">
             <div className="tp-footer-wd-social tp-footer-ai-social d-flex justify-content-lg-end mb-40">
-              {["facebook", "twitter", "instagram", "linkedin"].map((network, index) => (
-                <div key={network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
-                  <a href={withBasePath("/")}>
-                    <i className={`fa-brands fa-${network}`}></i>
+              {siteData.socials.map((social, index) => (
+                <div key={social.network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
+                  <a href={withBasePath(social.url)} target="_blank" rel="noopener noreferrer" aria-label={`Visit our ${social.network} page`}>
+                    <i className={`fa-brands fa-${social.network}`}></i>
                   </a>
                 </div>
               ))}
@@ -107,7 +105,7 @@ const Footer = () => (
                       />
                     </svg>
                   </span>
-                  Copyright 2025 <a href={withBasePath("/")} className="tp-text-theme-secondary">KNYX</a>. All Rights Reserved.
+                  Copyright {new Date().getFullYear()} <a href={withBasePath("/")} className="tp-text-theme-secondary">KNYX</a>. All Rights Reserved.
                 </p>
               </div>
             </div>

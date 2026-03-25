@@ -1,43 +1,90 @@
-const BackToTop = () => (
-  <div className="scrollToTop scrollToTop-3">
-    <div className="arrowUp">
-      <i className="fa-light fa-arrow-up"></i>
-    </div>
-    <div className="water">
-      <svg viewBox="0 0 560 20" className="water_wave water_wave_back">
-        <use xlinkHref="#wave"></use>
-      </svg>
-      <svg viewBox="0 0 560 20" className="water_wave water_wave_front">
-        <use xlinkHref="#wave"></use>
-      </svg>
-      <svg
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        viewBox="0 0 560 20"
-        style={{ display: 'none' }}
+"use client";
+import React, { useState, useEffect } from "react";
+
+const BackToTop = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show button if page is scrolled more than 300px
+      if (window.scrollY > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
+
+  return (
+    <>
+      <button
+        onClick={scrollToTop}
+        className="back-to-top-btn"
+        aria-label="Back to top"
       >
-        <symbol id="wave">
-          <path
-            d="M420,20c21.5-0.4,38.8-2.5,51.1-4.5c13.4-2.2,26.5-5.2,27.3-5.4C514,6.5,518,4.7,528.5,2.7c7.1-1.3,17.9-2.8,31.5-2.7c0,0,0,0,0,0v20H420z"
-            fill="currentColor"
-          ></path>
-          <path
-            d="M420,20c-21.5-0.4-38.8-2.5-51.1-4.5c-13.4-2.2-26.5-5.2-27.3-5.4C326,6.5,322,4.7,311.5,2.7C304.3,1.4,293.6-0.1,280,0c0,0,0,0,0,0v20H420z"
-            fill="currentColor"
-          ></path>
-          <path
-            d="M140,20c21.5-0.4,38.8-2.5,51.1-4.5c13.4-2.2,26.5-5.2,27.3-5.4C234,6.5,238,4.7,248.5,2.7c7.1-1.3,17.9-2.8,31.5-2.7c0,0,0,0,0,0v20H140z"
-            fill="currentColor"
-          ></path>
-          <path
-            d="M140,20c-21.5-0.4-38.8-2.5-51.1-4.5c-13.4-2.2-26.5-5.2-27.3-5.4C46,6.5,42,4.7,31.5,2.7C24.3,1.4,13.6-0.1,0,0c0,0,0,0,0,0l0,20H140z"
-            fill="currentColor"
-          ></path>
-        </symbol>
-      </svg>
-    </div>
-  </div>
-);
+        <i className="fa-solid fa-arrow-up"></i>
+      </button>
+
+      <style jsx>{`
+        .back-to-top-btn {
+          position: fixed;
+          bottom: 30px;
+          right: 30px;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          background-color: #c8ff00;
+          color: #000;
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+          cursor: pointer;
+          z-index: 999;
+          opacity: ${isVisible ? "1" : "0"};
+          visibility: ${isVisible ? "visible" : "hidden"};
+          transform: translateY(${isVisible ? "0" : "20px"});
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 4px 15px rgba(200, 255, 0, 0.3);
+        }
+        
+        .back-to-top-btn:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 25px rgba(200, 255, 0, 0.4);
+          background-color: #e0ff4d;
+        }
+
+        .back-to-top-btn i {
+          transition: transform 0.3s ease;
+        }
+
+        .back-to-top-btn:hover i {
+          transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+          .back-to-top-btn {
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            font-size: 18px;
+          }
+        }
+      `}</style>
+    </>
+  );
+};
 
 export default BackToTop;

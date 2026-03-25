@@ -2,22 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { withBasePath } from "@/lib/asset";
 import Offcanvas from "./Offcanvas";
-import { productCategories } from "@/lib/data/products";
+import { siteData } from "@/lib/data/site";
 
-export const MENU_ITEMS = [
-  { label: "Home", href: "/" },
-  { label: "Brand Story", href: "/#brand-story" },
-  { label: "Technology", href: "/technology" },
-  { 
-    label: "Products", 
-    href: "javascript:void(0)", 
-    dropdown: productCategories.map(cat => ({ 
-      label: cat.name, 
-      href: `/products/${cat.slug}` 
-    }))
-  },
-  { label: "Stockists", href: "/stockists" }
-];
+export const MENU_ITEMS = siteData.menus.main;
 
 
 const Header = () => {
@@ -60,16 +47,65 @@ const Header = () => {
           justifyContent: 'space-between'
         }}
       >
-        {/* Left Spacer (Ensures perfectly calculated center balance) */}
-        <div style={{ flex: 1 }}></div>
+        {/* Left Search */}
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+          <div className="header-search-wrap" style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <svg 
+              width="16" 
+              height="16" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              style={{ color: '#fff', position: 'absolute', left: '16px', pointerEvents: 'none', opacity: 0.6 }}
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input 
+              type="text" 
+              placeholder="Search..." 
+              style={{
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '30px',
+                padding: '10px 16px 10px 42px',
+                color: '#fff',
+                fontSize: '14px',
+                width: '180px',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                outline: 'none'
+              }}
+              onFocus={(e) => {
+                e.target.style.background = 'rgba(255, 255, 255, 0.08)';
+                e.target.style.borderColor = 'rgba(200, 255, 0, 0.4)';
+                e.target.style.width = '240px';
+                e.target.style.boxShadow = '0 0 15px rgba(200, 255, 0, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.background = 'rgba(255, 255, 255, 0.03)';
+                e.target.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                e.target.style.width = '180px';
+                e.target.style.boxShadow = 'none';
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && e.target.value.trim()) {
+                  window.location.href = `/search?q=${encodeURIComponent(e.target.value.trim())}`;
+                }
+              }}
+            />
+          </div>
+        </div>
 
         {/* Center Logo */}
         <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
           <a href={withBasePath("/")} style={{ display: 'block', cursor: 'pointer' }}>
             <img 
               style={{ height: '36px', width: 'auto', display: 'block', objectFit: 'contain' }} 
-              src={withBasePath('/assets/img/logo/logo-white-2.png')} 
-              alt="KNYX Logo" 
+              src={withBasePath(siteData.logo.light)} 
+              alt={siteData.logo.alt} 
             />
           </a>
         </div>

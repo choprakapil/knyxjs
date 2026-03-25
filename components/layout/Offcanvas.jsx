@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { withBasePath } from "@/lib/asset";
 import { MENU_ITEMS } from "./Header";
+import { siteData } from "@/lib/data/site";
 
 const MobileMenu = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -68,11 +69,6 @@ const MobileMenu = () => {
           )}
         </li>
       ))}
-      <li style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '15px 0' }}>
-        <a href={withBasePath("/")} style={{ display: 'block', padding: '0', fontSize: '20px', fontWeight: 600, color: '#ffffff' }}>
-          Contact Us
-        </a>
-      </li>
     </ul>
   );
 };
@@ -95,10 +91,10 @@ const Offcanvas = ({ open, onClose }) => {
         <div className={`tp-offcanvas offcanvas-black-bg ${open ? "opened" : ""}`} style={{ display: 'flex', flexDirection: 'column' }}>
           <div className="tp-offcanvas-top d-flex align-items-center justify-content-between mb-40">
             <div className="tp-offcanvas-logo" style={{ maxWidth: '120px' }}>
-              <a href="#" onClick={(e) => e.preventDefault()}>
+              <a href={withBasePath("/")} onClick={(e) => { e.preventDefault(); window.location.href = withBasePath("/"); }}>
                 <img 
-                  src={withBasePath('/assets/img/logo/logo-white-2.png')} 
-                  alt="logo" 
+                  src={withBasePath(siteData.logo.light)} 
+                  alt={siteData.logo.alt} 
                   style={{ width: '100%', height: 'auto' }} 
                 />
               </a>
@@ -120,10 +116,10 @@ const Offcanvas = ({ open, onClose }) => {
           <div className="tp-offcanvas-social" style={{ marginTop: 'auto' }}>
             <h3 className="tp-offcanvas-title sm">Stalk Us</h3>
             <div className="tp-footer-wd-social tp-footer-ai-social d-flex justify-content-lg-start mb-40">
-              {["facebook", "twitter", "instagram", "linkedin"].map((network, index) => (
-                <div key={network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
-                  <a href={withBasePath("/")}>
-                    <i className={`fa-brands fa-${network}`}></i>
+              {siteData.socials.map((social, index) => (
+                <div key={social.network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
+                  <a href={withBasePath(social.url)} target="_blank" rel="noopener noreferrer">
+                    <i className={`fa-brands fa-${social.network}`}></i>
                   </a>
                 </div>
               ))}

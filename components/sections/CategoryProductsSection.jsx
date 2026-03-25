@@ -133,16 +133,21 @@ const CategoryProductsSection = ({ category }) => {
         e.preventDefault();
 
         if (typeof window !== "undefined" && window.ScrollTrigger) {
-            const triggers = window.ScrollTrigger.getAll().filter(
-                st => st.trigger && st.trigger.classList.contains("helmet-product-card")
+            // Find the master ScrollTrigger we created for this section bounds
+            const st = window.ScrollTrigger.getAll().find(
+                st => st.trigger === sectionRef.current
             );
 
-            if (triggers[index]) {
+            if (st) {
+                const totalCards = allFilteredProducts.length;
+                // Add a tiny fractional offset (+0.01) to ensure we cross the threshold into the active index
+                const progress = (index / totalCards) + 0.005;
+                const targetY = st.start + (st.end - st.start) * progress;
+                
                 window.scrollTo({
-                    top: triggers[index].start + 5,
+                    top: targetY,
                     behavior: "smooth"
                 });
-                return;
             }
         }
     };
@@ -157,11 +162,12 @@ const CategoryProductsSection = ({ category }) => {
                         <a
                             href="#"
                             onClick={(e) => scrollToProduct(e, product.id, globalIdx)}
-                            className={`tp-ff-inter fw-500 fs-14 transition-3 d-inline-block position-relative ${isActive ? "tp-text-common-white" : "tp-text-grey-2 hover-text-primary"}`}
+                            className={`tp-ff-jakarta fw-600 fs-20 transition-3 d-inline-block position-relative ${isActive ? "tp-text-common-white" : "tp-text-grey-2 hover-text-primary"}`}
                             style={{
                                 transform: isActive ? "translateX(10px)" : "translateX(0)",
-                                transition: "all 0.3s ease",
-                                opacity: isActive ? 1 : 0.5,
+                                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                                opacity: isActive ? 1 : 0.6,
+                                letterSpacing: "-0.02em"
                             }}
                         >
                             {product.name}
@@ -245,6 +251,23 @@ const CategoryProductsSection = ({ category }) => {
                     background: #030303;
                 }
 
+                /* Fix for clicked text turning black */
+                .products-sidebar a:focus,
+                .products-sidebar a:active {
+                    outline: none;
+                }
+                .products-sidebar a.tp-text-common-white:focus,
+                .products-sidebar a.tp-text-common-white:active {
+                    color: #ffffff !important;
+                }
+                .products-sidebar a.hover-text-primary:focus,
+                .products-sidebar a.hover-text-primary:active {
+                    color: var(--tp-grey-2) !important;
+                }
+                .products-sidebar a.hover-text-primary:hover {
+                    color: var(--tp-theme-primary) !important;
+                }
+
                 .products-wrapper {
                     position: sticky;
                     top: 120px;
@@ -271,15 +294,15 @@ const CategoryProductsSection = ({ category }) => {
                     position: relative;
                     overflow: hidden;
                     display: flex;
-                    align-items: center;
+                    align-items: flex-start;
                     justify-content: center;
                 }
 
                 .helmet-product-card {
                     position: absolute;
-                    top: 50%;
+                    top: 20px;
                     left: 50%;
-                    transform: translate(-50%, -50%) scale(0.85);
+                    transform: translateX(-50%) scale(0.85);
                     width: 90%;
                     max-width: 1000px;
                     opacity: 0;

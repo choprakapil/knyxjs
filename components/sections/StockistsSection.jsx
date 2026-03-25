@@ -1,33 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import StockistCard from "@/components/ui/StockistCard";
-
-const stockists = [
-  {
-    name: "ABC Sports Store",
-    country: "India",
-    address: "123 Main Road, Delhi, India",
-    phone: "+91 9876543210",
-    email: "contact@abcstore.com",
-    website: "https://abcstore.com"
-  },
-  {
-    name: "Dragon Sports Hub",
-    country: "China",
-    address: "88 Beijing Street, Shanghai, China",
-    phone: "+86 1234567890",
-    email: "info@dragonsports.cn",
-    website: "https://dragonsports.cn"
-  }
-];
+import { stockistsData } from "@/lib/data/stockists";
 
 const StockistsSection = () => {
     const [selectedCountry, setSelectedCountry] = useState("All");
-    const countries = ["All", ...new Set(stockists.map(s => s.country))];
+    const countries = ["All", ...new Set(stockistsData.list.map(s => s.country))];
 
     const filteredStockists = selectedCountry === "All" 
-        ? stockists 
-        : stockists.filter(s => s.country === selectedCountry);
+        ? stockistsData.list 
+        : stockistsData.list.filter(s => s.country === selectedCountry);
 
     return (
         <section className="tp-stockists-section pt-150 pb-100" style={{ backgroundColor: "#030303", minHeight: "100vh" }}>
@@ -36,8 +18,8 @@ const StockistsSection = () => {
                 {/* Section Header */}
                 <div className="row mb-50">
                     <div className="col-12">
-                        <h1 className="tp-ff-jakarta fw-600 fs-48 fs-md-36 tp-text-common-white mb-15">Our Stockists</h1>
-                        <p className="tp-ff-dm fw-400 fs-18 tp-text-grey-2 max-w-600">Find official distributors and official stockists delivering KNYX equipment in your region.</p>
+                        <h1 className="tp-ff-jakarta fw-600 fs-48 fs-md-36 tp-text-common-white mb-15">{stockistsData.header.title}</h1>
+                        <p className="tp-ff-dm fw-400 fs-18 tp-text-grey-2 max-w-600">{stockistsData.header.description}</p>
                     </div>
                 </div>
 

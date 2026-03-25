@@ -1,22 +1,9 @@
 "use client";
 import React from 'react';
 import { withBasePath } from "@/lib/asset";
+import { homeData } from "@/lib/data/home";
 
-const brands = [
-    { img: 'logo.png', name: 'TACTICAL FACEGUARD' },
-    { img: 'logo-1.png', name: 'RIM (RADIAL IMPACT MITIGATION)' },
-    { img: 'logo-2.png', name: 'NECK SHIELD PRO' },
-    { img: 'logo-3.png', name: 'MAGLOCK' },
-    { img: 'logo-4.png', name: 'CARBON COMPOSITE' },
-    { img: 'logo-5.png', name: 'IVS (IMPROVED VENTILATION SYSTEM)' },
-    { img: 'logo-6.png', name: 'KOOLFORM' },
-    { img: 'logo-7.png', name: 'EPP' },
-    { img: 'logo-8.png', name: 'ISOFIT' },
-];
-
-/* Duplicate so the loop appears seamless */
-// const track = [...brands, ...brands, ...brands];
-const track = brands;
+const track = homeData.brands;
 
 const BrandSliderSection = () => (
     <section

@@ -9,19 +9,8 @@ import Loader from "@/components/layout/Loader";
 import LoaderInit from "@/components/layout/LoaderInit";
 import Offcanvas from "@/components/layout/Offcanvas";
 import SnapSliderInit from "@/components/layout/SnapSliderInit";
-import AboutSection from "@/components/sections/AboutSection";
-import BrandSliderSection from "@/components/sections/BrandSliderSection";
-import BannerSection from "@/components/sections/BannerSection";
-import BlogSection from "@/components/sections/BlogSection";
-import CtaSection from "@/components/sections/CtaSection";
-import FaqSection from "@/components/sections/FaqSection";
+import AboutSection from "@/components/sections/BrandStorySection";
 import HeroSection from "@/components/sections/HeroSection";
-import PortfolioSection from "@/components/sections/PortfolioSection";
-import PricingSection from "@/components/sections/PricingSection";
-import ServicesSection from "@/components/sections/ServicesSection";
-import TestimonialSection from "@/components/sections/TestimonialSection";
-import TextSliderSection from "@/components/sections/TextSliderSection";
-import StickyProductsSection from "@/components/sections/StickyProductsSection";
 
 export default function HomePage() {
   const [hideLoader, setHideLoader] = useState(false);
@@ -57,18 +46,7 @@ export default function HomePage() {
       {/* <SnapSliderInit /> */}
       <main>
         <HeroSection />
-        <BrandSliderSection />
         <AboutSection />
-        {/* <BannerSection /> */}
-        {/* <ServicesSection /> */}
-        {/* <StickyProductsSection /> */}
-        {/* <TextSliderSection /> */}
-        {/* <PortfolioSection /> */}
-        {/* <PricingSection /> */}
-        {/* <TestimonialSection /> */}
-        {/* <FaqSection /> */}
-        {/* <CtaSection />
-            <BlogSection /> */}
       </main>
       <Footer />
       {/* <LegacyScripts /> */}
