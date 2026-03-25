@@ -1,6 +1,5 @@
 import "./globals.css";
 import { withBasePath } from "@/lib/asset";
-import MagicCursor from "@/components/layout/MagicCursor";
 import ScrollCleanup from "@/components/layout/ScrollCleanup";
 
 const cssAssets = [
@@ -38,9 +37,8 @@ export default function RootLayout({ children }) {
           <link key={href} rel="stylesheet" href={withBasePath(href)} />
         ))}
       </head>
-      <body className={`tp-magic-cursor ${inter.className}`} suppressHydrationWarning>
+      <body className={`${inter.className}`} suppressHydrationWarning>
         <ScrollCleanup />
-        <MagicCursor />
         {children}
       </body>
     </html>

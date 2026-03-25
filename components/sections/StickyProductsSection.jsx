@@ -2,41 +2,18 @@
 
 import { useRef, useState, useEffect } from "react";
 import { withBasePath } from "@/lib/asset";
+import { professionalProducts } from "@/lib/data/products";
+import { slugify } from "@/lib/utils";
 
-const products = [
-  {
-    id: "001",
-    title: "C7 Iso Pro",
-    category: "Professional",
-    image: "/assets/img/products/1.png",
-    description: "Engineered for maximum protection with advanced impact absorption and ultra-lightweight titanium grille.",
-    link: "/products/helmet",
-  },
-  {
-    id: "002",
-    title: "KNYX Pro Elite V2",
-    category: "Professional",
-    image: "/assets/img/products/2.png",
-    description: "Next-gen helmet featuring enhanced ventilation system and multi-layer inner foam for unmatched comfort.",
-    link: "/products/helmet",
-  },
-  {
-    id: "003",
-    title: "KNYX Pro Master",
-    category: "Professional",
-    image: "/assets/img/products/3.png",
-    description: "Premium carbon fiber shell with steel blend grille, designed for elite-level cricketers.",
-    link: "/products/helmet",
-  },
-  {
-    id: "004",
-    title: "KNYX Pro Titanium",
-    category: "Professional",
-    image: "/assets/img/products/4.png",
-    description: "Our flagship titanium-grade helmet with sweat-wicking padding and 360° impact protection.",
-    link: "/products/helmet",
-  },
-];
+/** Pick the first 4 professional products for the homepage showcase. */
+const products = professionalProducts.slice(0, 4).map((p, i) => ({
+    id: String(i + 1).padStart(3, "0"),
+    title: p.name,
+    category: p.category,
+    image: `/assets/img/products/${p.image}`,
+    description: p.description,
+    link: `/products/${p.categorySlug || 'helmet'}/${p.slug || slugify(p.name)}`,
+}));
 
 export default function StickyProductsSection() {
   const sectionRef = useRef(null);

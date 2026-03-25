@@ -3,69 +3,29 @@ import React, { useEffect, useRef, useState } from "react";
 import { withBasePath } from "@/lib/asset";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { slugify } from "@/lib/utils";
+import { allProducts, productCategories } from "@/lib/data/products";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const slugify = (value) =>
-    String(value ?? "")
-        .trim()
-        .toLowerCase()
-        .replace(/&/g, "and")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-
-const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
+const CategoryProductsSection = ({ category }) => {
     const sectionRef = useRef(null);
     const [activeIndex, setActiveIndex] = useState(0);
 
-    const professionalProducts = [
-        { id: "product-1", name: "C7 Iso Pro", image: "1.png", slug: "c7-iso-pro" },
-        { id: "product-1b", name: "C7", image: "2.png", slug: "c7" },
-        { id: "product-1c", name: "C5 Iso Pro", image: "3.png", slug: "c5-iso-pro" },
-        { id: "product-1d", name: "C5", image: "4.png", slug: "c5" },
-        { id: "product-2", name: "KNYX Pro Elite V2", image: "2.png" },
-        { id: "product-3", name: "KNYX Pro Master", image: "3.png" },
-        { id: "product-4", name: "KNYX Pro Titanium", image: "4.png" },
-        { id: "product-5", name: "KNYX Pro Signature", image: "5.png" },
-    ];
-
-    const amateurProducts = [
-        { id: "product-6", name: "KNYX Classic Lite", image: "6.png" },
-        { id: "product-7", name: "KNYX Club Essential", image: "7.png" },
-        { id: "product-8", name: "KNYX Practice Series", image: "8.png" },
-        { id: "product-9", name: "KNYX Academy Edition", image: "9.png" },
-        { id: "product-10", name: "KNYX Starter Pro", image: "10.png" },
-    ];
-
-    const normalizedCategorySlugFilter = categorySlugFilter ? slugify(categorySlugFilter) : null;
-    const allowProfessional = !normalizedCategorySlugFilter || normalizedCategorySlugFilter === "professional";
-    const allowAmateurs = !normalizedCategorySlugFilter || normalizedCategorySlugFilter === "amateurs";
-
-    const normalizedAllowedProductSlugs = Array.isArray(allowedProductSlugs)
-        ? allowedProductSlugs.map((s) => slugify(s)).filter(Boolean)
-        : null;
-
     const getProductSlug = (product) => slugify(product?.slug ?? product?.name);
 
-    const buildFilteredProducts = (products) => {
-        if (!normalizedAllowedProductSlugs) return products;
-        const bySlug = new Map();
-        products.forEach((p) => {
-            const s = getProductSlug(p);
-            if (s && !bySlug.has(s)) bySlug.set(s, p);
-        });
-        return normalizedAllowedProductSlugs
-            .map((slug, idx) => {
-                const p = bySlug.get(slug);
-                if (!p) return null;
-                return { ...p, routeId: p.id };
-            })
-            .filter(Boolean);
-    };
+    const categoryProducts = allProducts.filter(p => (p.categorySlug || "helmet") === category);
 
-    const filteredProfessionalProducts = allowProfessional ? buildFilteredProducts(professionalProducts) : [];
-    const filteredAmateurProducts = allowAmateurs ? buildFilteredProducts(amateurProducts) : [];
-    const allProducts = [...filteredProfessionalProducts, ...filteredAmateurProducts];
+    // Group products dynamically (e.g., "Professional", "Amateur")
+    const groupedProducts = categoryProducts.reduce((acc, product) => {
+        const cat = product.category || "General";
+        if (!acc[cat]) acc[cat] = [];
+        acc[cat].push(product);
+        return acc;
+    }, {});
+
+    const groups = Object.keys(groupedProducts);
+    const allFilteredProducts = categoryProducts;
 
     useEffect(() => {
         if (typeof window === "undefined" || !sectionRef.current) return;
@@ -167,7 +127,7 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
             }
             tl.kill();
         };
-    }, [allProducts.length]);
+    }, [allFilteredProducts.length]);
 
     const scrollToProduct = (e, id, index) => {
         e.preventDefault();
@@ -229,11 +189,9 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
                     <div className={`product-content ${isAlternate ? "pr-30" : "pl-30"}`}>
                         <h3 className="tp-ff-jakarta fw-600 fs-36 mb-20 tp-text-common-white">{product.name}</h3>
                         <p className="tp-ff-dm fw-400 fs-18 lh-150-per tp-text-grey-2 mb-30">
-                            {isAlternate
-                                ? "The perfect starting point for new and aspiring cricketers. Designed giving priority to essential safety without compromising on visibility and airflow."
-                                : "Engineered for maximum protection and undeniable style. Features advanced impact absorption and an ultra-lightweight titanium/steel blend grille."}
+                            {product.description}
                         </p>
-                        <a href={`/products/helmet/${getProductSlug(product)}`} className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
+                        <a href={`/products/${category}/${getProductSlug(product)}`} className="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-white lh-1 fs-16 fw-700 tp-ff-dm">
                             <span className="d-flex align-items-center justify-content-center">
                                 <span className="btn-text">View Product</span>
                                 <span className="btn-icon">
@@ -250,31 +208,29 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
     );
 
     return (
-        <section id="helmet-products-section" ref={sectionRef}>
+        <section id="category-products-section" ref={sectionRef}>
             <div className="products-wrapper">
                 <div className="container-fluid container-1524 h-100">
                     <div className="products-inner">
                         <aside className="products-sidebar">
                             <div className="sidebar-group">
-                                {allowProfessional && (
-                                    <div className="category-group">
-                                        <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15">Professional</h5>
-                                        {renderNavList(filteredProfessionalProducts, 0)}
-                                    </div>
-                                )}
-                                {allowAmateurs && (
-                                    <div className="category-group mt-30">
-                                        <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15">Amateurs</h5>
-                                        {renderNavList(filteredAmateurProducts, filteredProfessionalProducts.length)}
-                                    </div>
-                                )}
+                                {groups.map((group, idx) => {
+                                    const groupProducts = groupedProducts[group];
+                                    const startIndex = allFilteredProducts.indexOf(groupProducts[0]);
+                                    return (
+                                        <div key={group} className={`category-group ${idx > 0 ? "mt-30" : ""}`}>
+                                            <h5 className="tp-ff-jakarta fw-700 fs-28 tp-text-common-white d-flex align-items-center mb-15">{group}</h5>
+                                            {renderNavList(groupProducts, startIndex)}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </aside>
 
                         <div className="products-stage">
-                            {allProducts.map((product, i) => (
+                            {allFilteredProducts.map((product, i) => (
                                 <div key={`${product.id}-${i}`} className="helmet-product-card">
-                                    {renderProductCard(product, i >= filteredProfessionalProducts.length)}
+                                    {renderProductCard(product, i % 2 !== 0)}
                                 </div>
                             ))}
                         </div>
@@ -283,7 +239,7 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
             </div>
 
             <style jsx>{`
-                #helmet-products-section {
+                #category-products-section {
                     position: relative;
                     height: 500vh; /* Increased for smoother control over more cards */
                     background: #030303;
@@ -340,7 +296,7 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
                 }
 
                 @media (max-width: 991px) {
-                    #helmet-products-section { height: auto; }
+                    #category-products-section { height: auto; }
                     .products-wrapper { position: relative; top: 0; height: auto; overflow: visible; }
                     .products-inner { flex-direction: column; }
                     .products-sidebar { width: 100%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 30px; margin-bottom: 30px; }
@@ -352,4 +308,4 @@ const HelmetProductsSection = ({ categorySlugFilter, allowedProductSlugs }) => {
     );
 };
 
-export default HelmetProductsSection;
+export default CategoryProductsSection;

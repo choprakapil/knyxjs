@@ -1,76 +1,24 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { withBasePath } from "@/lib/asset";
+import { slugify } from "@/lib/utils";
+import {
+    allProducts,
+} from "@/lib/data/products";
 
-const slugify = (value) =>
-    String(value ?? "")
-        .trim()
-        .toLowerCase()
-        .replace(/&/g, "and")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-
-const allProducts = [
-    {
-        id: "product-1",
-        name: "C7 Iso Pro",
-        image: "1.png",
-        category: "Professional",
-        slug: "c7-iso-pro",
-        description: "Carbon Composite Reinforced Shell with premium matte painted finish...",
-        gallery: ["1.png","11.png","12.png","9.png"]
-    },
-    {
-        id: "product-1b",
-        name: "C7",
-        image: "2.png",
-        category: "Professional",
-        slug: "c7",
-        description: "Engineered for maximum protection and undeniable style...",
-        gallery: ["2.png","11.png","12.png","9.png"]
-    },
-    {
-        id: "product-1c",
-        name: "C5 Iso Pro",
-        image: "3.png",
-        category: "Professional",
-        slug: "c5-iso-pro",
-        description: "Designed with ISOFIT adjustable locks for critical stability...",
-        gallery: ["3.png","11.png","12.png","9.png"]
-    },
-    {
-        id: "product-1d",
-        name: "C5",
-        image: "4.png",
-        category: "Professional",
-        slug: "c5",
-        description: "The perfect starting point for new and aspiring cricketers...",
-        gallery: ["4.png","11.png","12.png","9.png"]
-    },
-    { id: "product-2", name: "KNYX Pro Elite V2", image: "2.png", category: "Professional" },
-    { id: "product-3", name: "KNYX Pro Master", image: "3.png", category: "Professional" },
-    { id: "product-4", name: "KNYX Pro Titanium", image: "4.png", category: "Professional" },
-    { id: "product-5", name: "KNYX Pro Signature", image: "5.png", category: "Professional" },
-    { id: "product-6", name: "KNYX Classic Lite", image: "6.png", category: "Amateur" },
-    { id: "product-7", name: "KNYX Club Essential", image: "7.png", category: "Amateur" },
-    { id: "product-8", name: "KNYX Practice Series", image: "8.png", category: "Amateur" },
-    { id: "product-9", name: "KNYX Academy Edition", image: "9.png", category: "Amateur" },
-    { id: "product-10", name: "KNYX Starter Pro", image: "10.png", category: "Amateur" },
-];
-
-export default function HelmetProductDetailsClient({ id }) {
+export default function ProductDetailsClient({ id }) {
     const getProductSlug = (p) => p.slug || slugify(p.name);
     
     const product = allProducts.find((p) => getProductSlug(p) === id) || {
         id: id,
-        name: "Custom KNYX Helmet",
+        name: "Custom KNYX Product",
         image: "1.png",
         category: "Custom Edition",
     };
 
     const [isCertificateOpen, setIsCertificateOpen] = useState(false);
 
-    const galleryImages = [
+    const galleryImages = product.gallery || [
         product.image,
         product.image === "4.png" ? "8.png" : "11.png",
         product.image === "4.png" ? "5.png" : "12.png",
@@ -85,136 +33,6 @@ export default function HelmetProductDetailsClient({ id }) {
     const [activeFeature, setActiveFeature] = useState(null);
     const contentRef = useRef(null);
 
-    const featureDetails = [
-        {
-            iconImg: "logo-4.png",
-            title: "CARBON COMPOSITE",
-            desc: "Lightweight carbon shell built for pro‑level impact protection.",
-            detail: {
-                headline: "Carbon Composite Reinforced Shell",
-                intro: "The C7 Iso Pro features a state-of-the-art carbon composite reinforced shell that offers an unmatched balance of lightweight design and extreme durability. The exterior is finished with a premium matte paint for a sleek, professional look.",
-                highlights: [
-                    "Carbon fibre-reinforced polymer construction for superior strength-to-weight ratio",
-                    "Matte painted finish resists scratches, scuffs, and UV degradation",
-                    "Aerodynamic shell profile reduces drag and wind noise",
-                    "Impact-tested to exceed international safety standards",
-                ],
-                specs: { "Material": "Carbon Composite Polymer", "Finish": "Premium Matte Paint", "Weight Savings": "Up to 20% lighter than traditional shells", "Standard": "Exceeds BS 7928:2013" },
-            },
-        },
-        {
-            iconImg: "logo-7.png",
-            title: "EPP",
-            desc: "High‑density liner that spreads impact forces and stays comfortable.",
-            detail: {
-                headline: "High Density EPP Shock Absorbing Liner",
-                intro: "Expanded Polypropylene (EPP) is a high-performance foam used in the most demanding safety applications. Our high-density EPP liner is precision-molded to the inner contour of the shell, providing consistent, reliable energy absorption on every impact.",
-                highlights: [
-                    "Multi-impact capable — retains protective properties after repeated strikes",
-                    "Uniform energy dissipation across the entire liner surface area",
-                    "Lightweight closed-cell foam structure won't absorb sweat or moisture",
-                    "Precision-molded for a seamless fit against the inner shell",
-                ],
-                specs: { "Material": "Expanded Polypropylene (EPP)", "Density": "High-density, multi-impact grade", "Moisture Resistance": "Closed-cell, non-absorbent", "Coverage": "Full cranial coverage" },
-            },
-        },
-        {
-            iconImg: "logo-1.png",
-            title: "RIM (RADIAL IMPACT MITIGATION)",
-            desc: "Elastic RIM layer that reduces both linear and rotational shocks.",
-            detail: {
-                headline: "RIM — Radial Impact Mitigation System",
-                intro: "The proprietary RIM (Radial Impact Mitigation) system is an advanced elastic shock absorption technology designed to handle impacts from every direction. It works in concert with the EPP liner to dramatically reduce the transfer of rotational and linear forces to the head.",
-                highlights: [
-                    "Elastic polymer network absorbs and redirects radial impact energy",
-                    "Multi-directional protection against linear and rotational forces",
-                    "Integrates seamlessly between the shell and EPP liner",
-                    "Designed to significantly reduce peak G-force on impact",
-                ],
-                specs: { "Technology": "Elastic Polymer Network", "Protection": "Multi-directional (radial + linear)", "Integration": "Shell-liner interface", "Performance": "Reduces peak G-force significantly" },
-            },
-        },
-        {
-            iconImg: "logo-5.png",
-            title: "IVS (IMPROVED VENTILATION SYSTEM)",
-            desc: "Deep channel ventilation that keeps airflow moving through the helmet.",
-            detail: {
-                headline: "IVS — Improved Ventilation System",
-                intro: "The IVS (Improved Ventilation System) uses a network of strategically placed intake and exhaust vents to create a continuous, cooling airflow across the head. This ensures maximum comfort and concentration even during the most intense sessions under the sun.",
-                highlights: [
-                    "Strategically placed intake vents at the front draw in cool air",
-                    "Internal channeling system directs airflow across the scalp",
-                    "Rear exhaust ports expel warm, humid air efficiently",
-                    "Designed to reduce internal temperature by up to 15%",
-                ],
-                specs: { "System": "Multi-channel intake & exhaust", "Vent Count": "12+ precision-placed vents", "Airflow": "Continuous front-to-back circulation", "Cooling": "Up to 15% internal temperature reduction" },
-            },
-        },
-        {
-            iconImg: "logo-8.png",
-            title: "ISOFIT",
-            desc: "Dial‑in ISOFIT system that locks the helmet to your exact head shape.",
-            detail: {
-                headline: "ISOFIT Comfort Liner Fit System",
-                intro: "The ISOFIT system is a precision-engineered internal fit mechanism that allows the helmet to be adjusted for a personalized, secure fit. It adapts to the unique contours of your head, eliminating pressure points and ensuring the helmet stays locked in place during play.",
-                highlights: [
-                    "Micro-adjustable dial system for a personalized, secure fit",
-                    "Conforms to unique head contours to eliminate pressure points",
-                    "Easy one-handed adjustment even while wearing gloves",
-                    "Ensures zero helmet shift or wobble during fast play",
-                ],
-                specs: { "Adjustment": "Micro-dial precision system", "Fit": "Adaptive contouring", "Operation": "One-handed, glove-compatible", "Stability": "Zero-shift lock" },
-            },
-        },
-        {
-            iconImg: "logo-6.png",
-            title: "KOOLFORM",
-            desc: "Moisture‑wicking KoolForm padding that stays cool and fresh all day.",
-            detail: {
-                headline: "KoolForm Liner Comfort Padding",
-                intro: "KoolForm padding uses advanced moisture-wicking fabrics and memory foam inserts to deliver exceptional comfort for prolonged use. The pads are removable and washable, making it easy to keep your helmet fresh and hygienic.",
-                highlights: [
-                    "Moisture-wicking fabric draws sweat away from the skin",
-                    "Memory foam inserts provide a plush, custom fit over time",
-                    "Anti-microbial treated to prevent odor and bacteria build-up",
-                    "Fully removable and machine-washable for easy hygiene",
-                ],
-                specs: { "Fabric": "Moisture-wicking, anti-microbial", "Foam": "Memory foam inserts", "Maintenance": "Removable & machine-washable", "Comfort": "Long-session rated" },
-            },
-        },
-        {
-            iconImg: "logo.png",
-            title: "TACTICAL FACEGUARD",
-            desc: "Ultra‑light titanium grille that maximises vision without sacrificing safety.",
-            detail: {
-                headline: "Titanium Tactical Faceguard",
-                intro: "The titanium tactical faceguard provides unparalleled facial protection without compromising on weight or visibility. Titanium's exceptional strength-to-weight ratio means the grille can be thinner, lighter, and stronger than traditional steel alternatives.",
-                highlights: [
-                    "Aerospace-grade titanium construction for extreme durability",
-                    "Up to 40% lighter than comparable steel faceguards",
-                    "Optimized bar spacing for maximum visibility and ball tracking",
-                    "Corrosion-resistant finish for longevity in all conditions",
-                ],
-                specs: { "Material": "Aerospace-grade Titanium", "Weight": "Up to 40% lighter than steel", "Visibility": "Optimized bar spacing", "Finish": "Corrosion-resistant coating" },
-            },
-        },
-        {
-            iconImg: "logo-3.png",
-            title: "MAGLOCK",
-            desc: "Magnetic buckle you can fasten and release instantly with one hand.",
-            detail: {
-                headline: "Maglock Quick Fastening & Release Buckle System",
-                intro: "The Maglock buckle system uses powerful, self-aligning magnets for instant fastening and release. No more fumbling with traditional clips — just snap to secure, and pull to release. Designed for one-handed operation even with batting gloves.",
-                highlights: [
-                    "Self-aligning magnetic closure snaps securely into place",
-                    "Instant one-pull release for quick helmet removal",
-                    "Operable with one hand, even while wearing batting gloves",
-                    "Reinforced strap rated for high-tension loads",
-                ],
-                specs: { "Mechanism": "Self-aligning magnetic closure", "Operation": "One-handed, glove-compatible", "Release": "Instant one-pull release", "Strap": "Reinforced high-tension rated" },
-            },
-        },
-    ];
 
     return (
         <section ref={contentRef} className="product-details-area pt-120 pb-120" style={{ backgroundColor: "#06080D", minHeight: "100vh" }}>
@@ -274,14 +92,13 @@ export default function HelmetProductDetailsClient({ id }) {
                                         </div>
                                     </div>
 
-                                    {/* Compatible Accessories (moved under image area, left column) */}
+                                    {/* Compatible Accessories */}
                                     <div id="tab-accessories" className="tab-section mb-60 p-5 tp-round-10 mt-4" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
                                         <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-28 mb-20">Compatible Accessories</h3>
                                         <ul className="list-unstyled tp-text-grey-2 tp-ff-dm fs-18 lh-lg">
-                                            <li className="mb-2 border-bottom border-secondary pb-2"><i className="fa-solid fa-plus me-2" style={{ color: "#c8ff00" }}></i> Quick-Release Neck Guard</li>
-                                            <li className="mb-2 border-bottom border-secondary pb-2"><i className="fa-solid fa-plus me-2" style={{ color: "#c8ff00" }}></i> Replacement Inner Padding Set (Sweat-wicking)</li>
-                                            <li className="mb-2 border-bottom border-secondary pb-2"><i className="fa-solid fa-plus me-2" style={{ color: "#c8ff00" }}></i> Anti-Fog Visor Extenders</li>
-                                            <li className="mb-2 border-bottom border-secondary pb-2"><i className="fa-solid fa-plus me-2" style={{ color: "#c8ff00" }}></i> Carrying Case (Hard shell)</li>
+                                            {(product.accessories || []).map((acc) => (
+                                                <li key={acc} className="mb-2 border-bottom border-secondary pb-2"><i className="fa-solid fa-plus me-2" style={{ color: "#c8ff00" }}></i> {acc}</li>
+                                            ))}
                                         </ul>
                                     </div>
                                 </div>
@@ -292,19 +109,14 @@ export default function HelmetProductDetailsClient({ id }) {
                                         <span className="d-inline-block px-3 py-1 tp-round-10 tp-ff-inter fw-600 fs-12 text-uppercase mb-20" style={{ backgroundColor: "rgba(200,255,0,0.08)", color: "#c8ff00" }}>{product.category}</span>
                                         <h2 className="tp-ff-jakarta fw-700 fs-40 tp-text-common-white mb-20">{product.name}</h2>
                                         <p className="tp-ff-dm fw-400 fs-18 lh-150-per tp-text-grey-2 mb-30">
-                                            Carbon Composite Reinforced Shell with matte painted finish. Precision-engineered for elite professional cricketers who demand uncompromising protection, superior ventilation, and an advanced fit system.
+                                            {product.description}
                                         </p>
 
                                         <div className="d-flex flex-wrap gap-4 mb-40">
                                             <div>
                                                 <h5 className="tp-ff-jakarta fw-600 fs-16 tp-text-common-white mb-15">Available Colors</h5>
                                                 <div className="d-flex gap-3">
-                                                    {[
-                                                        { name: "Matte Black", color: "#000" },
-                                                        { name: "Navy Blue", color: "#1A2E44" },
-                                                        { name: "Crimson Red", color: "#820A0A" },
-                                                        { name: "Pearl White", color: "#EBEBEB" },
-                                                    ].map((c) => (
+                                                    {(product.colors || []).map((c) => (
                                                         <div
                                                             key={c.name}
                                                             className="color-circle"
@@ -319,8 +131,8 @@ export default function HelmetProductDetailsClient({ id }) {
 
                                             <div className="ms-lg-4">
                                                 <h5 className="tp-ff-jakarta fw-600 fs-16 tp-text-common-white mb-15">Select Size</h5>
-                                                <div className="d-flex gap-2">
-                                                    {["S", "M", "L", "XL"].map((s) => (
+                                                <div className="d-flex flex-wrap gap-2">
+                                                    {(product.sizes || []).map((s) => (
                                                         <button
                                                             key={s}
                                                             className="size-btn tp-ff-inter fw-600"
@@ -335,12 +147,30 @@ export default function HelmetProductDetailsClient({ id }) {
                                             </div>
                                         </div>
 
+                                        <div className="d-flex flex-column gap-3 mb-40 tp-round-10 p-4" style={{ backgroundColor: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
+                                            <div className="d-flex align-items-center">
+                                                <h5 className="tp-ff-jakarta fw-600 fs-16 tp-text-common-white m-0" style={{ width: "120px" }}>Grille Type:</h5>
+                                                <span className="tp-ff-dm fs-16 tp-text-grey-2">{product.grilleType}</span>
+                                            </div>
+                                            <div className="d-flex align-items-center">
+                                                <h5 className="tp-ff-jakarta fw-600 fs-16 tp-text-common-white m-0" style={{ width: "120px" }}>Certification:</h5>
+                                                <span className="tp-ff-dm fs-16" style={{ color: "#c8ff00" }}>{product.certification}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="mb-50">
+                                            <h5 className="tp-ff-jakarta fw-600 fs-18 tp-text-common-white mb-15">Helmet Sizing</h5>
+                                            <p className="tp-ff-dm tp-text-grey-2 fs-16" style={{ whiteSpace: "pre-line" }}>
+                                                {product.sizingText}
+                                            </p>
+                                        </div>
+
                                         <div id="tab-features" className="tab-section mb-60">
                                             <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-28 mb-15">Key Features</h3>
-                                            <p className="tp-ff-dm tp-text-grey-2 fs-16 mb-40" style={{ maxWidth: "650px" }}>Every component of the C7 Iso Pro is designed for professional-level performance, protection, and comfort.</p>
+                                            <p className="tp-ff-dm tp-text-grey-2 fs-16 mb-40" style={{ maxWidth: "650px" }}>Every component of the {product.name} is designed for professional-level performance, protection, and comfort.</p>
 
                                             <div className="features-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "18px" }}>
-                                                {featureDetails.map((feature, index) => (
+                                                {(product.features || []).map((feature, index) => (
                                                     <div
                                                         key={feature.title}
                                                         className="feature-card-item"

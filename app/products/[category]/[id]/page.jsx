@@ -2,9 +2,9 @@ import BackToTop from "@/components/layout/BackToTop";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import Offcanvas from "@/components/layout/Offcanvas";
-import HelmetProductDetailsClient from "@/components/products/HelmetProductDetailsClient";
+import ProductDetailsClient from "@/components/products/ProductDetailsClient";
 
-export default async function HelmetProductDetailsPage({ params }) {
+export default async function CategoryProductDetailsPage({ params }) {
   const { id } = await params;
 
   return (
@@ -14,7 +14,7 @@ export default async function HelmetProductDetailsPage({ params }) {
       <Offcanvas />
       <Header />
       <main>
-        <HelmetProductDetailsClient id={id} />
+        <ProductDetailsClient id={id} />
       </main>
       <Footer />
     </>

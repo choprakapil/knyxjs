@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { withBasePath } from "@/lib/asset";
 import Offcanvas from "./Offcanvas";
+import { productCategories } from "@/lib/data/products";
 
 export const MENU_ITEMS = [
   { label: "Home", href: "/" },
@@ -10,10 +11,10 @@ export const MENU_ITEMS = [
   { 
     label: "Products", 
     href: "javascript:void(0)", 
-    dropdown: [
-      { label: "Helmet", href: "/products/helmet" },
-      { label: "Groin Protection", href: "#" }
-    ]
+    dropdown: productCategories.map(cat => ({ 
+      label: cat.name, 
+      href: `/products/${cat.slug}` 
+    }))
   },
   { label: "Stockists", href: "/stockists" }
 ];

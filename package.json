@@ -15,9 +15,7 @@
   "type": "module",
   "dependencies": {
     "@prisma/client": "^5.22.0",
-    "bcryptjs": "^3.0.3",
     "gsap": "^3.14.2",
-    "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.20.0",
     "next": "16.0.8",
     "prisma": "^5.22.0",
@@ -26,6 +24,7 @@
     "swiper": "^12.1.2"
   },
   "devDependencies": {
+    "baseline-browser-mapping": "^2.10.10",
     "eslint": "^9.39.1",
     "eslint-config-next": "^16.0.0"
   },

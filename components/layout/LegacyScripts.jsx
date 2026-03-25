@@ -30,7 +30,6 @@ const localScripts = [
   "/assets/js/ajax-form.js",
   "/assets/js/slider-init.js",
   "/assets/js/main.js",
-  "/assets/js/tp-cursor.js",
 ];
 
 const LegacyScripts = () => {

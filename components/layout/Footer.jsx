@@ -1,6 +1,7 @@
 "use client";
 import { withBasePath } from "@/lib/asset";
 import gsap from "gsap";
+import { productCategories } from "@/lib/data/products";
 
 const Footer = () => (
   <footer style={{ position: "relative", zIndex: 2 }}>
@@ -43,7 +44,7 @@ const Footer = () => (
                 <li><a href={withBasePath("/")}>Home</a></li>
                 <li><a href={withBasePath("/#brand-story")}>Brand Story</a></li>
                 <li><a href={withBasePath("/technology")}>Technology</a></li>
-                <li><a href={withBasePath("/products/helmet")}>Products</a></li>
+                <li><a href={withBasePath(`/products/${productCategories[0]?.slug || 'helmet'}`)}>Products</a></li>
                 <li><a href={withBasePath("/stockists")}>Stockists</a></li>
               </ul>
             </div>

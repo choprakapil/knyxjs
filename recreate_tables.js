@@ -7,20 +7,10 @@ async function main() {
   await connection.query("SET FOREIGN_KEY_CHECKS = 0");
   await connection.query("DROP TABLE IF EXISTS products");
   await connection.query("DROP TABLE IF EXISTS categories");
-  await connection.query("DROP TABLE IF EXISTS users");
   await connection.query("SET FOREIGN_KEY_CHECKS = 1");
 
   console.log("Creating tables...");
 
-  await connection.query(`
-    CREATE TABLE users (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      email VARCHAR(191) NOT NULL UNIQUE,
-      password VARCHAR(191) NOT NULL,
-      role VARCHAR(191) NOT NULL DEFAULT 'admin',
-      createdAt DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3)
-    )
-  `);
 
   await connection.query(`
     CREATE TABLE categories (
