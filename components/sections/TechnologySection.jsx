@@ -6,8 +6,17 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, isHero = false }) => {
+const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, isHero = false, video = null }) => {
     const sectionRef = useRef(null);
+    const videoRef = useRef(null);
+    const [isMuted, setIsMuted] = React.useState(true);
+
+    const toggleMute = () => {
+        if (videoRef.current) {
+            videoRef.current.muted = !videoRef.current.muted;
+            setIsMuted(videoRef.current.muted);
+        }
+    };
 
     useEffect(() => {
         if (typeof window === "undefined" || !sectionRef.current) return;
@@ -49,14 +58,65 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
             <div className="container-fluid container-1524">
                 <div className={`row align-items-center ${reverse ? "flex-row-reverse" : ""}`}>
                     
-                    {/* Image Area */}
+                    {/* Image/Video Area */}
                     <div className="col-lg-6 mb-40 mb-lg-0 tech-reveal">
-                        <div className="tech-image-wrapper p-relative overflow-hidden tp-round-24">
-                            <img 
-                                src={withBasePath(image)} 
-                                alt={imageAlt} 
-                                className="img-fluid" 
-                            />
+                        <div 
+                            className="tech-image-wrapper p-relative overflow-hidden tp-round-24"
+                            style={{ 
+                                padding: video ? 0 : "30px", 
+                                height: video ? "auto" : "480px", 
+                                maxWidth: video ? "600px" : "100%",
+                                margin: "0 auto",
+                                boxShadow: video ? "0 20px 40px rgba(0,0,0,0.4)" : "none",
+                                border: video ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(255,255,255,0.05)"
+                            }}
+                        >
+                            {video ? (
+                                <>
+                                    <video 
+                                        ref={videoRef}
+                                        src={withBasePath(video)} 
+                                        autoPlay 
+                                        loop 
+                                        muted 
+                                        playsInline 
+                                        style={{ 
+                                            width: "100%", 
+                                            display: "block", 
+                                            borderRadius: "24px",
+                                            boxShadow: "inset 0 0 100px rgba(0,0,0,0.5)"
+                                        }}
+                                    />
+                                    <button 
+                                        onClick={toggleMute}
+                                        style={{
+                                            position: "absolute",
+                                            bottom: "20px",
+                                            right: "20px",
+                                            background: "rgba(0,0,0,0.5)",
+                                            border: "1px solid rgba(255,255,255,0.2)",
+                                            borderRadius: "50%",
+                                            width: "40px",
+                                            height: "40px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            color: "#fff",
+                                            zIndex: 20,
+                                            cursor: "pointer"
+                                        }}
+                                        aria-label={isMuted ? "Unmute" : "Mute"}
+                                    >
+                                        <i className={`fa-solid ${isMuted ? "fa-volume-mute" : "fa-volume-high"}`}></i>
+                                    </button>
+                                </>
+                            ) : (
+                                <img 
+                                    src={withBasePath(image)} 
+                                    alt={imageAlt} 
+                                    className="img-fluid" 
+                                />
+                            )}
                         </div>
                     </div>
                     
@@ -64,7 +124,7 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
                     <div className="col-lg-6 tech-reveal">
                         <div className={`tech-content ${reverse ? "pl-50" : "pr-50"}`}>
                             {isHero && (
-                                <span className="tp-ff-jakarta fw-600 fs-14 tp-text-theme-primary mb-15 d-inline-block text-uppercase ls-1">
+                                <span className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white mb-15 d-inline-block text-uppercase ls-1 title-slide-gradient">
                                     {badge}
                                 </span>
                             )}

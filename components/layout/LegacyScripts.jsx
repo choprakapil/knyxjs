@@ -35,6 +35,8 @@ const localScripts = [
 const LegacyScripts = () => {
   const [gsapLoaded, setGsapLoaded] = useState(false);
   const [scrollTriggerLoaded, setScrollTriggerLoaded] = useState(false);
+  const [jqueryLoaded, setJqueryLoaded] = useState(false);
+  const [pluginsLoaded, setPluginsLoaded] = useState(false);
 
   return (
     <>
@@ -47,11 +49,38 @@ const LegacyScripts = () => {
       <Script src={externalScripts[2]} strategy="afterInteractive" />
       <Script src={externalScripts[3]} strategy="afterInteractive" />
 
-      <Script src={withBasePath(localScripts[0])} strategy="afterInteractive" />
+      {/* Core jQuery */}
+      <Script 
+        src={withBasePath(localScripts[0])} 
+        strategy="afterInteractive" 
+        onLoad={() => setJqueryLoaded(true)} 
+      />
 
-      {localScripts.slice(1).map((src) => (
-        <Script key={src} src={withBasePath(src)} strategy="afterInteractive" />
-      ))}
+      {/* Plugins that depend on jQuery */}
+      {jqueryLoaded && (
+        <>
+          {localScripts.slice(1, -1).map((src, idx) => (
+            <Script 
+              key={src} 
+              src={withBasePath(src)} 
+              strategy="afterInteractive" 
+              onLoad={() => {
+                if (src.includes("magnific-popup.js")) {
+                  setPluginsLoaded(true);
+                }
+              }}
+            />
+          ))}
+        </>
+      )}
+
+      {/* Main script that depends on all plugins */}
+      {pluginsLoaded && (
+        <Script 
+          src={withBasePath(localScripts[localScripts.length - 1])} 
+          strategy="afterInteractive" 
+        />
+      )}
 
       <Script src={withBasePath("/assets/js/distortion-img.js")} strategy="afterInteractive" type="module" />
     </>

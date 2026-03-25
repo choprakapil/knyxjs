@@ -9,6 +9,14 @@ export const MENU_ITEMS = siteData.menus.main;
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchInputRef = React.useRef(null);
+
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+        searchInputRef.current.focus();
+    }
+  }, [isSearchOpen]);
 
   // Consolidated style rule for hamburger lines to maintain clean code standards
   const barLineStyle = {
@@ -37,7 +45,7 @@ const Header = () => {
           left: 0,
           right: 0,
           zIndex: 999,
-          padding: '28px 5%',
+          padding: '10px 5%',
           background: 'rgba(5, 5, 5, 0.4)', 
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
@@ -50,49 +58,67 @@ const Header = () => {
         {/* Left Search */}
         <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
           <div className="header-search-wrap" style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-            <svg 
-              width="16" 
-              height="16" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              style={{ color: '#fff', position: 'absolute', left: '16px', pointerEvents: 'none', opacity: 0.6 }}
+            <button 
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                padding: '8px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 10,
+                color: '#fff',
+                opacity: 0.8,
+                transition: 'opacity 0.3s ease'
+              }}
+              aria-label="Toggle search"
             >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
+              <svg 
+                width="24" 
+                height="24" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
             <input 
+              ref={searchInputRef}
               type="text" 
               placeholder={siteData.ui.searchPlaceholder} 
               style={{
-                background: 'rgba(255, 255, 255, 0.03)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
                 borderRadius: '30px',
-                padding: '10px 16px 10px 42px',
+                padding: isSearchOpen ? '10px 16px 10px 42px' : '0',
                 color: '#fff',
                 fontSize: '14px',
-                width: '180px',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                outline: 'none'
-              }}
-              onFocus={(e) => {
-                e.target.style.background = 'rgba(255, 255, 255, 0.08)';
-                e.target.style.borderColor = 'rgba(200, 255, 0, 0.4)';
-                e.target.style.width = '240px';
-                e.target.style.boxShadow = '0 0 15px rgba(200, 255, 0, 0.1)';
-              }}
-              onBlur={(e) => {
-                e.target.style.background = 'rgba(255, 255, 255, 0.03)';
-                e.target.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-                e.target.style.width = '180px';
-                e.target.style.boxShadow = 'none';
+                width: isSearchOpen ? '200px' : '0',
+                opacity: isSearchOpen ? 1 : 0,
+                visibility: isSearchOpen ? 'visible' : 'hidden',
+                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                outline: 'none',
+                position: 'absolute',
+                left: '0'
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && e.target.value.trim()) {
                   window.location.href = `/search?q=${encodeURIComponent(e.target.value.trim())}`;
+                }
+                if (e.key === 'Escape') {
+                  setIsSearchOpen(false);
+                }
+              }}
+              onBlur={() => {
+                if (!searchInputRef.current?.value) {
+                    setIsSearchOpen(false);
                 }
               }}
             />
@@ -103,7 +129,7 @@ const Header = () => {
         <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
           <a href={withBasePath("/")} style={{ display: 'block', cursor: 'pointer' }}>
             <img 
-              style={{ height: '36px', width: 'auto', display: 'block', objectFit: 'contain' }} 
+              style={{ height: '68px', width: 'auto', display: 'block', objectFit: 'contain' }} 
               src={withBasePath(siteData.logo.light)} 
               alt={siteData.logo.alt} 
             />

@@ -23,19 +23,16 @@ const HeroSection = () => (
     </video>
 
     <div
-      onClick={() => window.scrollTo({ top: window.innerHeight, behavior: "smooth" })}
       style={{
-        position: "absolute",
-        bottom: "8%",
-        left: "50%",
-        transform: "translateX(-50%)",
-        zIndex: 10,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        cursor: "pointer",
-        opacity: 0.8,
-        transition: "opacity 0.3s ease"
+        justifyContent: "center",
+        zIndex: 10,
+        padding: "40px 0 20px 0",
+        pointerEvents: "none",
+        opacity: 0.6,
+        background: "transparent"
       }}
       className="scroll-indicator"
     >

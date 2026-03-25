@@ -184,18 +184,18 @@ export default function ProductDetailsClient({ id }) {
                                                             onClick={() => setSelectedSize(s)}
                                                             className="size-btn tp-ff-inter fw-600"
                                                             style={{ 
-                                                                minWidth: "120px", 
-                                                                height: "48px", 
-                                                                borderRadius: "12px", 
-                                                                background: selectedSize === s ? "rgba(200, 255, 0, 0.15)" : "rgba(255,255,255,0.05)", 
-                                                                border: selectedSize === s ? "2px solid #c8ff00" : "1px solid rgba(255,255,255,0.1)", 
-                                                                color: selectedSize === s ? "#c8ff00" : "#fff", 
+                                                                background: "transparent", 
+                                                                border: "none", 
+                                                                color: selectedSize === s ? "#fff" : "rgba(255,255,255,0.4)", 
                                                                 display: "flex", 
                                                                 alignItems: "center", 
-                                                                justifyContent: "center", 
+                                                                justifyContent: "flex-start", 
                                                                 cursor: "pointer", 
                                                                 transition: "all 0.3s",
-                                                                padding: "0 20px"
+                                                                padding: "0",
+                                                                marginRight: "20px",
+                                                                fontSize: "16px",
+                                                                textDecoration: "none"
                                                             }}
                                                         >
                                                             {s}
@@ -207,7 +207,7 @@ export default function ProductDetailsClient({ id }) {
 
                                         <div className="d-flex flex-wrap gap-3 mb-40 tp-round-10 p-3" style={{ backgroundColor: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
                                             <div className="d-flex align-items-center flex-grow-1" style={{ minWidth: "180px", padding: "5px 10px" }}>
-                                                <h5 className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white m-0 mr-10" style={{ opacity: 0.6 }}>{siteData.ui.grilleLabel}</h5>
+                                                <h5 className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white m-0" style={{ opacity: 0.6 }}>{siteData.ui.grilleLabel}</h5>
                                                 <span className="tp-ff-dm fs-15 tp-text-grey-2 fw-600">{product.grilleType}</span>
                                             </div>
                                             <div 
@@ -215,7 +215,7 @@ export default function ProductDetailsClient({ id }) {
                                                 onClick={() => setIsCertificateOpen(true)}
                                                 style={{ cursor: "pointer", borderLeft: "1px solid rgba(255,255,255,0.1)", minWidth: "180px", padding: "5px 10px" }}
                                             >
-                                                <h5 className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white m-0 mr-10" style={{ opacity: 0.6 }}>{siteData.ui.certLabel}</h5>
+                                                <h5 className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white m-0" style={{ opacity: 0.6 }}>{siteData.ui.certLabel}</h5>
                                                 <span className="tp-ff-dm fs-15 cert-text fw-600" style={{ color: "#c8ff00" }}>{product.certification}</span>
                                             </div>
                                         </div>

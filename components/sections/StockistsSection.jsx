@@ -1,10 +1,15 @@
-"use client";
 import React, { useState } from "react";
 import StockistCard from "@/components/ui/StockistCard";
+import ComingSoon from "@/components/common/ComingSoon";
 import { stockistsData } from "@/lib/data/stockists";
 
 const StockistsSection = () => {
     const [selectedCountry, setSelectedCountry] = useState("All");
+    
+    if (!stockistsData.list || stockistsData.list.length === 0) {
+        return <ComingSoon message="Our global network of official stockists is currently expanding. Check back soon." />;
+    }
+
     const countries = ["All", ...new Set(stockistsData.list.map(s => s.country))];
 
     const filteredStockists = selectedCountry === "All" 

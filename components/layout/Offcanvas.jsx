@@ -3,12 +3,34 @@ import React, { useState, useEffect } from "react";
 import { withBasePath } from "@/lib/asset";
 import { MENU_ITEMS } from "./Header";
 import { siteData } from "@/lib/data/site";
+import { usePathname, useRouter } from "next/navigation";
 
-const MobileMenu = () => {
+const MobileMenu = ({ onClose }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const toggleDropdown = (label) => {
     setOpenDropdown(prev => prev === label ? null : label);
+  };
+
+  const handleNavClick = (e, href) => {
+    if (href.startsWith("/#")) {
+        e.preventDefault();
+        const targetId = href.replace("/#", "");
+        onClose && onClose();
+        
+        if (pathname === "/") {
+            const element = document.getElementById(targetId);
+            if (element) {
+                element.scrollIntoView({ behavior: "smooth" });
+            }
+        } else {
+            window.location.href = href;
+        }
+    } else {
+        onClose && onClose();
+    }
   };
 
   return (
@@ -63,7 +85,11 @@ const MobileMenu = () => {
               </ul>
             </>
           ) : (
-            <a href={withBasePath(item.href)} style={{ display: 'block', padding: '0', fontSize: '20px', fontWeight: 600, color: '#ffffff' }}>
+            <a 
+                href={withBasePath(item.href)} 
+                onClick={(e) => handleNavClick(e, item.href)}
+                style={{ display: 'block', padding: '0', fontSize: '20px', fontWeight: 600, color: '#ffffff' }}
+            >
               {item.label}
             </a>
           )}
@@ -110,7 +136,7 @@ const Offcanvas = ({ open, onClose }) => {
           </div>
           
           <div className="tp-offcanvas-menu mb-40">
-            <nav><MobileMenu /></nav>
+            <nav><MobileMenu onClose={onClose} /></nav>
           </div>
 
           <div className="tp-offcanvas-social" style={{ marginTop: 'auto' }}>

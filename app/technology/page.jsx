@@ -38,6 +38,7 @@ export default function TechnologyPage() {
                         title={section.title}
                         content={section.content}
                         image={section.image}
+                        video={section.video}
                         imageAlt={section.imageAlt}
                         reverse={section.reverse}
                         isHero={false}

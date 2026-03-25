@@ -1,125 +1,152 @@
 "use client";
+import React from "react";
 import { withBasePath } from "@/lib/asset";
 import gsap from "gsap";
 import { siteData } from "@/lib/data/site";
+import { usePathname } from "next/navigation";
 
-const Footer = () => (
-  <footer style={{ position: "relative", zIndex: 2 }}>
-    <div className="tp-footer-area pt-50 bg-position" style={{ backgroundImage: `url(${withBasePath('/assets/img/footer/ai/bg-black.jpg')})` }}>
-      <div className="container-fluid container-1524">
-        <div className="row">
-          {(siteData.contact.address.line1 || siteData.contact.address.line2) ? (
-            <div className="col-lg-3 col-md-6 col-sm-6">
-              <div className="tp-footer-ai-widget mb-40 tp_fade_anim" data-delay=".3">
-                <h5 className="tp-ff-jakarta fw-600 fs-18 lh-140-per ls-m-2 text-uppercase tp-text-common-white mb-15">{siteData.ui.locationHeading}</h5>
-                <p className="tp-ff-dm fs-18 lh-140-per ls-m-2 tp-text-common-white opacity-8">
-                  {siteData.contact.address.line1}
-                  <br />
-                  {siteData.contact.address.line2}
-                </p>
+const Footer = () => {
+  const pathname = usePathname();
+
+  const handleNavClick = (e, href) => {
+    if (href.startsWith("/#")) {
+      const targetId = href.replace("/#", "");
+      if (pathname === "/") {
+        e.preventDefault();
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        // Let the browser handle cross-page hash navigation
+        window.location.href = href;
+      }
+    }
+  };
+
+  return (
+    <footer style={{ position: "relative", zIndex: 2 }}>
+      <div className="tp-footer-area pt-50 bg-position" style={{ backgroundImage: `url(${withBasePath('/assets/img/footer/ai/bg-black.jpg')})` }}>
+        <div className="container-fluid container-1524">
+          <div className="row align-items-start">
+
+            {/* Contact Section */}
+            {siteData.contact.phone || siteData.contact.email ? (
+              <div className="col-lg-3 col-md-6 col-sm-6">
+                <div className="tp-footer-ai-widget mb-40 tp_fade_anim" data-delay=".3">
+                  <h5 className="tp-ff-jakarta fw-600 fs-18 lh-140-per ls-m-2 text-uppercase tp-text-common-white mb-15">{siteData.ui.contactHeading}</h5>
+                  {siteData.contact.phone && (
+                    <div className="mb-10">
+                      <a href={`tel:${siteData.contact.phone.replace(/[^0-9+]/g, '')}`} className="tp-ff-dm fs-18 lh-140-per ls-m-2 tp-text-common-white hover-text-white opacity-8 underline-black">
+                        {siteData.contact.phone}
+                      </a>
+                    </div>
+                  )}
+                  <div>
+                    <a href={`mailto:${siteData.contact.email}`} className="tp-ff-dm fs-18 lh-140-per ls-m-2 tp-text-common-white hover-text-white opacity-8 underline-black">
+                      {siteData.contact.email}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            {/* Menu Section - Centered in middle */}
+            <div className="col-lg-7 col-md-12">
+              <div className="tp-footer-ai-menu mb-40 tp_fade_anim text-center" data-delay=".5">
+                <ul className="d-flex flex-wrap align-items-center justify-content-center" style={{ gap: '25px', listStyle: 'none', padding: 0, margin: 0 }}>
+                  {siteData.menus.main.map((item, i) => {
+                    const isDropdown = item.href === "javascript:void(0)" && item.dropdown;
+                    const href = isDropdown ? withBasePath(item.dropdown[0].href) : withBasePath(item.href);
+                    const label = isDropdown ? item.dropdown[0].label : item.label;
+                    return (
+                      <li key={i} style={{ margin: 0 }}>
+                        <a
+                          href={href}
+                          onClick={(e) => handleNavClick(e, item.href)}
+                          className="tp-ff-jakarta fw-600 fs-15 text-uppercase ls-1 tp-text-common-white"
+                        >
+                          {label}
+                        </a>
+                      </li>
+                    )
+                  })}
+                </ul>
               </div>
             </div>
-          ) : null}
 
-          <div className="col-lg-3 col-md-6 col-sm-6">
-            <div className="tp-footer-ai-widget mb-40 tp_fade_anim" data-delay=".5">
-              <h5 className="tp-ff-jakarta fw-600 fs-18 lh-140-per ls-m-2 text-uppercase tp-text-common-white mb-15">{siteData.ui.contactHeading}</h5>
-              {siteData.contact.phone && (
-                <div className="mb-10">
-                  <a href={`tel:${siteData.contact.phone.replace(/[^0-9+]/g, '')}`} className="tp-ff-dm fs-18 lh-140-per ls-m-2 tp-text-common-white hover-text-white opacity-8 underline-black">
-                    {siteData.contact.phone}
-                  </a>
+            {/* Stalk Us Section - Right aligned */}
+            <div className="col-lg-2 col-md-6 col-sm-6 text-lg-end">
+              <div className="tp-footer-ai-widget mb-40 tp_fade_anim" data-delay=".7">
+                <h5 className="tp-ff-jakarta fw-600 fs-18 lh-140-per ls-m-2 text-uppercase tp-text-common-white mb-15">{siteData.ui.socialsHeading}</h5>
+                <div className="tp-footer-wd-social tp-footer-ai-social d-flex justify-content-lg-end justify-content-start">
+                  {siteData.socials.map((social, index) => (
+                    <div key={social.network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
+                      <a href={withBasePath(social.url)} target="_blank" rel="noopener noreferrer" aria-label={`Visit our ${social.network} page`}>
+                        <i className={`fa-brands fab fa-${social.network}`}></i>
+                      </a>
+                    </div>
+                  ))}
                 </div>
-              )}
-              <div>
-                <a href={`mailto:${siteData.contact.email}`} className="tp-ff-dm fs-18 lh-140-per ls-m-2 tp-text-common-white hover-text-white opacity-8 underline-black">
-                  {siteData.contact.email}
-                </a>
+              </div>
+            </div>
+
+            {/* Big Title Section */}
+            <div className="col-lg-12">
+              <div className="tp-footer-ai-title-wrap text-center pt-15 pb-30 tp_fade_anim" style={{ overflow: "hidden", maxWidth: "100%" }} data-fade-from="top" data-delay=".7" data-ease="bounce">
+                <h2 className="tp-footer-ai-bigtitle tp-ff-jakarta fw-800 text-uppercase tp-text-common-white">
+                  <a
+                    href={withBasePath("/")}
+                    className="text-scale-anim"
+                  >
+                    <span className="tp-word-span">
+                      {"KNYX".split("").map((char, i) => (
+                        <span
+                          key={i}
+                          className="tp-letter-span"
+                          onMouseEnter={(e) => {
+                            gsap.to(e.currentTarget, { scaleY: 1.3, y: "-14%", duration: 0.2, ease: "sine" });
+                          }}
+                          onMouseLeave={(e) => {
+                            gsap.to(e.currentTarget, { scaleY: 1, y: "0%", duration: 0.2, ease: "sine" });
+                          }}
+                          style={{ display: "inline-block", transformOrigin: "bottom center" }}
+                        >
+                          {char}
+                        </span>
+                      ))}
+                    </span>
+                  </a>
+                </h2>
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="col-lg-7 col-md-12 col-sm-12">
-            <div className="tp-footer-ai-menu mb-40 tp_fade_anim" data-delay=".7">
-              <ul className="d-flex flex-wrap align-items-center justify-content-lg-center" style={{ gap: '20px', listStyle: 'none', padding: 0, columnCount: 1 }}>
-                {siteData.menus.main.map((item, i) => {
-                  const isDropdown = item.href === "javascript:void(0)" && item.dropdown;
-                  const href = isDropdown ? withBasePath(item.dropdown[0].href) : withBasePath(item.href);
-                  const label = isDropdown ? item.dropdown[0].label : item.label;
-                  return (
-                    <li key={i} style={{ margin: 0 }}><a href={href}>{label}</a></li>
-                  )
-                })}
-              </ul>
-            </div>
-          </div>
-
-          <div className="col-lg-2 col-md-6 col-sm-6">
-            <div className="tp-footer-wd-social tp-footer-ai-social d-flex justify-content-lg-end mb-40">
-              {siteData.socials.map((social, index) => (
-                <div key={social.network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
-                  <a href={withBasePath(social.url)} target="_blank" rel="noopener noreferrer" aria-label={`Visit our ${social.network} page`}>
-                    <i className={`fa-brands fab fa-${social.network}`}></i>
-                  </a>
+        <div className="tp-footer-ai-copyright-border">
+          <div className="container">
+            <div className="row">
+              <div className="col-12">
+                <div className="tp-footer-ai-copyright text-center">
+                  <p className="tp-ff-dm fw-500 tp-text-common-white">
+                    <span>
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M0.875 7C0.875 8.62445 1.52031 10.1824 2.66897 11.331C3.81763 12.4797 5.37555 13.125 7 13.125C8.62445 13.125 10.1824 12.4797 11.331 11.331C12.4797 10.1824 13.125 8.62445 13.125 7C13.125 5.37555 12.4797 3.81763 11.331 2.66897C10.1824 1.52031 8.62445 0.875 7 0.875C5.37555 0.875 3.81763 1.52031 2.66897 2.66897C1.52031 3.81763 0.875 5.37555 0.875 7ZM14 7C14 8.85652 13.2625 10.637 11.9497 11.9497C10.637 13.2625 8.85652 14 7 14C5.14348 14 3.36301 13.2625 2.05025 11.9497C0.737498 10.637 0 8.85652 0 7C0 5.14348 0.737498 3.36301 2.05025 2.05025C3.36301 0.737498 5.14348 0 7 0C8.85652 0 10.637 0.737498 11.9497 2.05025C13.2625 3.36301 14 5.14348 14 7ZM7.12775 4.368C6.06725 4.368 5.44162 5.173 5.44162 6.55725V7.48475C5.44162 8.85938 6.05675 9.639 7.12775 9.639C7.98438 9.639 8.56363 9.12625 8.64062 8.39825H9.77375V8.47962C9.68625 9.74662 8.589 10.6383 7.1225 10.6383C5.29288 10.6383 4.26213 9.46925 4.26213 7.48563V6.54675C4.26213 4.56838 5.313 3.3635 7.12337 3.3635C8.59425 3.3635 9.6915 4.28575 9.77375 5.614V5.691H8.64062C8.56363 4.92188 7.96863 4.368 7.12775 4.368Z"
+                          fill="#fff"
+                        />
+                      </svg>
+                    </span>
+                    {siteData.ui.copyrightText(new Date().getFullYear())}
+                  </p>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="col-lg-12">
-            <div className="tp-footer-ai-title-wrap text-center pt-15 pb-30 tp_fade_anim" style={{ overflow: "hidden", maxWidth: "100%" }} data-fade-from="top" data-delay=".7" data-ease="bounce">
-              <h2 className="tp-footer-ai-bigtitle tp-ff-jakarta fw-800 text-uppercase tp-text-common-white">
-                <a
-                  href={withBasePath("/")}
-                  className="text-scale-anim"
-                >
-                  <span className="tp-word-span">
-                    {"KNYX".split("").map((char, i) => (
-                      <span
-                        key={i}
-                        className="tp-letter-span"
-                        onMouseEnter={(e) => {
-                          gsap.to(e.currentTarget, { scaleY: 1.3, y: "-14%", duration: 0.2, ease: "sine" });
-                        }}
-                        onMouseLeave={(e) => {
-                          gsap.to(e.currentTarget, { scaleY: 1, y: "0%", duration: 0.2, ease: "sine" });
-                        }}
-                        style={{ display: "inline-block", transformOrigin: "bottom center" }}
-                      >
-                        {char}
-                      </span>
-                    ))}
-                  </span>
-                </a>
-              </h2>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div className="tp-footer-ai-copyright-border">
-        <div className="container">
-          <div className="row">
-            <div className="col-12">
-              <div className="tp-footer-ai-copyright text-center">
-                <p className="tp-ff-dm fw-500 tp-text-common-white">
-                  <span>
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M0.875 7C0.875 8.62445 1.52031 10.1824 2.66897 11.331C3.81763 12.4797 5.37555 13.125 7 13.125C8.62445 13.125 10.1824 12.4797 11.331 11.331C12.4797 10.1824 13.125 8.62445 13.125 7C13.125 5.37555 12.4797 3.81763 11.331 2.66897C10.1824 1.52031 8.62445 0.875 7 0.875C5.37555 0.875 3.81763 1.52031 2.66897 2.66897C1.52031 3.81763 0.875 5.37555 0.875 7ZM14 7C14 8.85652 13.2625 10.637 11.9497 11.9497C10.637 13.2625 8.85652 14 7 14C5.14348 14 3.36301 13.2625 2.05025 11.9497C0.737498 10.637 0 8.85652 0 7C0 5.14348 0.737498 3.36301 2.05025 2.05025C3.36301 0.737498 5.14348 0 7 0C8.85652 0 10.637 0.737498 11.9497 2.05025C13.2625 3.36301 14 5.14348 14 7ZM7.12775 4.368C6.06725 4.368 5.44162 5.173 5.44162 6.55725V7.48475C5.44162 8.85938 6.05675 9.639 7.12775 9.639C7.98438 9.639 8.56363 9.12625 8.64062 8.39825H9.77375V8.47962C9.68625 9.74662 8.589 10.6383 7.1225 10.6383C5.29288 10.6383 4.26213 9.46925 4.26213 7.48563V6.54675C4.26213 4.56838 5.313 3.3635 7.12337 3.3635C8.59425 3.3635 9.6915 4.28575 9.77375 5.614V5.691H8.64062C8.56363 4.92188 7.96863 4.368 7.12775 4.368Z"
-                        fill="#fff"
-                      />
-                    </svg>
-                  </span>
-                  {siteData.ui.copyrightText(new Date().getFullYear())}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
-);
+    </footer>
+  );
+};
 
 export default Footer;
