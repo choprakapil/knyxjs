@@ -5,6 +5,7 @@ import {
     allProducts,
     getFeature,
 } from "@/lib/data/products";
+import { siteData } from "@/lib/data/site";
 
 export default function ProductDetailsClient({ id }) {
     const product = allProducts.find((p) => p.slug === id) || {
@@ -121,7 +122,7 @@ export default function ProductDetailsClient({ id }) {
                                                     className="d-flex align-items-center justify-content-between cursor-pointer" 
                                                     onClick={() => setIsAccessoriesOpen(!isAccessoriesOpen)}
                                                 >
-                                                    <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-24 m-0">Accessories</h3>
+                                                    <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-24 m-0">{siteData.ui.accessoriesHeading}</h3>
                                                     <i className={`fa-solid ${isAccessoriesOpen ? "fa-minus" : "fa-plus"}`} style={{ color: "#c8ff00", fontSize: "18px", transition: "transform 0.3s ease" }}></i>
                                                 </div>
                                                 <div className="overflow-hidden" style={{ maxHeight: isAccessoriesOpen ? "200px" : "0", transition: "all 0.4s ease-in-out", opacity: isAccessoriesOpen ? 1 : 0 }}>
@@ -137,7 +138,7 @@ export default function ProductDetailsClient({ id }) {
                                                     className="d-flex align-items-center justify-content-between cursor-pointer" 
                                                     onClick={() => setIsSizingOpen(!isSizingOpen)}
                                                 >
-                                                    <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-24 m-0">{product.sizingTitle || "Helmet Sizing"}</h3>
+                                                    <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-24 m-0">{product.sizingTitle || siteData.ui.sizingHeading}</h3>
                                                     <i className={`fa-solid ${isSizingOpen ? "fa-minus" : "fa-plus"}`} style={{ color: "#c8ff00", fontSize: "18px", transition: "transform 0.3s ease" }}></i>
                                                 </div>
                                                 <div className="overflow-hidden" style={{ maxHeight: isSizingOpen ? "500px" : "0", transition: "all 0.4s ease-in-out", opacity: isSizingOpen ? 1 : 0 }}>
@@ -161,7 +162,7 @@ export default function ProductDetailsClient({ id }) {
 
                                         <div className="d-flex flex-wrap gap-4 mb-40">
                                             <div>
-                                                <h5 className="tp-ff-jakarta fw-600 fs-16 tp-text-common-white mb-15">Available Colors</h5>
+                                                <h5 className="tp-ff-jakarta fw-600 fs-16 tp-text-common-white mb-15">{siteData.ui.colorsHeading}</h5>
                                                 <div className="d-flex gap-3">
                                                     {(product.colors || []).map((c) => (
                                                         <div
@@ -175,7 +176,7 @@ export default function ProductDetailsClient({ id }) {
                                             </div>
 
                                             <div className="ms-lg-4">
-                                                <h5 className="tp-ff-jakarta fw-600 fs-16 tp-text-common-white mb-15">Select Size</h5>
+                                                <h5 className="tp-ff-jakarta fw-600 fs-16 tp-text-common-white mb-15">{siteData.ui.sizeHeading}</h5>
                                                 <div className="d-flex flex-wrap gap-3">
                                                     {(product.sizes || []).map((s) => (
                                                         <button
@@ -206,7 +207,7 @@ export default function ProductDetailsClient({ id }) {
 
                                         <div className="d-flex flex-wrap gap-3 mb-40 tp-round-10 p-3" style={{ backgroundColor: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
                                             <div className="d-flex align-items-center flex-grow-1" style={{ minWidth: "180px", padding: "5px 10px" }}>
-                                                <h5 className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white m-0 mr-10" style={{ opacity: 0.6 }}>Grille:</h5>
+                                                <h5 className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white m-0 mr-10" style={{ opacity: 0.6 }}>{siteData.ui.grilleLabel}</h5>
                                                 <span className="tp-ff-dm fs-15 tp-text-grey-2 fw-600">{product.grilleType}</span>
                                             </div>
                                             <div 
@@ -214,13 +215,13 @@ export default function ProductDetailsClient({ id }) {
                                                 onClick={() => setIsCertificateOpen(true)}
                                                 style={{ cursor: "pointer", borderLeft: "1px solid rgba(255,255,255,0.1)", minWidth: "180px", padding: "5px 10px" }}
                                             >
-                                                <h5 className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white m-0 mr-10" style={{ opacity: 0.6 }}>Cert:</h5>
+                                                <h5 className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white m-0 mr-10" style={{ opacity: 0.6 }}>{siteData.ui.certLabel}</h5>
                                                 <span className="tp-ff-dm fs-15 cert-text fw-600" style={{ color: "#c8ff00" }}>{product.certification}</span>
                                             </div>
                                         </div>
 
                                         <div id="tab-features" className="tab-section mb-60">
-                                            <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-28 mb-10">Key Features</h3>
+                                            <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-28 mb-10">{siteData.ui.keyFeaturesHeading}</h3>
                                             <p className="tp-ff-dm tp-text-grey-2 fs-15 mb-30" style={{ maxWidth: "600px" }}>Every component of the {product.name} is designed for professional-level performance, protection, and comfort.</p>
 
                                             <div className="features-grid" style={{ display: "grid", gridTemplateColumns: "1fr", gap: "15px" }}>
@@ -279,30 +280,7 @@ export default function ProductDetailsClient({ id }) {
                                             </div>
                                         </div>
 
-                                        <div className="product-certificate text-center" style={{ marginTop: "60px" }}>
-                                            <button
-                                                onClick={() => setIsCertificateOpen(true)}
-                                                style={{
-                                                    display: "inline-flex",
-                                                    alignItems: "center",
-                                                    gap: "12px",
-                                                    padding: "18px 40px",
-                                                    background: "linear-gradient(135deg, rgba(200, 255, 0, 0.1) 0%, rgba(200, 255, 0, 0.05) 100%)",
-                                                    border: "1px solid rgba(200, 255, 0, 0.25)",
-                                                    borderRadius: "12px",
-                                                    color: "#c8ff00",
-                                                    fontSize: "16px",
-                                                    fontWeight: 600,
-                                                    cursor: "pointer",
-                                                    transition: "all 0.3s ease",
-                                                    letterSpacing: "0.5px",
-                                                }}
-                                            >
-                                                <i className="fa-solid fa-certificate" style={{ fontSize: "20px" }}></i>
-                                                View Certificate of Authenticity
-                                                <i className="fa-solid fa-arrow-up-right-from-square" style={{ fontSize: "14px", opacity: 0.6 }}></i>
-                                            </button>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -356,22 +334,22 @@ export default function ProductDetailsClient({ id }) {
                     >
                         <div className="tp-round-10 overflow-hidden" style={{ border: "2px solid #c8ff00", boxShadow: "0 0 50px rgba(200, 255, 0, 0.2)" }}>
                             <div className="bg-white p-5 tp-ff-jakarta" style={{ minHeight: '600px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                <h1 style={{ color: '#1A1F2B', fontWeight: 800, fontSize: '48px', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '20px' }}>Certificate of Authenticity</h1>
+                                <h1 style={{ color: '#1A1F2B', fontWeight: 800, fontSize: '48px', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '20px' }}>{siteData.ui.certificate.title}</h1>
                                 <div style={{ height: '2px', width: '100px', backgroundColor: '#c8ff00', margin: '0 auto 40px auto' }}></div>
-                                <h3 style={{ color: '#555', fontSize: '24px', marginBottom: '10px' }}>This certifies that</h3>
+                                <h3 style={{ color: '#555', fontSize: '24px', marginBottom: '10px' }}>{siteData.ui.certificate.certifiesText}</h3>
                                 <h2 style={{ color: '#6B8E23', fontSize: '36px', fontWeight: 700, margin: '20px 0' }}>{product.name}</h2>
-                                <h3 style={{ color: '#555', fontSize: '20px', lineHeight: 1.6, maxWidth: '600px', margin: '20px auto' }}>Has undergone rigorous safety testing and meets or exceeds all international sporting safety compliance standards (ISO 9001, CE, BSI).</h3>
+                                <h3 style={{ color: '#555', fontSize: '20px', lineHeight: 1.6, maxWidth: '600px', margin: '20px auto' }}>{siteData.ui.certificate.complianceText}</h3>
                                 <div className="mt-5 d-flex justify-content-center align-items-center gap-5">
                                     <div className="text-center">
                                         <div style={{ borderBottom: "1px solid #111", width: "150px", marginBottom: "10px" }}></div>
-                                        <span style={{ fontSize: "14px", color: "#666" }}>Quality Assurance Lead</span>
+                                        <span style={{ fontSize: "14px", color: "#666" }}>{siteData.ui.certificate.qaLeadLabel}</span>
                                     </div>
                                     <div>
-                                        <img src={withBasePath('/assets/img/logo/logo.png')} alt="KNYX Logo" style={{ maxWidth: '120px', filter: 'invert(1)' }} />
+                                        <img src={withBasePath(siteData.logo.dark)} alt={siteData.logo.alt} style={{ maxWidth: '120px' }} />
                                     </div>
                                     <div className="text-center">
                                         <div style={{ borderBottom: "1px solid #111", width: "150px", marginBottom: "10px" }}></div>
-                                        <span style={{ fontSize: "14px", color: "#666" }}>Date of Issuance</span>
+                                        <span style={{ fontSize: "14px", color: "#666" }}>{siteData.ui.certificate.issuanceDateLabel}</span>
                                     </div>
                                 </div>
                             </div>
@@ -448,7 +426,7 @@ export default function ProductDetailsClient({ id }) {
                                 <img src={`/assets/img/brands/${activeFeature.iconImg}`} alt={activeFeature.title} style={{ maxWidth: "28px", height: "auto", filter: "invert(1)" }} />
                             </div>
                             <div>
-                                <span style={{ fontSize: "11px", color: "#c8ff00", textTransform: "uppercase", letterSpacing: "2px" }}>Feature Detail</span>
+                                <span style={{ fontSize: "11px", color: "#c8ff00", textTransform: "uppercase", letterSpacing: "2px" }}>{siteData.ui.featureDetailBadge}</span>
                                 <h3 className="tp-ff-jakarta fw-700 tp-text-common-white m-0" style={{ fontSize: "24px" }}>{activeFeature.detail.headline}</h3>
                             </div>
                         </div>

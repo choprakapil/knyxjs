@@ -1,15 +1,17 @@
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ComingSoon from "@/components/common/ComingSoon";
+import { siteData } from "@/lib/data/site";
 
 export default function ContactPage() {
+  const { title, eyebrow, description } = siteData.pages.contact;
   return (
     <>
       <Breadcrumb
-        title="Contact Us"
-        eyebrow="Get In Touch"
-        description="A dedicated enquiry workspace for prospects and partners."
+        title={title}
+        eyebrow={eyebrow}
+        description={description}
       />
-      <ComingSoon message="Drop us a line soon — the contact workspace is under construction." />
+      <ComingSoon />
     </>
   );
 }

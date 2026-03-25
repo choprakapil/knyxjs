@@ -119,7 +119,7 @@ const Offcanvas = ({ open, onClose }) => {
               {siteData.socials.map((social, index) => (
                 <div key={social.network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
                   <a href={withBasePath(social.url)} target="_blank" rel="noopener noreferrer">
-                    <i className={`fa-brands fa-${social.network}`}></i>
+                    <i className={`fa-brands fab fa-${social.network}`}></i>
                   </a>
                 </div>
               ))}

@@ -12,6 +12,7 @@ const cssAssets = [
 ];
 
 import { Inter } from "next/font/google";
+import { siteData } from "@/lib/data/site";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,8 +20,9 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "KNYX",
-  description: "A Next.js port of the KNYX Website",
+  title: siteData.seo.title,
+  description: siteData.seo.description,
+  keywords: siteData.seo.keywords,
 };
 
 export default function RootLayout({ children }) {

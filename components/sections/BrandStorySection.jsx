@@ -12,11 +12,11 @@ const BrandStorySection = ({ isHomePage = false }) => (
                     <div className="brand-story-wrapper">
                         <div className="tp-about-ai-content mb-30 text-start">
                             <div className="tp-about-ai-text-wrap mb-10 text-start">
-                                <h3 className="tp-about-ai-text tp-ff-jakarta fw-600 fs-40 fs-xl-60 fs-md-38 lh-120-per ls-m-4 tp-text-common-white tet-left title-slide-gradient">
+                                <h3 className="tp-about-ai-title text-uppercase tp-ff-jakarta fw-600 ls-m-4 tp-text-common-white tet-left title-slide-gradient">
                                     {homeData.brandStory.title}
                                 </h3>
                             </div>
-                            <h2 className="tp-about-ai-title fw-600 tp-ff-jakarta ls-m-4 d-flex align-items-center justify-content-start mb-35 tp_fade_anim" data-delay=".3">
+                            <h2 className="tp-about-ai-text fw-600 tp-ff-jakarta fs-40 fs-xl-60 fs-md-38 lh-120-per ls-m-4 d-flex align-items-center justify-content-start mb-35 tp_fade_anim" data-delay=".3">
                                 <span className="tp-text-common-white">{homeData.brandStory.brandName}</span>
                             </h2>
                             <div className="tp_fade_anim" data-delay=".5">

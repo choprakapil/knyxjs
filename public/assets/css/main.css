@@ -306,9 +306,18 @@ a:hover {
 }
 
 /* KNYX Fix: Ensure text never disappears on click (focus/active states) */
-a:focus, a:active,
-button:focus, button:active,
-h1:focus, h2:focus, h3:focus, h4:focus, h5:focus, h6:focus, p:focus, span:focus {
+a:focus,
+a:active,
+button:focus,
+button:active,
+h1:focus,
+h2:focus,
+h3:focus,
+h4:focus,
+h5:focus,
+h6:focus,
+p:focus,
+span:focus {
   opacity: 1 !important;
   -webkit-text-fill-color: initial;
   visibility: visible !important;
@@ -14395,7 +14404,7 @@ only screen and (min-width: 576px) and (max-width: 767px),
 }
 
 .tp-about-ai-title {
-  font-size: 132px;
+  font-size: 62px;
 }
 
 @media (max-width: 574.98px) {
