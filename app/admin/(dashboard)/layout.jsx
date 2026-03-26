@@ -80,7 +80,7 @@ export default function AdminDashboardLayout({ children }) {
           backgroundSize: "auto, auto, cover",
           backgroundPosition: "center",
           backdropFilter: "blur(20px)",
-          borderRight: "1px solid rgba(200, 255, 0, 0.08)",
+          borderRight: "1px solid rgba(27, 59, 138, 0.15)",
           display: "flex",
           flexDirection: "column",
           padding: isSidebarMinimized ? "24px 10px" : "24px 16px",
@@ -90,12 +90,12 @@ export default function AdminDashboardLayout({ children }) {
           overflow: "hidden"
         }}
       >
-        {/* Ambient Radial Green Glowing Light (Like Login Screen) */}
+        {/* Ambient Radial Navy Glowing Light */}
         <div
           style={{
             position: "absolute",
             width: "100%", height: "100%",
-            background: "radial-gradient(ellipse at center, rgba(200,255,0,0.12) 0%, rgba(0,0,0,0) 80%)",
+            background: "radial-gradient(ellipse at center, rgba(27, 59, 138, 0.15) 0%, rgba(0,0,0,0) 80%)",
             top: 0, left: 0,
             zIndex: 1, pointerEvents: "none"
           }}
@@ -106,10 +106,10 @@ export default function AdminDashboardLayout({ children }) {
             position: "absolute", top: "26px", right: isSidebarMinimized ? "50%" : "-12px",
             transform: isSidebarMinimized ? "translateX(50%)" : "none",
             width: "24px", height: "24px", borderRadius: "6px",
-            background: "#1B3B8A", border: "none", color: "#000",
+            background: "#1B3B8A", border: "none", color: "#ffffff",
             display: "flex", alignItems: "center", justifyContent: "center",
             cursor: "pointer", zIndex: 11, fontSize: "11px",
-            boxShadow: "0 2px 8px rgba(200, 255, 0, 0.3)",
+            boxShadow: "0 2px 8px rgba(27, 59, 138, 0.4)",
           }}
         >
           <i className={`fa-solid ${isSidebarMinimized ? "fa-chevron-right" : "fa-chevron-left"}`}></i>
@@ -124,7 +124,7 @@ export default function AdminDashboardLayout({ children }) {
           {menuItems.map((item) => {
             const isActive = checkActive(item.href);
             return (
-              <a key={item.id} href={item.href} style={{ display: "flex", alignItems: "center", justifyContent: isSidebarMinimized ? "center" : "flex-start", gap: isSidebarMinimized ? "0" : "12px", padding: "12px", borderRadius: "12px", fontSize: "14px", fontWeight: 500, color: isActive ? "#000000" : "rgba(255,255,255,0.6)", background: isActive ? "linear-gradient(135deg, #1B3B8A 0%, #a2cc00 100%)" : "transparent", textDecoration: "none", transition: "color 0.2s, background 0.2s", cursor: "pointer", boxShadow: isActive ? "0 4px 12px rgba(200, 255, 0, 0.15)" : "none" }}>
+              <a key={item.id} href={item.href} style={{ display: "flex", alignItems: "center", justifyContent: isSidebarMinimized ? "center" : "flex-start", gap: isSidebarMinimized ? "0" : "12px", padding: "12px", borderRadius: "12px", fontSize: "14px", fontWeight: 500, color: isActive ? "#ffffff" : "rgba(255,255,255,0.6)", background: isActive ? "linear-gradient(135deg, #1B3B8A 0%, #0d1a3a 100%)" : "transparent", textDecoration: "none", transition: "color 0.2s, background 0.2s", cursor: "pointer", boxShadow: isActive ? "0 4px 12px rgba(27, 59, 138, 0.25)" : "none", border: isActive ? "1px solid rgba(255,255,255,0.1)" : "1px solid transparent" }}>
                 <i className={`fa-solid ${item.icon}`} style={{ width: "16px", textAlign: "center", fontSize: "15px" }}></i>
                 {!isSidebarMinimized && <span>{item.title}</span>}
               </a>
@@ -147,7 +147,7 @@ export default function AdminDashboardLayout({ children }) {
               onClick={() => { setIsProfileOpen(!isProfileOpen); fetchProfile(); }}
               style={{ display: "flex", alignItems: "center", gap: "10px", padding: "6px 12px", borderRadius: "12px", background: isProfileOpen ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", cursor: "pointer" }}
             >
-              <div style={{ width: "32px", height: "32px", borderRadius: "8px", background: "rgba(200, 255, 0, 0.1)", border: "1px solid rgba(200, 255, 0, 0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#1B3B8A", fontSize: "14px" }}>K</div>
+              <div style={{ width: "32px", height: "32px", borderRadius: "8px", background: "rgba(27, 59, 138, 0.15)", border: "1px solid rgba(27, 59, 138, 0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#ffffff", fontSize: "14px" }}>K</div>
               <div style={{ display: "flex", flexDirection: "column", textAlign: "left" }}>
                 <span style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff" }}>KNYX Admin</span>
                 <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.4)" }}>Operator</span>
@@ -198,7 +198,7 @@ export default function AdminDashboardLayout({ children }) {
 
               <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
                 <button type="button" onClick={() => setIsModalOpen(false)} style={{ flex: 1, padding: "12px", background: "transparent", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px", color: "rgba(255,255,255,0.6)", cursor: "pointer" }}>Cancel</button>
-                <button type="submit" style={{ flex: 1, padding: "12px", background: "linear-gradient(135deg, #1B3B8A 0%, #a2cc00 100%)", border: "none", borderRadius: "10px", color: "#000000", fontWeight: 700, cursor: "pointer" }}>Save Changes</button>
+                <button type="submit" style={{ flex: 1, padding: "12px", background: "linear-gradient(135deg, #1B3B8A 0%, #0d1a3a 100%)", border: "none", borderRadius: "10px", color: "#ffffff", fontWeight: 700, cursor: "pointer" }}>Save Changes</button>
               </div>
             </form>
           </div>

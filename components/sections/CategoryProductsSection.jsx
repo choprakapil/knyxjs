@@ -83,11 +83,11 @@ const CategoryProductsSection = ({ category }) => {
                     productItem,
                     { 
                         borderColor: isFirst ? "var(--tp-theme-primary)" : "rgba(255,255,255,0.05)", 
-                        boxShadow: isFirst ? "0 0 30px rgba(25, 135, 84, 0.3)" : "0 0 0px rgba(25, 135, 84, 0)" 
+                        boxShadow: isFirst ? "0 0 30px rgba(27, 59, 138, 0.3)" : "0 0 0px rgba(27, 59, 138, 0)" 
                     },
                     {
                         borderColor: "var(--tp-theme-primary)",
-                        boxShadow: "0 0 30px rgba(25, 135, 84, 0.3)",
+                        boxShadow: "0 0 30px rgba(27, 59, 138, 0.3)",
                         ease: "power2.out",
                         duration: step / 2,
                     },
@@ -113,7 +113,7 @@ const CategoryProductsSection = ({ category }) => {
                     productItem,
                     {
                         borderColor: "rgba(255,255,255,0.05)",
-                        boxShadow: "0 0 0px rgba(25, 135, 84, 0)",
+                        boxShadow: "0 0 0px rgba(27, 59, 138, 0)",
                         ease: "power2.in",
                         duration: step / 2,
                     },
