@@ -90,7 +90,7 @@ const AdminLoginPage = () => {
           border: "1px solid rgba(255, 255, 255, 0.04)",
           borderRadius: "24px",
           padding: "40px",
-          boxShadow: isHovered ? "0 25px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(27, 59, 138, 0.1)" : "0 20px 40px rgba(0, 0, 0, 0.7)",
+          boxShadow: isHovered ? "0 25px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(50, 87, 255, 0.1)" : "0 20px 40px rgba(0, 0, 0, 0.7)",
           transition: "all 0.4s ease",
         }}
         onMouseEnter={() => setIsHovered(true)}
@@ -104,9 +104,9 @@ const AdminLoginPage = () => {
             transform: "translateX(-50%)",
             width: "80px",
             height: "4px",
-            background: "#1B3B8A",
+            background: "#3257ff",
             borderRadius: "0 0 4px 4px",
-            boxShadow: "0 0 15px rgba(27, 59, 138, 0.4)"
+            boxShadow: "0 0 15px rgba(50, 87, 255, 0.4)"
           }}
         ></div>
 
@@ -146,7 +146,7 @@ const AdminLoginPage = () => {
                 outline: "none",
                 transition: "all 0.3s ease",
               }}
-              onFocus={(e) => { e.target.style.borderColor = "#1B3B8A"; e.target.style.background = "rgba(0,0,0,0.3)"; }}
+              onFocus={(e) => { e.target.style.borderColor = "#3257ff"; e.target.style.background = "rgba(0,0,0,0.3)"; }}
               onBlur={(e) => { e.target.style.borderColor = "rgba(255, 255, 255, 0.08)"; e.target.style.background = "rgba(255, 255, 255, 0.03)"; }}
             />
           </div>
@@ -171,7 +171,7 @@ const AdminLoginPage = () => {
                   outline: "none",
                   transition: "all 0.3s ease"
                 }}
-                onFocus={(e) => { e.target.style.borderColor = "#1B3B8A"; e.target.style.background = "rgba(0,0,0,0.3)"; }}
+                onFocus={(e) => { e.target.style.borderColor = "#3257ff"; e.target.style.background = "rgba(0,0,0,0.3)"; }}
                 onBlur={(e) => { e.target.style.borderColor = "rgba(255, 255, 255, 0.08)"; e.target.style.background = "rgba(255, 255, 255, 0.03)"; }}
               />
               <div
@@ -182,7 +182,7 @@ const AdminLoginPage = () => {
                   transform: "translateY(-50%)",
                   right: "16px",
                   cursor: "pointer",
-                  color: "#1B3B8A",
+                  color: "#3257ff",
                   display: "flex",
                   alignItems: "center"
                 }}
@@ -198,16 +198,16 @@ const AdminLoginPage = () => {
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <label style={{ display: "flex", alignItems: "center", gap: "8px", color: "rgba(255,255,255,0.4)", fontSize: "12px", cursor: "pointer" }}>
-              <input type="checkbox" style={{ accentColor: "#1B3B8A" }} /> Remember
+              <input type="checkbox" style={{ accentColor: "#3257ff" }} /> Remember
             </label>
-            <a href="#" style={{ color: "#1B3B8A", fontSize: "12px", textDecoration: "none", opacity: 0.8 }}>Forgot access?</a>
+            <a href="#" style={{ color: "#3257ff", fontSize: "12px", textDecoration: "none", opacity: 0.8 }}>Forgot access?</a>
           </div>
 
           <button
             type="submit"
             style={{
               padding: "16px",
-              background: "linear-gradient(135deg, #1B3B8A 0%, #001A3D 100%)",
+              background: "linear-gradient(135deg, #3257ff 0%, #001A3D 100%)",
               border: "none",
               borderRadius: "12px",
               color: "#ffffff",
@@ -219,11 +219,11 @@ const AdminLoginPage = () => {
               justifyContent: "center",
               gap: "8px",
               marginTop: "10px",
-              boxShadow: "0 4px 20px rgba(27, 59, 138, 0.2)",
+              boxShadow: "0 4px 20px rgba(50, 87, 255, 0.2)",
               transition: "all 0.3s ease"
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(27, 59, 138, 0.4)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(27, 59, 138, 0.2)"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(50, 87, 255, 0.4)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(50, 87, 255, 0.2)"; }}
           >
             Authenticate
             <svg width="18" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">

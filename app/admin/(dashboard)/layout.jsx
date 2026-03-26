@@ -80,7 +80,7 @@ export default function AdminDashboardLayout({ children }) {
           backgroundSize: "auto, auto, cover",
           backgroundPosition: "center",
           backdropFilter: "blur(20px)",
-          borderRight: "1px solid rgba(27, 59, 138, 0.15)",
+          borderRight: "1px solid rgba(68, 129, 235, 0.15)",
           display: "flex",
           flexDirection: "column",
           padding: isSidebarMinimized ? "24px 10px" : "24px 16px",
@@ -95,7 +95,7 @@ export default function AdminDashboardLayout({ children }) {
           style={{
             position: "absolute",
             width: "100%", height: "100%",
-            background: "radial-gradient(ellipse at center, rgba(27, 59, 138, 0.15) 0%, rgba(0,0,0,0) 80%)",
+            background: "radial-gradient(ellipse at center, rgba(68, 129, 235, 0.15) 0%, rgba(0,0,0,0) 80%)",
             top: 0, left: 0,
             zIndex: 1, pointerEvents: "none"
           }}
@@ -117,14 +117,14 @@ export default function AdminDashboardLayout({ children }) {
 
         <div style={{ marginBottom: "40px", padding: "0 12px", textAlign: isSidebarMinimized ? "center" : "left" }}>
           <img src={withBasePath("/assets/img/logo/logo-white-2.png")} alt="KNYX Logo" style={{ height: "23px", maxWidth: "100%", objectFit: "contain" }} />
-          {!isSidebarMinimized && <p style={{ color: "#1B3B8A", fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 700, marginTop: "6px", margin: 0 }}>Operator Panel</p>}
+          {!isSidebarMinimized && <p style={{ color: "#4481eb", fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 700, marginTop: "6px", margin: 0 }}>Operator Panel</p>}
         </div>
 
         <nav style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px" }}>
           {menuItems.map((item) => {
             const isActive = checkActive(item.href);
             return (
-              <a key={item.id} href={item.href} style={{ display: "flex", alignItems: "center", justifyContent: isSidebarMinimized ? "center" : "flex-start", gap: isSidebarMinimized ? "0" : "12px", padding: "12px", borderRadius: "12px", fontSize: "14px", fontWeight: 500, color: isActive ? "#ffffff" : "rgba(255,255,255,0.6)", background: isActive ? "linear-gradient(135deg, #1B3B8A 0%, #0d1a3a 100%)" : "transparent", textDecoration: "none", transition: "color 0.2s, background 0.2s", cursor: "pointer", boxShadow: isActive ? "0 4px 12px rgba(27, 59, 138, 0.25)" : "none", border: isActive ? "1px solid rgba(255,255,255,0.1)" : "1px solid transparent" }}>
+              <a key={item.id} href={item.href} style={{ display: "flex", alignItems: "center", justifyContent: isSidebarMinimized ? "center" : "flex-start", gap: isSidebarMinimized ? "0" : "12px", padding: "12px", borderRadius: "12px", fontSize: "14px", fontWeight: 500, color: isActive ? "#ffffff" : "rgba(255,255,255,0.6)", background: isActive ? "linear-gradient(135deg, #4481eb 0%, #0d1a3a 100%)" : "transparent", textDecoration: "none", transition: "color 0.2s, background 0.2s", cursor: "pointer", boxShadow: isActive ? "0 4px 12px rgba(68, 129, 235, 0.25)" : "none", border: isActive ? "1px solid rgba(255,255,255,0.1)" : "1px solid transparent" }}>
                 <i className={`fa-solid ${item.icon}`} style={{ width: "16px", textAlign: "center", fontSize: "15px" }}></i>
                 {!isSidebarMinimized && <span>{item.title}</span>}
               </a>
@@ -147,7 +147,7 @@ export default function AdminDashboardLayout({ children }) {
               onClick={() => { setIsProfileOpen(!isProfileOpen); fetchProfile(); }}
               style={{ display: "flex", alignItems: "center", gap: "10px", padding: "6px 12px", borderRadius: "12px", background: isProfileOpen ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", cursor: "pointer" }}
             >
-              <div style={{ width: "32px", height: "32px", borderRadius: "8px", background: "rgba(27, 59, 138, 0.15)", border: "1px solid rgba(27, 59, 138, 0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#ffffff", fontSize: "14px" }}>K</div>
+              <div style={{ width: "32px", height: "32px", borderRadius: "8px", background: "rgba(68, 129, 235, 0.15)", border: "1px solid rgba(68, 129, 235, 0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#ffffff", fontSize: "14px" }}>K</div>
               <div style={{ display: "flex", flexDirection: "column", textAlign: "left" }}>
                 <span style={{ fontSize: "14px", fontWeight: 700, color: "#ffffff", fontFamily: "var(--tp-ff-brand)" }}>KNYX Admin</span>
                 <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.4)" }}>Operator</span>
@@ -157,7 +157,7 @@ export default function AdminDashboardLayout({ children }) {
             {isProfileOpen && (
               <div style={{ position: "absolute", top: "50px", right: 0, width: "220px", background: "#0c0f17", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "12px", padding: "8px", boxShadow: "0 10px 25px rgba(0,0,0,0.5)", display: "flex", flexDirection: "column", gap: "4px", zIndex: 12 }}>
                 <a onClick={() => { setIsModalOpen(true); setIsProfileOpen(false); }} style={{ padding: "10px 12px", color: "#ffffff", fontSize: "13px", textDecoration: "none", borderRadius: "8px", display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }} onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.04)"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
-                  <i className="fa-solid fa-user-gear" style={{ width: "16px", color: "#1B3B8A" }}></i> Edit Contact Details
+                  <i className="fa-solid fa-user-gear" style={{ width: "16px", color: "#4481eb" }}></i> Edit Contact Details
                 </a>
                 <div style={{ height: "1px", background: "rgba(255,255,255,0.05)", margin: "4px 0" }}></div>
                 <button onClick={handleLogout} style={{ padding: "10px 12px", background: "transparent", border: "none", color: "#ff6b6b", fontSize: "13px", borderRadius: "8px", cursor: "pointer", display: "flex", alignItems: "center", gap: "10px", textAlign: "left", width: "100%" }} onMouseEnter={(e) => e.currentTarget.style.background = "rgba(220, 53, 69, 0.08)"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
