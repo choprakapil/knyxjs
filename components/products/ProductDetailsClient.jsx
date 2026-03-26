@@ -145,14 +145,14 @@ export default function ProductDetailsClient({ id }) {
                                                         <div className="row g-3">
                                                             {product.neckShieldGallery.map((imgFile, i) => (
                                                                 <div key={i} className="col-6 col-sm-3">
-                                                                    <div 
-                                                                        className="tp-round-10 overflow-hidden cursor-pointer" 
+                                                                    <div
+                                                                        className="tp-round-10 overflow-hidden cursor-pointer"
                                                                         style={{ border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.02)", aspectRatio: "1/1", display: "flex", alignItems: "center", justifyContent: "center" }}
                                                                         onClick={() => setActiveNeckShieldImage(`/assets/img/Neck_Shield_Pro/${product.neckShieldFolder}/${imgFile}`)}
                                                                     >
-                                                                        <img 
-                                                                            src={`/assets/img/Neck_Shield_Pro/${product.neckShieldFolder}/${imgFile}`} 
-                                                                            alt={`Neck Shield Detail ${i + 1}`} 
+                                                                        <img
+                                                                            src={`/assets/img/Neck_Shield_Pro/${product.neckShieldFolder}/${imgFile}`}
+                                                                            alt={`Neck Shield Detail ${i + 1}`}
                                                                             style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", transition: "transform 0.3s ease" }}
                                                                             onMouseEnter={(e) => e.target.style.transform = "scale(1.1)"}
                                                                             onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
@@ -187,7 +187,7 @@ export default function ProductDetailsClient({ id }) {
                                 {/* Right column: main info + features + CTA */}
                                 <div className="col-lg-6">
                                     <div className="product-info pl-lg-30">
-                                        <span className="title-slide-gradient d-inline-block px-3 py-1 tp-round-10 tp-ff-inter fw-600 fs-12 text-uppercase mb-20" style={{ backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>{product.category}</span>
+                                        <span className="title-slide-gradient d-inline-block px-3 py-1 tp-round-10 tp-ff-inter fw-600 fs-12 text-uppercase mb-20">{product.category}</span>
                                         <h2 className="tp-ff-jakarta fw-700 fs-40 tp-text-common-white mb-20">{product.name}</h2>
                                         <p className="tp-ff-dm fw-400 fs-18 lh-150-per tp-text-grey-2 mb-30">
                                             {product.description}
@@ -273,7 +273,7 @@ export default function ProductDetailsClient({ id }) {
                                                             transition: "all 0.35s ease",
                                                             cursor: "default",
                                                         }}
-                                                        // onClick={() => setActiveFeature(feature)}
+                                                    // onClick={() => setActiveFeature(feature)}
                                                     >
                                                         <div style={{
                                                             position: "absolute",
@@ -513,22 +513,22 @@ export default function ProductDetailsClient({ id }) {
                     >
                         &times;
                     </button>
-                    <div 
-                        style={{ 
-                            maxWidth: "1000px", width: "100%", height: "auto", 
+                    <div
+                        style={{
+                            maxWidth: "1000px", width: "100%", height: "auto",
                             display: "flex", alignItems: "center", justifyContent: "center",
                             animation: "modalZoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)"
                         }}
                     >
-                        <img 
-                            src={activeNeckShieldImage} 
-                            alt="Neck Shield Detail View" 
-                            style={{ 
-                                maxWidth: "100%", maxHeight: "85vh", 
-                                objectFit: "contain", 
+                        <img
+                            src={activeNeckShieldImage}
+                            alt="Neck Shield Detail View"
+                            style={{
+                                maxWidth: "100%", maxHeight: "85vh",
+                                objectFit: "contain",
                                 filter: "drop-shadow(0 0 30px rgba(0,0,0,0.5))",
                                 borderRadius: "8px"
-                            }} 
+                            }}
                             onClick={(e) => e.stopPropagation()}
                         />
                     </div>
