@@ -27,8 +27,8 @@ export default function CategoriesPage() {
           <h1 style={{ fontSize: "24px", fontWeight: 700, color: "#ffffff", margin: 0 }}>Categories</h1>
           <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", marginTop: "4px" }}>Group and filter your catalog items.</p>
         </div>
-        <button style={{ padding: "12px 20px", background: "linear-gradient(135deg, #c8ff00 0%, #a2cc00 100%)", border: "none", borderRadius: "12px", color: "#000000", fontWeight: 700, fontSize: "14px", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}>
-          <i className="fa-solid fa-plus"></i> Add Category
+        <button style={{ padding: "12px 20px", background: "linear-gradient(135deg, #1B3B8A 0%, #001A3D 100%)", border: "none", borderRadius: "12px", color: "#ffffff", fontWeight: 700, fontSize: "14px", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}>
+          <i className="fa-solid fa-plus" style={{ color: "#ffffff" }}></i> Add Category
         </button>
       </div>
 
@@ -47,7 +47,7 @@ export default function CategoriesPage() {
               {categories.map((c) => (
                 <tr key={c.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.02)" }}>
                   <td style={{ padding: "14px", fontSize: "14px", fontWeight: 600, color: "#ffffff" }}>{c.name}</td>
-                  <td style={{ padding: "14px", fontSize: "13px", color: "#c8ff00" }}>{c.slug}</td>
+                  <td style={{ padding: "14px", fontSize: "13px", color: "#1B3B8A" }}>{c.slug}</td>
                 </tr>
               ))}
             </tbody>

@@ -20,7 +20,7 @@ const SearchResults = () => {
               </h1>
               {query ? (
                 <p className="tp-ff-dm fs-20 tp-text-grey-2">
-                  Showing results for <strong style={{ color: "#c8ff00" }}>"{query}"</strong>
+                  Showing results for <strong style={{ color: "#1B3B8A" }}>"{query}"</strong>
                 </p>
               ) : (
                 <p className="tp-ff-dm fs-20 tp-text-grey-2">

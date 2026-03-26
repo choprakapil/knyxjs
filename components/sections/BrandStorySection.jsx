@@ -25,7 +25,7 @@ const BrandStorySection = ({ isHomePage = false }) => {
     }, []);
 
     return (
-        <div id="brand-story" className={`tp-about-area ${isHomePage ? 'pt-10' : 'pt-150'} ${isHomePage ? 'pb-0' : 'pb-130'} p-relative z-index-1`}>
+        <div id="brand-story" className={`tp-about-area pt-50 pb-50 p-relative z-index-1`}>
             <div className="container-fluid container-1524">
 
                 {/* ── Intro block: 80% centred ── */}

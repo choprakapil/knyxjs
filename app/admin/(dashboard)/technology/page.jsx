@@ -10,7 +10,7 @@ export default function TechnologyPage() {
           <h1 style={{ fontSize: "24px", fontWeight: 700, color: "#ffffff", margin: 0 }}>Technology</h1>
           <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", marginTop: "4px" }}>Control your dynamic feature layouts grid lists.</p>
         </div>
-        <button style={{ padding: "12px 20px", background: "linear-gradient(135deg, #c8ff00 0%, #a2cc00 100%)", border: "none", borderRadius: "12px", color: "#000000", fontWeight: 700, fontSize: "14px", cursor: "pointer" }}>
+        <button style={{ padding: "12px 20px", background: "linear-gradient(135deg, #1B3B8A 0%, #001A3D 100%)", border: "none", borderRadius: "12px", color: "#ffffff", fontWeight: 700, fontSize: "14px", cursor: "pointer" }}>
           Edit node
         </button>
       </div>

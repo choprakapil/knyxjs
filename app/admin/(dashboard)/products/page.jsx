@@ -51,18 +51,18 @@ export default function ProductsPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-      
+
       {/* 1. Page Header with CTA */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div>
           <h1 style={{ fontSize: "24px", fontWeight: 700, color: "#ffffff", margin: 0 }}>Products</h1>
           <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", marginTop: "4px" }}>Manage and review your live KNYX catalog listings.</p>
         </div>
-        <button 
+        <button
           onClick={() => setIsModalOpen(true)}
-          style={{ padding: "12px 20px", background: "linear-gradient(135deg, #c8ff00 0%, #a2cc00 100%)", border: "none", borderRadius: "12px", color: "#000000", fontWeight: 700, fontSize: "14px", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", boxShadow: "0 4px 15px rgba(200, 255, 0, 0.2)" }}
+          style={{ padding: "12px 20px", background: "linear-gradient(135deg, #1B3B8A 0%, #001A3D 100%)", border: "none", borderRadius: "12px", color: "#ffffff", fontWeight: 700, fontSize: "14px", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", boxShadow: "0 4px 15px rgba(27, 59, 138, 0.2)" }}
         >
-          <i className="fa-solid fa-plus"></i> Add Product
+          <i className="fa-solid fa-plus" style={{ color: "#ffffff" }}></i> Add Product
         </button>
       </div>
 
@@ -86,7 +86,7 @@ export default function ProductsPage() {
               {products.map((p) => (
                 <tr key={p.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.02)", transition: "background 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.02)"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
                   <td style={{ padding: "14px", fontSize: "14px", fontWeight: 600, color: "#ffffff" }}>{p.name}</td>
-                  <td style={{ padding: "14px", fontSize: "13px", color: "#c8ff00" }}>{p.category?.name || "Uncategorized"}</td>
+                  <td style={{ padding: "14px", fontSize: "13px", color: "#1B3B8A" }}>{p.category?.name || "Uncategorized"}</td>
                   <td style={{ padding: "14px", fontSize: "13px", color: "rgba(255,255,255,0.6)" }}>{p.slug}</td>
                   <td style={{ padding: "14px", fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>{new Date(p.createdAt).toLocaleDateString()}</td>
                 </tr>
@@ -129,7 +129,7 @@ export default function ProductsPage() {
 
               <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
                 <button type="button" onClick={() => setIsModalOpen(false)} style={{ flex: 1, padding: "12px", background: "transparent", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px", color: "rgba(255,255,255,0.6)", cursor: "pointer" }}>Cancel</button>
-                <button type="submit" style={{ flex: 1, padding: "12px", background: "linear-gradient(135deg, #c8ff00 0%, #a2cc00 100%)", border: "none", borderRadius: "10px", color: "#000000", fontWeight: 700, cursor: "pointer" }}>Create</button>
+                <button type="submit" style={{ flex: 1, padding: "12px", background: "linear-gradient(135deg, #1B3B8A 0%, #001A3D 100%)", border: "none", borderRadius: "10px", color: "#ffffff", fontWeight: 700, cursor: "pointer" }}>Create</button>
               </div>
             </form>
           </div>

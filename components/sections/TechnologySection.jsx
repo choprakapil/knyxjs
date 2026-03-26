@@ -155,8 +155,8 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
                     transition: border-color 0.5s ease, box-shadow 0.5s ease, transform 0.5s ease;
                 }
                 .tech-image-wrapper:hover {
-                    border-color: rgba(25, 135, 84, 0.3);
-                    box-shadow: 0 0 40px rgba(25, 135, 84, 0.15);
+                    border-color: rgba(27, 59, 138, 0.3);
+                    box-shadow: 0 0 40px rgba(27, 59, 138, 0.15);
                     transform: translateY(-8px);
                 }
                 .tech-image-wrapper img {

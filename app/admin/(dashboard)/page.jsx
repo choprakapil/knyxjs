@@ -23,8 +23,8 @@ export default function AdminDashboardPage() {
   }, []);
 
   const statCards = [
-    { title: "Products", value: stats.products, icon: "fa-helmet-safety", color: "#c8ff00" },
-    { title: "Categories", value: stats.categories, icon: "fa-folder-tree", color: "#a2cc00" },
+    { title: "Products", value: stats.products, icon: "fa-helmet-safety", color: "#1B3B8A" },
+    { title: "Categories", value: stats.categories, icon: "fa-folder-tree", color: "#112D6A" },
     { title: "Administrators", value: stats.admins, icon: "fa-shield-halved", color: "#00d2d3" },
     { title: "Today's Hits", value: "1,245", icon: "fa-arrow-trend-up", color: "#ff9f43" }
   ];
@@ -67,7 +67,7 @@ export default function AdminDashboardPage() {
             <h3 style={{ fontSize: "16px", fontWeight: 600, margin: 0, color: "#ffffff" }}>Server Requests & Activity</h3>
             <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", margin: "4px 0 0" }}>Live metrics over the last 6 months (simulated)</p>
           </div>
-          <span style={{ color: "#c8ff00", fontSize: "12px", fontWeight: 600, background: "rgba(200,255,0,0.1)", padding: "4px 10px", borderRadius: "20px" }}>+24% Increase</span>
+          <span style={{ color: "#1B3B8A", fontSize: "12px", fontWeight: 600, background: "rgba(27,59,138,0.1)", padding: "4px 10px", borderRadius: "20px" }}>+24% Increase</span>
         </div>
 
         {/* SVG Graph Structure with glowing attributes */}
@@ -75,15 +75,15 @@ export default function AdminDashboardPage() {
           <svg viewBox="0 0 1000 200" preserveAspectRatio="none" style={{ width: "100%", height: "100%", overflow: "visible" }}>
             <defs>
               <linearGradient id="areaGlow" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#c8ff00" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#c8ff00" stopOpacity="0" />
+                <stop offset="0%" stopColor="#1B3B8A" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#1B3B8A" stopOpacity="0" />
               </linearGradient>
               <linearGradient id="lineGlow" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#c8ff00" />
-                <stop offset="100%" stopColor="#a2cc00" />
+                <stop offset="0%" stopColor="#1B3B8A" />
+                <stop offset="100%" stopColor="#001A3D" />
               </linearGradient>
               <filter id="shadowGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#c8ff00" floodOpacity="0.3" />
+                <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#1B3B8A" floodOpacity="0.3" />
               </filter>
             </defs>
 
@@ -108,8 +108,8 @@ export default function AdminDashboardPage() {
             />
 
             {/* Dot markers on high peaks */}
-            <circle cx="500" cy="40" r="6" fill="#c8ff00" stroke="#000000" strokeWidth="2" filter="url(#shadowGlow)" />
-            <circle cx="900" cy="20" r="6" fill="#c8ff00" stroke="#000000" strokeWidth="2" filter="url(#shadowGlow)" />
+            <circle cx="500" cy="40" r="6" fill="#1B3B8A" stroke="#000000" strokeWidth="2" filter="url(#shadowGlow)" />
+            <circle cx="900" cy="20" r="6" fill="#1B3B8A" stroke="#000000" strokeWidth="2" filter="url(#shadowGlow)" />
           </svg>
         </div>
         

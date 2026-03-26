@@ -29,6 +29,7 @@ export default function ProductDetailsClient({ id }) {
     }, [product.id]);
 
     const [activeFeature, setActiveFeature] = useState(null);
+    const [activeNeckShieldImage, setActiveNeckShieldImage] = useState(null);
     const contentRef = useRef(null);
 
     // Safely resolve features from featureIds
@@ -50,7 +51,7 @@ export default function ProductDetailsClient({ id }) {
                     width: 4px;
                 }
                 .custom-scrollbar::-webkit-scrollbar-thumb {
-                    background: rgba(200, 255, 0, 0.2);
+                    background: rgba(27, 59, 138, 0.2);
                     border-radius: 10px;
                 }
                 .custom-scrollbar::-webkit-scrollbar-track {
@@ -59,6 +60,10 @@ export default function ProductDetailsClient({ id }) {
                 @keyframes featureSlideIn {
                     from { opacity: 0; transform: translateY(20px); }
                     to { opacity: 1; transform: translateY(0); }
+                }
+                @keyframes modalZoomIn {
+                    from { opacity: 0; transform: scale(0.95); }
+                    to { opacity: 1; transform: scale(1); }
                 }
             `}</style>
 
@@ -82,7 +87,7 @@ export default function ProductDetailsClient({ id }) {
                                                             width: "100px",
                                                             height: "100px",
                                                             backgroundColor: "rgba(255,255,255,0.02)",
-                                                            border: activeIdx === idx ? "2px solid #c8ff00" : "1px solid rgba(255,255,255,0.05)",
+                                                            border: activeIdx === idx ? "2px solid #1B3B8A" : "1px solid rgba(255,255,255,0.05)",
                                                             display: "flex",
                                                             justifyContent: "center",
                                                             alignItems: "center",
@@ -104,7 +109,7 @@ export default function ProductDetailsClient({ id }) {
 
                                             {/* Main image */}
                                             <div className="product-image-wrapper p-relative tp-round-10 p-4 mb-0 flex-grow-1" style={{ backgroundColor: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", display: "flex", justifyContent: "center", alignItems: "center", transition: "all 0.3s ease", height: "100%" }}>
-                                                <div className="glow-effect" style={{ position: "absolute", width: "80%", height: "80%", background: "radial-gradient(circle, rgba(200,255,0,0.1) 0%, rgba(0,0,0,0) 70%)", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 0 }}></div>
+                                                <div className="glow-effect" style={{ position: "absolute", width: "80%", height: "80%", background: "radial-gradient(circle, rgba(27,59,138,0.1) 0%, rgba(0,0,0,0) 70%)", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 0 }}></div>
                                                 <img
                                                     src={`/assets/img/products/${galleryImages[activeIdx]}`}
                                                     alt={product.name}
@@ -114,32 +119,60 @@ export default function ProductDetailsClient({ id }) {
                                             </div>
                                         </div>
 
-                                        {/* Accessories & Sizing Unified Box */}
+                                        {/* Neck Shield & Sizing Unified Box */}
                                         <div className="tab-section mb-60 p-5 tp-round-10" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
-                                            {/* Accessories Accordion */}
+                                            {/* Neck Shield Accordion */}
                                             <div className="mb-30 pb-30 border-bottom border-secondary" style={{ borderColor: "rgba(255,255,255,0.05) !important" }}>
-                                                <div 
-                                                    className="d-flex align-items-center justify-content-between cursor-pointer" 
+                                                <div
+                                                    className="d-flex align-items-center justify-content-between cursor-pointer"
                                                     onClick={() => setIsAccessoriesOpen(!isAccessoriesOpen)}
                                                 >
-                                                    <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-24 m-0">{siteData.ui.accessoriesHeading}</h3>
-                                                    <i className={`fa-solid ${isAccessoriesOpen ? "fa-minus" : "fa-plus"}`} style={{ color: "#c8ff00", fontSize: "18px", transition: "transform 0.3s ease" }}></i>
+                                                    <div className="d-flex align-items-center" style={{ gap: "12px" }}>
+                                                        <img src="/assets/img/brands/logo-2.png" alt="Neck Shield" style={{ width: "32px", height: "auto", filter: "invert(1)" }} />
+                                                        <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-24 m-0">{siteData.ui.accessoriesHeading}</h3>
+                                                    </div>
+                                                    <i className={`fa-solid ${isAccessoriesOpen ? "fa-minus" : "fa-plus"}`} style={{ color: "#1B3B8A", fontSize: "18px", transition: "transform 0.3s ease" }}></i>
                                                 </div>
-                                                <div className="overflow-hidden" style={{ maxHeight: isAccessoriesOpen ? "200px" : "0", transition: "all 0.4s ease-in-out", opacity: isAccessoriesOpen ? 1 : 0 }}>
-                                                    <p className="tp-ff-dm tp-text-grey-2 fs-16 mt-20 mb-0">
-                                                        {(product.accessories || []).join(", ")}
-                                                    </p>
+                                                <div className="overflow-hidden" style={{ maxHeight: isAccessoriesOpen ? "700px" : "0", transition: "all 0.4s ease-in-out", opacity: isAccessoriesOpen ? 1 : 0 }}>
+                                                    <ul className="tp-ff-dm tp-text-grey-2 fs-16 mt-20 mb-30 ps-3">
+                                                        <li className="mb-2">Lightweight Profiled Fit</li>
+                                                        <li className="mb-2">Built with Impact Modified Polymer and High Density EPP</li>
+                                                        <li>Included with Each Helmet Box</li>
+                                                    </ul>
+
+                                                    {/* Neck Shield Image Grid */}
+                                                    {product.neckShieldFolder && product.neckShieldGallery && (
+                                                        <div className="row g-3">
+                                                            {product.neckShieldGallery.map((imgFile, i) => (
+                                                                <div key={i} className="col-6 col-sm-3">
+                                                                    <div 
+                                                                        className="tp-round-10 overflow-hidden cursor-pointer" 
+                                                                        style={{ border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.02)", aspectRatio: "1/1", display: "flex", alignItems: "center", justifyContent: "center" }}
+                                                                        onClick={() => setActiveNeckShieldImage(`/assets/img/Neck_Shield_Pro/${product.neckShieldFolder}/${imgFile}`)}
+                                                                    >
+                                                                        <img 
+                                                                            src={`/assets/img/Neck_Shield_Pro/${product.neckShieldFolder}/${imgFile}`} 
+                                                                            alt={`Neck Shield Detail ${i + 1}`} 
+                                                                            style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", transition: "transform 0.3s ease" }}
+                                                                            onMouseEnter={(e) => e.target.style.transform = "scale(1.1)"}
+                                                                            onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
 
                                             {/* Sizing Accordion */}
                                             <div>
-                                                <div 
-                                                    className="d-flex align-items-center justify-content-between cursor-pointer" 
+                                                <div
+                                                    className="d-flex align-items-center justify-content-between cursor-pointer"
                                                     onClick={() => setIsSizingOpen(!isSizingOpen)}
                                                 >
                                                     <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-24 m-0">{product.sizingTitle || siteData.ui.sizingHeading}</h3>
-                                                    <i className={`fa-solid ${isSizingOpen ? "fa-minus" : "fa-plus"}`} style={{ color: "#c8ff00", fontSize: "18px", transition: "transform 0.3s ease" }}></i>
+                                                    <i className={`fa-solid ${isSizingOpen ? "fa-minus" : "fa-plus"}`} style={{ color: "#1B3B8A", fontSize: "18px", transition: "transform 0.3s ease" }}></i>
                                                 </div>
                                                 <div className="overflow-hidden" style={{ maxHeight: isSizingOpen ? "500px" : "0", transition: "all 0.4s ease-in-out", opacity: isSizingOpen ? 1 : 0 }}>
                                                     <p className="tp-ff-dm tp-text-grey-2 fs-16 mt-20 mb-0" style={{ whiteSpace: "pre-line" }}>
@@ -154,7 +187,7 @@ export default function ProductDetailsClient({ id }) {
                                 {/* Right column: main info + features + CTA */}
                                 <div className="col-lg-6">
                                     <div className="product-info pl-lg-30">
-                                        <span className="d-inline-block px-3 py-1 tp-round-10 tp-ff-inter fw-600 fs-12 text-uppercase mb-20" style={{ backgroundColor: "rgba(200,255,0,0.08)", color: "#c8ff00" }}>{product.category}</span>
+                                        <span className="d-inline-block px-3 py-1 tp-round-10 tp-ff-inter fw-600 fs-12 text-uppercase mb-20" style={{ backgroundColor: "rgba(27,59,138,0.15)", color: "#1B3B8A" }}>{product.category}</span>
                                         <h2 className="tp-ff-jakarta fw-700 fs-40 tp-text-common-white mb-20">{product.name}</h2>
                                         <p className="tp-ff-dm fw-400 fs-18 lh-150-per tp-text-grey-2 mb-30">
                                             {product.description}
@@ -183,14 +216,14 @@ export default function ProductDetailsClient({ id }) {
                                                             key={s}
                                                             onClick={() => setSelectedSize(s)}
                                                             className="size-btn tp-ff-inter fw-600"
-                                                            style={{ 
-                                                                background: "transparent", 
-                                                                border: "none", 
-                                                                color: selectedSize === s ? "#fff" : "rgba(255,255,255,0.4)", 
-                                                                display: "flex", 
-                                                                alignItems: "center", 
-                                                                justifyContent: "flex-start", 
-                                                                cursor: "pointer", 
+                                                            style={{
+                                                                background: "transparent",
+                                                                border: "none",
+                                                                color: selectedSize === s ? "#fff" : "rgba(255,255,255,0.4)",
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                justifyContent: "flex-start",
+                                                                cursor: "pointer",
                                                                 transition: "all 0.3s",
                                                                 padding: "0",
                                                                 marginRight: "20px",
@@ -206,17 +239,17 @@ export default function ProductDetailsClient({ id }) {
                                         </div>
 
                                         <div className="d-flex flex-wrap gap-3 mb-40 tp-round-10 p-3" style={{ backgroundColor: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
-                                            <div className="d-flex align-items-center flex-grow-1" style={{ minWidth: "180px", padding: "5px 10px" }}>
+                                            <div className="d-flex align-items-center flex-grow-1 justify-content-between" style={{ minWidth: "180px", padding: "5px 10px" }}>
                                                 <h5 className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white m-0" style={{ opacity: 0.6 }}>{siteData.ui.grilleLabel}</h5>
                                                 <span className="tp-ff-dm fs-15 tp-text-grey-2 fw-600">{product.grilleType}</span>
                                             </div>
-                                            <div 
-                                                className="d-flex align-items-center flex-grow-1 border-left border-secondary pl-3" 
+                                            <div
+                                                className="d-flex align-items-center flex-grow-1 border-left border-secondary justify-content-between pl-3"
                                                 onClick={() => setIsCertificateOpen(true)}
                                                 style={{ cursor: "pointer", borderLeft: "1px solid rgba(255,255,255,0.1)", minWidth: "180px", padding: "5px 10px" }}
                                             >
                                                 <h5 className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white m-0" style={{ opacity: 0.6 }}>{siteData.ui.certLabel}</h5>
-                                                <span className="tp-ff-dm fs-15 cert-text fw-600" style={{ color: "#c8ff00" }}>{product.certification}</span>
+                                                <span className="tp-ff-dm fs-15 cert-text fw-600" style={{ color: "#1B3B8A" }}>{product.certification}</span>
                                             </div>
                                         </div>
 
@@ -238,9 +271,9 @@ export default function ProductDetailsClient({ id }) {
                                                             overflow: "hidden",
                                                             animation: `featureSlideIn 0.5s ease ${idx * 0.08}s both`,
                                                             transition: "all 0.35s ease",
-                                                            cursor: "pointer",
+                                                            cursor: "default",
                                                         }}
-                                                        onClick={() => setActiveFeature(feature)}
+                                                        // onClick={() => setActiveFeature(feature)}
                                                     >
                                                         <div style={{
                                                             position: "absolute",
@@ -248,7 +281,7 @@ export default function ProductDetailsClient({ id }) {
                                                             left: 0,
                                                             width: "3px",
                                                             height: "100%",
-                                                            background: "linear-gradient(180deg, #c8ff00 0%, transparent 100%)",
+                                                            background: "linear-gradient(180deg, #1B3B8A 0%, transparent 100%)",
                                                             opacity: 0.6,
                                                             borderRadius: "3px 0 0 3px",
                                                         }}></div>
@@ -258,8 +291,8 @@ export default function ProductDetailsClient({ id }) {
                                                                 width: "44px",
                                                                 height: "44px",
                                                                 borderRadius: "12px",
-                                                                background: "rgba(200, 255, 0, 0.08)",
-                                                                border: "1px solid rgba(200, 255, 0, 0.15)",
+                                                                background: "rgba(27, 59, 138, 0.08)",
+                                                                border: "1px solid rgba(27, 59, 138, 0.15)",
                                                                 display: "flex",
                                                                 alignItems: "center",
                                                                 justifyContent: "center",
@@ -271,9 +304,9 @@ export default function ProductDetailsClient({ id }) {
                                                                 <h5 className="tp-ff-jakarta fw-600 tp-text-common-white" style={{ fontSize: "16px", letterSpacing: "-0.2px", marginBottom: "4px" }}>{feature.title}</h5>
                                                                 <p className="tp-ff-dm" style={{ fontSize: "14px", lineHeight: 1.4, color: "rgba(255,255,255,0.6)", marginBottom: "0" }}>{feature.desc}</p>
                                                             </div>
-                                                            <span className="tp-ff-inter fw-600 feature-details-link" style={{ position: "absolute", top: "22px", right: "20px", fontSize: "12px", color: "#c8ff00" }}>
+                                                            {/* <span className="tp-ff-inter fw-600 feature-details-link" style={{ position: "absolute", top: "22px", right: "20px", fontSize: "12px", color: "#1B3B8A" }}>
                                                                 Details <i className="fa-solid fa-arrow-right" style={{ fontSize: "10px" }}></i>
-                                                            </span>
+                                                            </span> */}
                                                         </div>
                                                     </div>
                                                 ))}
@@ -332,10 +365,10 @@ export default function ProductDetailsClient({ id }) {
                         }}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="tp-round-10 overflow-hidden" style={{ border: "2px solid #c8ff00", boxShadow: "0 0 50px rgba(200, 255, 0, 0.2)" }}>
+                        <div className="tp-round-10 overflow-hidden" style={{ border: "2px solid #1B3B8A", boxShadow: "0 0 50px rgba(27, 59, 138, 0.2)" }}>
                             <div className="bg-white p-5 tp-ff-jakarta" style={{ minHeight: '600px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                 <h1 style={{ color: '#1A1F2B', fontWeight: 800, fontSize: '48px', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '20px' }}>{siteData.ui.certificate.title}</h1>
-                                <div style={{ height: '2px', width: '100px', backgroundColor: '#c8ff00', margin: '0 auto 40px auto' }}></div>
+                                <div style={{ height: '2px', width: '100px', backgroundColor: '#1B3B8A', margin: '0 auto 40px auto' }}></div>
                                 <h3 style={{ color: '#555', fontSize: '24px', marginBottom: '10px' }}>{siteData.ui.certificate.certifiesText}</h3>
                                 <h2 style={{ color: '#6B8E23', fontSize: '36px', fontWeight: 700, margin: '20px 0' }}>{product.name}</h2>
                                 <h3 style={{ color: '#555', fontSize: '20px', lineHeight: 1.6, maxWidth: '600px', margin: '20px auto' }}>{siteData.ui.certificate.complianceText}</h3>
@@ -417,8 +450,8 @@ export default function ProductDetailsClient({ id }) {
                                 width: "56px",
                                 height: "56px",
                                 borderRadius: "16px",
-                                background: "rgba(200, 255, 0, 0.1)",
-                                border: "1px solid rgba(200, 255, 0, 0.2)",
+                                background: "rgba(27, 59, 138, 0.1)",
+                                border: "1px solid rgba(27, 59, 138, 0.2)",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -426,7 +459,7 @@ export default function ProductDetailsClient({ id }) {
                                 <img src={`/assets/img/brands/${activeFeature.iconImg}`} alt={activeFeature.title} style={{ maxWidth: "28px", height: "auto", filter: "invert(1)" }} />
                             </div>
                             <div>
-                                <span style={{ fontSize: "11px", color: "#c8ff00", textTransform: "uppercase", letterSpacing: "2px" }}>{siteData.ui.featureDetailBadge}</span>
+                                <span style={{ fontSize: "11px", color: "#1B3B8A", textTransform: "uppercase", letterSpacing: "2px" }}>{siteData.ui.featureDetailBadge}</span>
                                 <h3 className="tp-ff-jakarta fw-700 tp-text-common-white m-0" style={{ fontSize: "24px" }}>{activeFeature.detail.headline}</h3>
                             </div>
                         </div>
@@ -438,7 +471,7 @@ export default function ProductDetailsClient({ id }) {
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "30px" }}>
                             {activeFeature.detail.highlights.map((h, i) => (
                                 <div key={i} className="d-flex align-items-start gap-2" style={{ padding: "12px 14px", background: "rgba(255,255,255,0.02)", borderRadius: "10px", border: "1px solid rgba(255,255,255,0.04)" }}>
-                                    <i className="fa-solid fa-circle-check" style={{ color: "#c8ff00", fontSize: "14px", marginTop: "3px" }}></i>
+                                    <i className="fa-solid fa-circle-check" style={{ color: "#1B3B8A", fontSize: "14px", marginTop: "3px" }}></i>
                                     <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>{h}</span>
                                 </div>
                             ))}
@@ -452,6 +485,52 @@ export default function ProductDetailsClient({ id }) {
                                 </div>
                             ))}
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Neck Shield Lightbox Modal */}
+            {activeNeckShieldImage && (
+                <div
+                    style={{
+                        position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
+                        background: "rgba(0,0,0,0.92)", backdropFilter: "blur(15px)",
+                        zIndex: 100000, display: "flex", alignItems: "center", justifyContent: "center",
+                        padding: "40px", transition: "all 0.3s ease"
+                    }}
+                    onClick={() => setActiveNeckShieldImage(null)}
+                >
+                    <button
+                        style={{
+                            position: "absolute", top: "30px", right: "40px",
+                            background: "transparent", border: "none", color: "#fff",
+                            fontSize: "50px", fontWeight: "200", cursor: "pointer", zIndex: 100001,
+                            lineHeight: "1", opacity: 0.7
+                        }}
+                        onMouseEnter={(e) => e.target.style.opacity = 1}
+                        onMouseLeave={(e) => e.target.style.opacity = 0.7}
+                        onClick={() => setActiveNeckShieldImage(null)}
+                    >
+                        &times;
+                    </button>
+                    <div 
+                        style={{ 
+                            maxWidth: "1000px", width: "100%", height: "auto", 
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            animation: "modalZoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)"
+                        }}
+                    >
+                        <img 
+                            src={activeNeckShieldImage} 
+                            alt="Neck Shield Detail View" 
+                            style={{ 
+                                maxWidth: "100%", maxHeight: "85vh", 
+                                objectFit: "contain", 
+                                filter: "drop-shadow(0 0 30px rgba(0,0,0,0.5))",
+                                borderRadius: "8px"
+                            }} 
+                            onClick={(e) => e.stopPropagation()}
+                        />
                     </div>
                 </div>
             )}

@@ -43,8 +43,8 @@ const BackToTop = () => {
           width: 50px;
           height: 50px;
           border-radius: 50%;
-          background-color: #c8ff00;
-          color: #000;
+          background-color: #1B3B8A;
+          color: #fff;
           border: none;
           display: flex;
           align-items: center;
@@ -56,13 +56,13 @@ const BackToTop = () => {
           visibility: ${isVisible ? "visible" : "hidden"};
           transform: translateY(${isVisible ? "0" : "20px"});
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: 0 4px 15px rgba(200, 255, 0, 0.3);
+          box-shadow: 0 4px 15px rgba(27, 59, 138, 0.3);
         }
         
         .back-to-top-btn:hover {
           transform: translateY(-5px);
-          box-shadow: 0 8px 25px rgba(200, 255, 0, 0.4);
-          background-color: #e0ff4d;
+          box-shadow: 0 8px 25px rgba(27, 59, 138, 0.4);
+          background-color: #2547a1;
         }
 
         .back-to-top-btn i {

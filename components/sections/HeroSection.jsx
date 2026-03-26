@@ -61,7 +61,7 @@ const HeroSection = () => (
       .wheel {
         width: 4px;
         height: 8px;
-        background-color: #c8ff00;
+        background-color: #1B3B8A;
         border-radius: 2px;
         position: absolute;
         top: 8px;

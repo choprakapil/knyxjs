@@ -40,9 +40,9 @@ const StockistsSection = () => {
                                         onClick={() => setSelectedCountry(country)}
                                         className={`tp-ff-inter fw-600 fs-15 text-start border-0 bg-transparent py-2 px-3 rounded-3 tp-text-common-white`}
                                         style={{
-                                            backgroundColor: selectedCountry === country ? "rgba(200, 255, 0, 0.1)" : "transparent",
-                                            border: selectedCountry === country ? "1px solid rgba(200, 255, 0, 0.2)" : "1px solid transparent",
-                                            color: selectedCountry === country ? "#c8ff00" : "#ffffff",
+                                            backgroundColor: selectedCountry === country ? "rgba(27, 59, 138, 0.1)" : "transparent",
+                                            border: selectedCountry === country ? "1px solid rgba(27, 59, 138, 0.2)" : "1px solid transparent",
+                                            color: selectedCountry === country ? "#1B3B8A" : "#ffffff",
                                             whiteSpace: "nowrap",
                                             transition: "all 0.3s ease",
                                             cursor: "pointer"
