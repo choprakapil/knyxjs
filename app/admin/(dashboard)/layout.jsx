@@ -149,7 +149,7 @@ export default function AdminDashboardLayout({ children }) {
             >
               <div style={{ width: "32px", height: "32px", borderRadius: "8px", background: "rgba(27, 59, 138, 0.15)", border: "1px solid rgba(27, 59, 138, 0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#ffffff", fontSize: "14px" }}>K</div>
               <div style={{ display: "flex", flexDirection: "column", textAlign: "left" }}>
-                <span style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff" }}>KNYX Admin</span>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "#ffffff", fontFamily: "var(--tp-ff-brand)" }}>KNYX Admin</span>
                 <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.4)" }}>Operator</span>
               </div>
             </div>

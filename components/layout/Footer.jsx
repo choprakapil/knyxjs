@@ -94,7 +94,7 @@ const Footer = () => {
             {/* Big Title Section */}
             <div className="col-lg-12">
               <div className="tp-footer-ai-title-wrap text-center pt-15 pb-30 tp_fade_anim" style={{ overflow: "hidden", maxWidth: "100%" }} data-fade-from="top" data-delay=".7" data-ease="bounce">
-                <h2 className="tp-footer-ai-bigtitle tp-ff-jakarta fw-800 text-uppercase tp-text-common-white">
+                <h2 className="tp-footer-ai-bigtitle tp-ff-brand tp-brand-font fw-800 text-uppercase tp-text-common-white">
                   <a
                     href={withBasePath("/")}
                     className="text-scale-anim"

@@ -38,8 +38,8 @@ const BrandStorySection = ({ isHomePage = false }) => {
                                         {homeData.brandStory.title}
                                     </h3>
                                 </div>
-                                <h2 className="tp-about-ai-text fw-600 tp-ff-jakarta fs-38 fs-xl-60 fs-md-36 lh-120-per ls-m-4 d-flex align-items-center justify-content-start mb-35 tp_fade_anim" data-delay=".3">
-                                    <span className="tp-text-common-white">{homeData.brandStory.brandName}</span>
+                                <h2 className="tp-about-ai-text fw-600 tp-ff-brand fs-38 fs-xl-60 fs-md-36 lh-120-per ls-m-4 d-flex align-items-center justify-content-start mb-35 tp_fade_anim" data-delay=".3">
+                                    <span className="tp-text-common-white tp-brand-font">{homeData.brandStory.brandName}</span>
                                 </h2>
                                 <div className="tp_fade_anim" data-delay=".5">
                                     <p className="tp-about-ai-para tp-ff-dm mb-0 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">

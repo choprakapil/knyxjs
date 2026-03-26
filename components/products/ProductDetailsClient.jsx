@@ -187,7 +187,7 @@ export default function ProductDetailsClient({ id }) {
                                 {/* Right column: main info + features + CTA */}
                                 <div className="col-lg-6">
                                     <div className="product-info pl-lg-30">
-                                        <span className="d-inline-block px-3 py-1 tp-round-10 tp-ff-inter fw-600 fs-12 text-uppercase mb-20" style={{ backgroundColor: "rgba(27,59,138,0.15)", color: "#1B3B8A" }}>{product.category}</span>
+                                        <span className="title-slide-gradient d-inline-block px-3 py-1 tp-round-10 tp-ff-inter fw-600 fs-12 text-uppercase mb-20" style={{ backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>{product.category}</span>
                                         <h2 className="tp-ff-jakarta fw-700 fs-40 tp-text-common-white mb-20">{product.name}</h2>
                                         <p className="tp-ff-dm fw-400 fs-18 lh-150-per tp-text-grey-2 mb-30">
                                             {product.description}

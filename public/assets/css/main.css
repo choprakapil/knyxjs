@@ -163,6 +163,7 @@ li,
   --tp-ff-poppins: 'Poppins', sans-serif;
   --tp-ff-playfair: 'Playfair Display', serif;
   --tp-ff-jakarta: 'Plus Jakarta Sans', sans-serif;
+  --tp-ff-brand: 'Space Grotesk', sans-serif;
   --tp-ff-familjen: 'Familjen Grotesk', sans-serif;
   --tp-ff-morganite-bold: 'Morganite-Bold', sans-serif;
   --tp-ff-morganite-semibold: 'Morganite-SemiBold', sans-serif;
@@ -33621,4 +33622,7 @@ section.pt-80.pb-100.tp-breadcrumb-area.tp-bg-common-black.p-relative.z-index-1 
 
 section.hero-section {
   padding-top: 95px;
+}
+.tp-brand-font {
+  font-family: var(--tp-ff-brand) !important;
 }
