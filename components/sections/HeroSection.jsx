@@ -4,7 +4,7 @@ import { homeData } from "@/lib/data/home";
 
 const HeroSection = () => (
   <section className="hero-section"
-    style={{ width: "100%", position: "relative", paddingTop: "0px", minHeight: "80vh", lineHeight: 0, background: "#030303", overflow: "hidden" }}
+    style={{ width: "100%", position: "relative", paddingTop: "95px", minHeight: "80vh", lineHeight: 0, background: "#030303", overflow: "hidden" }}
     data-background={homeData.hero.bgImage}>
 
     <video
