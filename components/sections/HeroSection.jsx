@@ -50,12 +50,11 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="hero-section"
-      style={{ width: "100%", position: "relative", paddingTop: "95px", minHeight: "80vh", lineHeight: 0, background: "#030303", overflow: "hidden" }}
+    <section className="hero-section hero-section-ai"
       data-background={homeData.hero.bgImage}>
 
       {/* Relative container ensures the mute button stays positioned on the video itself */}
-      <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
+      <div className="video-container">
         <video
           ref={videoRef}
           // autoPlay attribute removed to handle play() manually via useEffect for better control over sound policies
@@ -63,13 +62,6 @@ const HeroSection = () => {
           muted={isMuted}
           playsInline
           className="bg_video"
-          style={{
-            width: "100%",
-            height: "auto",
-            display: "block",
-            position: "relative",
-            zIndex: 1
-          }}
         >
           <source src={withBasePath(homeData.hero.videoSrc)} type="video/mp4" />
         </video>
@@ -77,25 +69,7 @@ const HeroSection = () => {
         {/* Mute/Unmute Toggle Button */}
         <button 
           onClick={toggleMute}
-          style={{
-            position: "absolute",
-            bottom: "30px",
-            right: "30px",
-            background: "rgba(0,0,0,0.4)",
-            backdropFilter: "blur(10px)",
-            border: "1px solid rgba(255,255,255,0.15)",
-            borderRadius: "50%",
-            width: "46px",
-            height: "46px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#fff",
-            zIndex: 100, // Higher than video
-            cursor: "pointer",
-            transition: "all 0.3s ease",
-            boxShadow: "0 4px 15px rgba(0,0,0,0.3)"
-          }}
+          className="mute-btn"
           onMouseEnter={(e) => {
             e.currentTarget.style.background = "rgba(50, 87, 255, 0.4)";
             e.currentTarget.style.borderColor = "rgba(50, 87, 255, 0.6)";
@@ -112,20 +86,7 @@ const HeroSection = () => {
         </button>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          zIndex: 10,
-          padding: "40px 0 20px 0",
-          pointerEvents: "none",
-          opacity: 0.6,
-          background: "transparent"
-        }}
-        className="scroll-indicator"
-      >
+      <div className="scroll-indicator">
         <div className="mouse-icon">
           <div className="wheel"></div>
         </div>
@@ -137,6 +98,58 @@ const HeroSection = () => {
       </div>
 
       <style jsx>{`
+        .hero-section-ai {
+          width: 100%;
+          position: relative;
+          padding-top: 95px;
+          min-height: 80vh;
+          line-height: 0;
+          background: #030303;
+          overflow: hidden;
+        }
+        .video-container {
+          position: relative;
+          width: 100%;
+          overflow: hidden;
+        }
+        .bg_video {
+          width: 100%;
+          height: auto;
+          display: block;
+          position: relative;
+          z-index: 1;
+        }
+        .mute-btn {
+          position: absolute;
+          bottom: 30px;
+          right: 30px;
+          background: "rgba(0,0,0,0.4)";
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255,255,255,0.15);
+          border-radius: 50%;
+          width: 46px;
+          height: 46px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+          z-index: 100;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .scroll-indicator {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          z-index: 10;
+          padding: 40px 0 20px 0;
+          pointer-events: none;
+          opacity: 0.6;
+          background: transparent;
+        }
         .scroll-indicator:hover {
           opacity: 1 !important;
         }
@@ -162,7 +175,7 @@ const HeroSection = () => {
         .chevron-arrows {
           display: flex;
           flex-direction: column;
-          alignItems: "center";
+          align-items: center;
           margin-top: -8px;
         }
         .chevron-arrows span {
@@ -189,6 +202,39 @@ const HeroSection = () => {
           0% { opacity: 0; transform: rotate(45deg) translate(-5px, -5px); }
           50% { opacity: 1; }
           100% { opacity: 0; transform: rotate(45deg) translate(5px, 5px); }
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 767px) {
+          .hero-section-ai {
+            padding-top: 75px;
+            min-height: auto;
+          }
+          .scroll-indicator {
+            padding: 20px 0 10px 0;
+            opacity: 0.4;
+          }
+          .mouse-icon {
+            width: 22px;
+            height: 38px;
+            border-width: 1.5px;
+            border-radius: 11px;
+          }
+          .wheel {
+            width: 3px;
+            height: 6px;
+            top: 6px;
+          }
+          .chevron-arrows span {
+            width: 8px;
+            height: 8px;
+          }
+          .mute-btn {
+            width: 40px;
+            height: 40px;
+            bottom: 20px;
+            right: 20px;
+          }
         }
       `}</style>
     </section>

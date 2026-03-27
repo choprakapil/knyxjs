@@ -26,13 +26,13 @@ const Footer = () => {
 
   return (
     <footer style={{ position: "relative", zIndex: 2 }}>
-      <div className="tp-footer-area pt-50 bg-position" style={{ backgroundImage: `url(${withBasePath('/assets/img/footer/ai/bg-black.jpg')})` }}>
+      <div className="tp-footer-area pt-50 bg-position footer-bg-container" style={{ backgroundImage: `url(${withBasePath('/assets/img/footer/ai/bg-black.jpg')})` }}>
         <div className="container-fluid container-1524">
-          <div className="row align-items-start">
+          <div className="row align-items-start footer-main-row">
 
             {/* Contact Section */}
             {siteData.contact.phone || siteData.contact.email ? (
-              <div className="col-lg-3 col-md-6 col-sm-6">
+              <div className="col-lg-3 col-md-6 col-sm-6 col-12 footer-widget-col">
                 <div className="tp-footer-ai-widget mb-40 tp_fade_anim" data-delay=".3">
                   <h5 className="tp-ff-jakarta fw-600 fs-18 lh-140-per ls-m-2 text-uppercase tp-text-common-white mb-15">{siteData.ui.contactHeading}</h5>
                   {siteData.contact.phone && (
@@ -52,15 +52,15 @@ const Footer = () => {
             ) : null}
 
             {/* Menu Section - Centered in middle */}
-            <div className="col-lg-7 col-md-12">
+            <div className="col-lg-7 col-md-12 col-12 footer-menu-col">
               <div className="tp-footer-ai-menu mb-40 tp_fade_anim text-center" data-delay=".5">
-                <ul className="d-flex flex-wrap align-items-center justify-content-center" style={{ gap: '25px', listStyle: 'none', padding: 0, margin: 0 }}>
+                <ul className="footer-menu-list d-flex flex-wrap align-items-center justify-content-center" style={{ gap: '25px', listStyle: 'none', padding: 0, margin: 0 }}>
                   {siteData.menus.main.map((item, i) => {
                     const isDropdown = item.href === "javascript:void(0)" && item.dropdown;
                     const href = isDropdown ? withBasePath(item.dropdown[0].href) : withBasePath(item.href);
                     const label = isDropdown ? item.dropdown[0].label : item.label;
                     return (
-                      <li key={i} style={{ margin: 0 }}>
+                      <li key={i} className="footer-menu-item" style={{ margin: 0 }}>
                         <a
                           href={href}
                           onClick={(e) => handleNavClick(e, item.href)}
@@ -76,10 +76,10 @@ const Footer = () => {
             </div>
 
             {/* Stalk Us Section - Right aligned */}
-            <div className="col-lg-2 col-md-6 col-sm-6 text-lg-end">
+            <div className="col-lg-2 col-md-6 col-sm-6 col-12 text-lg-end footer-widget-col">
               <div className="tp-footer-ai-widget mb-40 tp_fade_anim" data-delay=".7">
                 <h5 className="tp-ff-jakarta fw-600 fs-18 lh-140-per ls-m-2 text-uppercase tp-text-common-white mb-15">{siteData.ui.socialsHeading}</h5>
-                <div className="tp-footer-wd-social tp-footer-ai-social d-flex justify-content-lg-end justify-content-start">
+                <div className="tp-footer-wd-social tp-footer-ai-social d-flex justify-content-lg-end justify-content-center">
                   {siteData.socials.map((social, index) => (
                     <div key={social.network} className="tp_fade_anim" data-delay={`.${index * 2 + 3}`} data-fade-from="top" data-ease="bounce">
                       <a href={withBasePath(social.url)} target="_blank" rel="noopener noreferrer" aria-label={`Visit our ${social.network} page`}>
@@ -145,6 +145,49 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      <style jsx>{`
+        .footer-bg-container {
+          background-size: cover;
+          background-position: center bottom;
+          background-repeat: no-repeat;
+          background-attachment: scroll; /* Ensures image follows container */
+        }
+        @media (max-width: 991px) {
+          .tp-footer-ai-bigtitle {
+            font-size: 80px !important;
+          }
+          .footer-menu-list {
+            gap: 15px !important;
+          }
+        }
+        @media (max-width: 767px) {
+          .footer-bg-container {
+            background-position: center bottom;
+            background-size: 150%; /* Zoom in slightly to show the blue glow better on narrow screens */
+          }
+          .footer-main-row {
+            text-align: center;
+          }
+          .footer-widget-col {
+            margin-bottom: 20px;
+          }
+          .tp-footer-ai-social {
+            justify-content: center !important;
+          }
+           .tp-footer-ai-bigtitle {
+            font-size: 60px !important;
+            line-height: 1 !important;
+          }
+          .footer-menu-item {
+            width: 100%;
+            margin-bottom: 10px !important;
+          }
+          .footer-menu-list {
+            flex-direction: column;
+            gap: 5px !important;
+          }
+        }
+      `}</style>
     </footer>
   );
 };

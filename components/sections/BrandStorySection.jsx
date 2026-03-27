@@ -38,11 +38,11 @@ const BrandStorySection = ({ isHomePage = false }) => {
                                         {homeData.brandStory.title}
                                     </h3>
                                 </div>
-                                <h2 className="tp-about-ai-text fw-600 tp-ff-brand fs-38 fs-xl-60 fs-md-36 lh-120-per ls-m-4 d-flex align-items-center justify-content-start mb-35 tp_fade_anim" data-delay=".3">
+                                <h2 className="tp-about-ai-text brand-story-main-title fw-600 tp-ff-brand fs-38 fs-xl-60 fs-md-36 lh-120-per ls-m-4 d-flex align-items-center justify-content-start mb-35 tp_fade_anim" data-delay=".3">
                                     <span className="tp-text-common-white tp-brand-font">{homeData.brandStory.brandName}</span>
                                 </h2>
                                 <div className="tp_fade_anim" data-delay=".5">
-                                    <p className="tp-about-ai-para tp-ff-dm mb-0 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
+                                    <p className="tp-about-ai-para responsive-para tp-ff-dm mb-0 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
                                         {homeData.brandStory.intro}
                                     </p>
                                 </div>
@@ -64,10 +64,10 @@ const BrandStorySection = ({ isHomePage = false }) => {
                         <React.Fragment key={index}>
                             <div className="col-12 mb-40">
                                 <div className="tp_fade_anim text-start brand-story-wrapper" data-delay={`.${3 + index}`}>
-                                    <h3 className="tp-ff-jakarta fw-600 fs-32 ls-m-2 mb-20 tp-text-common-white">{section.title}</h3>
+                                    <h3 className="tp-ff-jakarta responsive-h3 fw-600 fs-32 ls-m-2 mb-20 tp-text-common-white">{section.title}</h3>
 
                                     {section.content.map((paragraph, pIdx) => (
-                                        <p key={pIdx} className={`tp-about-ai-para tp-ff-dm fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2 ${pIdx === section.content.length - 1 && section.list.length === 0 && !section.footer ? 'mb-0' : 'mb-20'}`}>
+                                        <p key={pIdx} className={`tp-about-ai-para responsive-para tp-ff-dm fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2 ${pIdx === section.content.length - 1 && section.list.length === 0 && !section.footer ? 'mb-0' : 'mb-20'}`}>
                                             {typeof paragraph === 'string' ? (
                                                 paragraph.split(/(#NowKnyx)/g).map((part, i) => 
                                                     part === '#NowKnyx' ? <i key={i}>{part}</i> : part
@@ -77,7 +77,7 @@ const BrandStorySection = ({ isHomePage = false }) => {
                                     ))}
 
                                     {section.list && section.list.length > 0 && (
-                                        <ul className="tp-about-ai-para tp-ff-dm mb-20 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
+                                        <ul className="tp-about-ai-para responsive-para tp-ff-dm mb-20 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
                                             {section.list.map((listItem, lIdx) => (
                                                 <li key={lIdx}>
                                                     {typeof listItem === 'string' ? (
@@ -91,7 +91,7 @@ const BrandStorySection = ({ isHomePage = false }) => {
                                     )}
 
                                     {section.footer && (
-                                        <p className="tp-about-ai-para tp-ff-dm mb-0 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
+                                        <p className="tp-about-ai-para responsive-para tp-ff-dm mb-0 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
                                             {typeof section.footer === 'string' ? (
                                                 section.footer.split(/(#NowKnyx)/g).map((part, i) => 
                                                     part === '#NowKnyx' ? <i key={i}>{part}</i> : part
@@ -112,6 +112,41 @@ const BrandStorySection = ({ isHomePage = false }) => {
                     ))}
                 </div>
             </div>
+            <style jsx>{`
+                @media (max-width: 767px) {
+                    /* Targeting both brand labels and main brand names to ensure 'brand story font size' looks correct */
+                    .tp-about-ai-title,
+                    .brand-story-main-title {
+                        font-size: 35px !important;
+                        margin-bottom: 5px !important;
+                        line-height: 1.1 !important;
+                    }
+                    
+                    /* Targeting the wrapper div to eliminate the gap */
+                    div.tp-about-ai-content.mb-30 {
+                        margin-bottom: 0 !important;
+                    }
+                    
+                    .tp-about-ai-text-wrap.mb-10 {
+                        margin-bottom: 0 !important;
+                    }
+
+                    .responsive-h3 {
+                        font-size: 26px !important;
+                        margin-bottom: 12px !important;
+                    }
+                    
+                    .responsive-para {
+                        font-size: 18px !important;
+                        line-height: 1.4 !important;
+                    }
+                    
+                    .tp-about-area {
+                        padding-top: 40px !important;
+                        padding-bottom: 40px !important;
+                    }
+                }
+            `}</style>
         </div>
     );
 };
