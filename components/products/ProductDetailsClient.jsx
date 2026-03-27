@@ -308,12 +308,12 @@ export default function ProductDetailsClient({ id }) {
                                                 <span className="tp-ff-dm fs-15 tp-text-grey-2 fw-600">{product.grilleType}</span>
                                             </div>
                                             <div
-                                                className="d-flex align-items-center flex-grow-1 border-left border-secondary justify-content-between pl-3 disabled-opacity"
+                                                className="d-flex align-items-center flex-grow-1 border-left border-secondary justify-content-between pl-3"
                                                 onClick={() => {}}
-                                                style={{ cursor: "not-allowed", borderLeft: "1px solid rgba(255,255,255,0.1)", minWidth: "180px", padding: "5px 10px", opacity: 0.4 }}
+                                                style={{ cursor: "default", borderLeft: "1px solid rgba(255,255,255,0.1)", minWidth: "180px", padding: "5px 10px" }}
                                             >
                                                 <h5 className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white m-0" style={{ opacity: 0.6 }}>{siteData.ui.certLabel}</h5>
-                                                <span className="tp-ff-dm fs-15 cert-text fw-600" style={{ color: "#3257ff" }}>{product.certification}</span>
+                                                <span className="tp-ff-dm fs-17 cert-text fw-800" style={{ color: "#A5FF04", textShadow: "0 0 15px rgba(165, 255, 4, 0.6)", letterSpacing: "0.5px" }}>{product.certification}</span>
                                             </div>
                                         </div>
 
