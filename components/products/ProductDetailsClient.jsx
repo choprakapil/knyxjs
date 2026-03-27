@@ -249,8 +249,8 @@ export default function ProductDetailsClient({ id }) {
                                 {/* Right column: main info + features + CTA */}
                                 <div className="col-lg-6">
                                     <div className="product-info pl-lg-30">
-                                        <div className="mb-10">
-                                            <span className="title-slide-gradient d-inline-block px-3 py-1 tp-round-10 tp-ff-inter fw-600 fs-12 text-uppercase">{product.category}</span>
+                                        <div className="mb-30">
+                                            <span className="tp-ff-jakarta fw-600 fs-16 tp-text-common-white d-inline-block text-uppercase ls-1 title-slide-gradient">{product.category}</span>
                                         </div>
                                         <h2 className="tp-ff-jakarta fw-700 fs-40 tp-text-common-white mb-20">{product.name}</h2>
                                         <p className="tp-ff-dm fw-400 fs-18 lh-150-per tp-text-grey-2 mb-30">
@@ -272,9 +272,9 @@ export default function ProductDetailsClient({ id }) {
                                                 </div>
                                             </div>
 
-                                            <div className="ms-lg-4">
+                                            <div className="ms-auto text-end">
                                                 <h5 className="tp-ff-jakarta fw-600 fs-16 tp-text-common-white mb-15">{siteData.ui.sizeHeading}</h5>
-                                                <div className="d-flex flex-wrap gap-3">
+                                                <div className="d-flex flex-wrap gap-3 justify-content-end">
                                                     {(product.sizes || []).map((s) => (
                                                         <button
                                                             key={s}
@@ -283,14 +283,16 @@ export default function ProductDetailsClient({ id }) {
                                                             style={{
                                                                 background: "transparent",
                                                                 border: "none",
-                                                                color: selectedSize === s ? "#fff" : "rgba(255,255,255,0.4)",
+                                                                color: selectedSize === s ? "#4D9FFF" : "rgba(255,255,255,0.4)",
+                                                                textShadow: selectedSize === s ? "0 0 15px rgba(77, 159, 255, 0.6)" : "none",
+                                                                letterSpacing: selectedSize === s ? "0.5px" : "normal",
                                                                 display: "flex",
                                                                 alignItems: "center",
                                                                 justifyContent: "flex-start",
                                                                 cursor: "pointer",
                                                                 transition: "all 0.3s",
                                                                 padding: "0",
-                                                                marginRight: "20px",
+                                                                marginRight: "0",
                                                                 fontSize: "16px",
                                                                 textDecoration: "none"
                                                             }}
@@ -313,7 +315,7 @@ export default function ProductDetailsClient({ id }) {
                                                 style={{ cursor: "default", borderLeft: "1px solid rgba(255,255,255,0.1)", minWidth: "180px", padding: "5px 10px" }}
                                             >
                                                 <h5 className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white m-0" style={{ opacity: 0.6 }}>{siteData.ui.certLabel}</h5>
-                                                <span className="tp-ff-dm fs-17 cert-text fw-800" style={{ color: "#A5FF04", textShadow: "0 0 15px rgba(165, 255, 4, 0.6)", letterSpacing: "0.5px" }}>{product.certification}</span>
+                                                <span className="tp-ff-dm fs-17 cert-text fw-800" style={{ color: "#4D9FFF", textShadow: "0 0 15px rgba(77, 159, 255, 0.6)", letterSpacing: "0.5px" }}>{product.certification}</span>
                                             </div>
                                         </div>
 

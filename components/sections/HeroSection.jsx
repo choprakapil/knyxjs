@@ -1,17 +1,51 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { withBasePath } from "@/lib/asset";
 import { homeData } from "@/lib/data/home";
 
 const HeroSection = () => {
   const videoRef = useRef(null);
+  // Default to muted true to satisfy most browser autoplay policies
   const [isMuted, setIsMuted] = useState(true);
+
+  useEffect(() => {
+    const playVideo = async () => {
+      if (videoRef.current) {
+        try {
+          // Attempt to play with sound if possible (may fail based on browser policy)
+          videoRef.current.muted = false; 
+          await videoRef.current.play();
+          setIsMuted(false);
+        } catch (error) {
+          // Fallback to muted autoplay if sound is blocked
+          console.log("Autoplay with sound blocked, falling back to muted autoplay.");
+          videoRef.current.muted = true;
+          try {
+            await videoRef.current.play();
+            setIsMuted(true);
+          } catch (autoplayError) {
+            console.error("Autoplay failed completely:", autoplayError);
+          }
+        }
+      }
+    };
+    
+    // Slight delay to ensure DOM is ready and potentially bypass some initial blocks
+    const timer = setTimeout(playVideo, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   const toggleMute = (e) => {
     e.stopPropagation();
     if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(videoRef.current.muted);
+      const nextMuteState = !videoRef.current.muted;
+      videoRef.current.muted = nextMuteState;
+      setIsMuted(nextMuteState);
+      
+      // Ensure it's playing when unmuting
+      if (!nextMuteState) {
+        videoRef.current.play().catch(err => console.error("Could not play on unmute:", err));
+      }
     }
   };
 
@@ -20,58 +54,63 @@ const HeroSection = () => {
       style={{ width: "100%", position: "relative", paddingTop: "95px", minHeight: "80vh", lineHeight: 0, background: "#030303", overflow: "hidden" }}
       data-background={homeData.hero.bgImage}>
 
-      <video
-        ref={videoRef}
-        autoPlay
-        loop
-        muted={isMuted}
-        playsInline
-        className="bg_video"
-        style={{
-          width: "100%",
-          height: "auto",
-          display: "block",
-        }}
-      >
-        <source src={withBasePath(homeData.hero.videoSrc)} type="video/mp4" />
-      </video>
+      {/* Relative container ensures the mute button stays positioned on the video itself */}
+      <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
+        <video
+          ref={videoRef}
+          // autoPlay attribute removed to handle play() manually via useEffect for better control over sound policies
+          loop
+          muted={isMuted}
+          playsInline
+          className="bg_video"
+          style={{
+            width: "100%",
+            height: "auto",
+            display: "block",
+            position: "relative",
+            zIndex: 1
+          }}
+        >
+          <source src={withBasePath(homeData.hero.videoSrc)} type="video/mp4" />
+        </video>
 
-      {/* Mute/Unmute Toggle Button */}
-      <button 
-        onClick={toggleMute}
-        style={{
-          position: "absolute",
-          bottom: "30px",
-          right: "30px",
-          background: "rgba(0,0,0,0.4)",
-          backdropFilter: "blur(10px)",
-          border: "1px solid rgba(255,255,255,0.15)",
-          borderRadius: "50%",
-          width: "46px",
-          height: "46px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "#fff",
-          zIndex: 100,
-          cursor: "pointer",
-          transition: "all 0.3s ease",
-          boxShadow: "0 4px 15px rgba(0,0,0,0.3)"
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = "rgba(50, 87, 255, 0.4)";
-          e.currentTarget.style.borderColor = "rgba(50, 87, 255, 0.6)";
-          e.currentTarget.style.transform = "scale(1.1)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = "rgba(0,0,0,0.4)";
-          e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
-          e.currentTarget.style.transform = "scale(1)";
-        }}
-        aria-label={isMuted ? "Unmute" : "Mute"}
-      >
-        <i className={`fa-solid ${isMuted ? "fa-volume-mute" : "fa-volume-high"}`} style={{ fontSize: "18px" }}></i>
-      </button>
+        {/* Mute/Unmute Toggle Button */}
+        <button 
+          onClick={toggleMute}
+          style={{
+            position: "absolute",
+            bottom: "30px",
+            right: "30px",
+            background: "rgba(0,0,0,0.4)",
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            borderRadius: "50%",
+            width: "46px",
+            height: "46px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            zIndex: 100, // Higher than video
+            cursor: "pointer",
+            transition: "all 0.3s ease",
+            boxShadow: "0 4px 15px rgba(0,0,0,0.3)"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "rgba(50, 87, 255, 0.4)";
+            e.currentTarget.style.borderColor = "rgba(50, 87, 255, 0.6)";
+            e.currentTarget.style.transform = "scale(1.1)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "rgba(0,0,0,0.4)";
+            e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
+            e.currentTarget.style.transform = "scale(1)";
+          }}
+          aria-label={isMuted ? "Unmute" : "Mute"}
+        >
+          <i className={`fa-solid ${isMuted ? "fa-volume-mute" : "fa-volume-high"}`} style={{ fontSize: "18px" }}></i>
+        </button>
+      </div>
 
       <div
         style={{
@@ -157,3 +196,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+

@@ -68,21 +68,35 @@ const BrandStorySection = ({ isHomePage = false }) => {
 
                                     {section.content.map((paragraph, pIdx) => (
                                         <p key={pIdx} className={`tp-about-ai-para tp-ff-dm fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2 ${pIdx === section.content.length - 1 && section.list.length === 0 && !section.footer ? 'mb-0' : 'mb-20'}`}>
-                                            {paragraph}
+                                            {typeof paragraph === 'string' ? (
+                                                paragraph.split(/(#NowKnyx)/g).map((part, i) => 
+                                                    part === '#NowKnyx' ? <i key={i}>{part}</i> : part
+                                                )
+                                            ) : paragraph}
                                         </p>
                                     ))}
 
                                     {section.list && section.list.length > 0 && (
                                         <ul className="tp-about-ai-para tp-ff-dm mb-20 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
                                             {section.list.map((listItem, lIdx) => (
-                                                <li key={lIdx}>{listItem}</li>
+                                                <li key={lIdx}>
+                                                    {typeof listItem === 'string' ? (
+                                                        listItem.split(/(#NowKnyx)/g).map((part, i) => 
+                                                            part === '#NowKnyx' ? <i key={i}>{part}</i> : part
+                                                        )
+                                                    ) : listItem}
+                                                </li>
                                             ))}
                                         </ul>
                                     )}
 
                                     {section.footer && (
                                         <p className="tp-about-ai-para tp-ff-dm mb-0 fw-400 fs-22 ls-m-2 lh-150-per tp-text-grey-2">
-                                            {section.footer}
+                                            {typeof section.footer === 'string' ? (
+                                                section.footer.split(/(#NowKnyx)/g).map((part, i) => 
+                                                    part === '#NowKnyx' ? <i key={i}>{part}</i> : part
+                                                )
+                                            ) : section.footer}
                                         </p>
                                     )}
                                 </div>

@@ -168,7 +168,7 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
                     <div className="col-lg-6 tech-reveal d-flex align-items-center">
                         <div className={`tech-content ${reverse ? "pl-50" : "pr-50"}`}>
                             {isHero && (
-                                <span className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white mb-15 d-inline-block text-uppercase ls-1 title-slide-gradient">
+                                <span className="tp-ff-jakarta fw-600 fs-16 tp-text-common-white mb-30 d-inline-block text-uppercase ls-1 title-slide-gradient">
                                     {badge}
                                 </span>
                             )}
