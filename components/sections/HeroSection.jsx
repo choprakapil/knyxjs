@@ -101,7 +101,7 @@ const HeroSection = () => {
         .hero-section-ai {
           width: 100%;
           position: relative;
-          padding-top: 95px;
+          padding-top: 40px;
           min-height: 80vh;
           line-height: 0;
           background: #030303;
@@ -207,7 +207,7 @@ const HeroSection = () => {
         /* Responsive Fixes */
         @media (max-width: 767px) {
           .hero-section-ai {
-            padding-top: 75px;
+            padding-top: 30px;
             min-height: auto;
           }
           .scroll-indicator {

@@ -42,7 +42,24 @@ export default function ProductDetailsClient({ id }) {
                 .sticky-column {
                     position: relative;
                 }
-                @media (min-width: 768px) {
+                @media (min-width: 992px) {
+                    .thumbnails {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 16px;
+                        width: 100px;
+                        height: 100%;
+                        overflow-y: auto;
+                        padding-top: 30px;
+                        padding-bottom: 30px;
+                        scrollbar-width: none;
+                        -ms-overflow-style: none;
+                    }
+                    .thumbnail-wrapper {
+                        width: 100px;
+                        height: 100px;
+                        flex-shrink: 0;
+                    }
                     .sticky-column {
                         position: sticky;
                         top: 100px;
@@ -69,6 +86,124 @@ export default function ProductDetailsClient({ id }) {
                     from { opacity: 0; transform: scale(0.95); }
                     to { opacity: 1; transform: scale(1); }
                 }
+                @media (max-width: 991px) {
+                    .product-details-area { padding-top: 60px !important; padding-bottom: 40px !important; }
+                    .tab-section.mb-60 { margin-bottom: 30px !important; }
+                    .row.mb-60 { margin-bottom: 30px !important; }
+                    .mb-60 { margin-bottom: 30px !important; }
+                    .mb-40 { margin-bottom: 25px !important; }
+                    .mb-30 { margin-bottom: 20px !important; }
+                    
+                    .product-gallery { height: auto !important; flex-direction: column !important; gap: 20px !important; }
+                    .thumbnails-slider-wrapper { 
+                        width: 100% !important; 
+                        height: auto !important; 
+                        order: 2 !important; 
+                        position: relative !important;
+                    }
+                    #thumbnails-container { 
+                        display: flex !important;
+                        flex-direction: row !important; 
+                        flex-wrap: nowrap !important;
+                        justify-content: flex-start !important;
+                        width: 100% !important; 
+                        height: auto !important; 
+                        overflow-x: auto !important; 
+                        overflow-y: hidden !important; 
+                        padding: 10px 0 !important;
+                        -webkit-overflow-scrolling: touch;
+                        gap: 12px !important;
+                        scrollbar-width: none;
+                    }
+                    #thumbnails-container::-webkit-scrollbar {
+                        display: none !important;
+                    }
+                    .thumbnail-wrapper { 
+                        width: 80px !important; 
+                        height: 80px !important; 
+                        flex-shrink: 0 !important; 
+                    }
+                    .product-image-wrapper { 
+                        height: 350px !important; 
+                        padding: 20px !important; 
+                        border-radius: 16px !important;
+                        order: 1 !important;
+                    }
+                    .nav-btn-v { display: none !important; }
+                    
+                    /* Mobile H-Arrows */
+                    .mobile-nav-arrow {
+                        display: flex !important;
+                        position: absolute;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        width: 30px;
+                        height: 30px;
+                        background: rgba(50, 87, 255, 0.4);
+                        border: none;
+                        color: #fff;
+                        border-radius: 50%;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 10;
+                    }
+                    .mobile-nav-arrow.left { left: -5px; }
+                    .mobile-nav-arrow.right { right: -5px; }
+                    
+                    .product-info { padding-left: 0 !important; margin-top: 40px; }
+                    .fs-40 { font-size: 30px !important; }
+                    .fs-28 { font-size: 20px !important; }
+                    .fs-24 { font-size: 18px !important; }
+                    .tab-section { padding: 25px 20px !important; }
+                    
+                    .features-grid { grid-template-columns: 1fr !important; }
+                    .feature-card-item { padding: 20px !important; }
+                    .feature-title-wrapper { padding-right: 0 !important; }
+                }
+
+                @media (min-width: 992px) {
+                    .mobile-nav-arrow { display: none !important; }
+                }
+
+                @media (max-width: 767px) {
+                    .product-image-wrapper { height: 300px !important; }
+                    .fs-40 { font-size: 24px !important; }
+                    .d-flex.flex-wrap.gap-4 { gap: 15px !important; flex-direction: column; align-items: flex-start !important; }
+                    .ms-auto.text-end { text-align: left !important; margin-left: 0 !important; width: 100%; }
+                    .justify-content-end { justify-content: flex-start !important; }
+                    .feature-card-item { padding: 15px !important; }
+                    .feature-card-item div[style*="paddingRight: 80px"] { padding-right: 0 !important; }
+                    
+                    /* Cert & Grille section */
+                    .d-flex.flex-wrap.gap-3.mb-40 { 
+                        flex-direction: column !important; 
+                        gap: 0 !important; 
+                        padding: 15px !important;
+                    }
+                    .d-flex.align-items-center.flex-grow-1.justify-content-between { 
+                        width: 100% !important; 
+                        border-left: none !important; 
+                        padding: 12px 0 !important;
+                        border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+                        display: flex !important;
+                        flex-direction: row !important;
+                        align-items: center !important;
+                        justify-content: space-between !important;
+                    }
+                    .d-flex.align-items-center.flex-grow-1.justify-content-between:last-child {
+                        border-bottom: none !important;
+                    }
+                    .cert-text { 
+                        font-size: 14px !important; 
+                        text-align: right !important;
+                        white-space: nowrap !important;
+                    }
+                    .tp-ff-jakarta.fw-600.fs-14 {
+                        font-size: 11px !important;
+                        text-transform: uppercase !important;
+                        letter-spacing: 1px !important;
+                    }
+                }
             `}</style>
 
             <div className="container">
@@ -92,82 +227,101 @@ export default function ProductDetailsClient({ id }) {
                                     <div className="sticky-column">
                                         <div className="product-gallery d-flex gap-3 mb-4" style={{ height: "550px" }}>
                                             {/* Thumbnails Slider Container */}
-                                            <div className="thumbnails-slider-wrapper p-relative" style={{ width: "100px", flexShrink: 0, height: "100%", display: "flex", flexDirection: "column" }}>
-                                                {/* Nav Up */}
-                                                {(galleryImages?.length > 4) && (
-                                                    <button 
-                                                        className="nav-btn-v up" 
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            const el = document.getElementById("thumbnails-container");
-                                                            if (el) el.scrollTop -= 120;
-                                                        }}
-                                                        style={{ 
-                                                            position: 'absolute', top: '0', left: '0', right: '0', 
-                                                            height: '30px', background: 'linear-gradient(to bottom, rgba(6,8,13,1) 0%, rgba(6,8,13,0) 100%)', 
-                                                            border: 'none', color: '#fff', cursor: 'pointer', zIndex: 100,
-                                                            display: 'flex', alignItems: 'center', justifyContent: 'center'
-                                                        }}
-                                                    >
-                                                        <i className="fa-solid fa-chevron-up fs-12"></i>
-                                                    </button>
-                                                )}
+                                            <div className="thumbnails-slider-wrapper p-relative">
+                                                 {/* Nav Up (Desktop) */}
+                                                 {(galleryImages?.length > 4) && (
+                                                     <button 
+                                                         className="nav-btn-v up d-none d-lg-flex" 
+                                                         onClick={(e) => {
+                                                             e.stopPropagation();
+                                                             const el = document.getElementById("thumbnails-container");
+                                                             if (el) el.scrollTop -= 120;
+                                                         }}
+                                                         style={{ 
+                                                             position: 'absolute', top: '0', left: '0', right: '0', 
+                                                             height: '30px', background: 'linear-gradient(to bottom, rgba(6,8,13,1) 0%, rgba(6,8,13,0) 100%)', 
+                                                             border: 'none', color: '#fff', cursor: 'pointer', zIndex: 100,
+                                                             display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                                         }}
+                                                     >
+                                                         <i className="fa-solid fa-chevron-up fs-12"></i>
+                                                     </button>
+                                                 )}
 
-                                                {/* Thumbnails Container */}
-                                                <div 
-                                                    id="thumbnails-container"
-                                                    className="thumbnails d-flex flex-column gap-3 overflow-y-auto pr-0 custom-scrollbar" 
-                                                    style={{ width: "100px", height: "100%", scrollBehavior: 'smooth', scrollbarWidth: 'none', msOverflowStyle: 'none', paddingTop: "30px", paddingBottom: "30px" }}
-                                                >
-                                                    {(galleryImages || []).map((img, idx) => (
-                                                        <div
-                                                            key={idx}
-                                                            onClick={() => setActiveIdx(idx)}
-                                                            className="thumbnail-wrapper p-relative tp-round-10"
-                                                            style={{
-                                                                width: "100px",
-                                                                height: "100px",
-                                                                backgroundColor: "rgba(255,255,255,0.02)",
-                                                                border: activeIdx === idx ? "2px solid #3257ff" : "1px solid rgba(255,255,255,0.05)",
-                                                                display: "flex",
-                                                                justifyContent: "center",
-                                                                alignItems: "center",
-                                                                cursor: "pointer",
-                                                                transition: "all 0.2s ease",
-                                                                opacity: activeIdx === idx ? 1 : 0.6,
-                                                                flexShrink: 0
-                                                            }}
-                                                        >
-                                                            <img
-                                                                src={`/assets/img/products_images/${product.imageFolder}/${img}`}
-                                                                alt={`${product.name} thumbnail ${idx + 1}`}
-                                                                className="img-fluid p-relative z-index-1"
-                                                                style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain", filter: "drop-shadow(0 5px 10px rgba(0,0,0,0.5))" }}
-                                                            />
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                 {/* Mobile Arrows (Visible only on mobile via CSS) */}
+                                                 <button 
+                                                     className="mobile-nav-arrow left"
+                                                     onClick={(e) => {
+                                                         e.stopPropagation();
+                                                         const el = document.getElementById("thumbnails-container");
+                                                         if (el) el.scrollLeft -= 100;
+                                                     }}
+                                                 >
+                                                     <i className="fa-solid fa-chevron-left"></i>
+                                                 </button>
+                                                 <button 
+                                                     className="mobile-nav-arrow right"
+                                                     onClick={(e) => {
+                                                         e.stopPropagation();
+                                                         const el = document.getElementById("thumbnails-container");
+                                                         if (el) el.scrollLeft += 100;
+                                                     }}
+                                                 >
+                                                     <i className="fa-solid fa-chevron-right"></i>
+                                                 </button>
 
-                                                {/* Nav Down */}
-                                                {(galleryImages?.length > 4) && (
-                                                    <button 
-                                                        className="nav-btn-v down" 
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            const el = document.getElementById("thumbnails-container");
-                                                            if (el) el.scrollTop += 120;
-                                                        }}
-                                                        style={{ 
-                                                            position: 'absolute', bottom: '0', left: '0', right: '0', 
-                                                            height: '30px', background: 'linear-gradient(to top, rgba(6,8,13,1) 0%, rgba(6,8,13,0) 100%)', 
-                                                            border: 'none', color: '#fff', cursor: 'pointer', zIndex: 100,
-                                                            display: 'flex', alignItems: 'center', justifyContent: 'center'
-                                                        }}
-                                                    >
-                                                        <i className="fa-solid fa-chevron-down fs-12"></i>
-                                                    </button>
-                                                )}
-                                            </div>
+                                                 {/* Thumbnails Container */}
+                                                 <div 
+                                                     id="thumbnails-container"
+                                                     className="thumbnails custom-scrollbar" 
+                                                 >
+                                                     {(galleryImages || []).map((img, idx) => (
+                                                         <div
+                                                             key={idx}
+                                                             onClick={() => setActiveIdx(idx)}
+                                                             className="thumbnail-wrapper p-relative tp-round-10"
+                                                             style={{
+                                                                 backgroundColor: "rgba(255,255,255,0.02)",
+                                                                 border: activeIdx === idx ? "2px solid #3257ff" : "1px solid rgba(255,255,255,0.05)",
+                                                                 display: "flex",
+                                                                 justifyContent: "center",
+                                                                 alignItems: "center",
+                                                                 cursor: "pointer",
+                                                                 transition: "all 0.2s ease",
+                                                                 opacity: activeIdx === idx ? 1 : 0.6,
+                                                                 flexShrink: 0
+                                                             }}
+                                                         >
+                                                             <img
+                                                                 src={`/assets/img/products_images/${product.imageFolder}/${img}`}
+                                                                 alt={`${product.name} thumbnail ${idx + 1}`}
+                                                                 className="img-fluid p-relative z-index-1"
+                                                                 style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain", filter: "drop-shadow(0 5px 10px rgba(0,0,0,0.5))" }}
+                                                             />
+                                                         </div>
+                                                     ))}
+                                                 </div>
+
+                                                 {/* Nav Down (Desktop) */}
+                                                 {(galleryImages?.length > 4) && (
+                                                     <button 
+                                                         className="nav-btn-v down d-none d-lg-flex" 
+                                                         onClick={(e) => {
+                                                             e.stopPropagation();
+                                                             const el = document.getElementById("thumbnails-container");
+                                                             if (el) el.scrollTop += 120;
+                                                         }}
+                                                         style={{ 
+                                                             position: 'absolute', bottom: '0', left: '0', right: '0', 
+                                                             height: '30px', background: 'linear-gradient(to top, rgba(6,8,13,1) 0%, rgba(6,8,13,0) 100%)', 
+                                                             border: 'none', color: '#fff', cursor: 'pointer', zIndex: 100,
+                                                             display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                                         }}
+                                                     >
+                                                         <i className="fa-solid fa-chevron-down fs-12"></i>
+                                                     </button>
+                                                 )}
+                                             </div>
 
                                             {/* Main image */}
                                             <div className="product-image-wrapper p-relative tp-round-10 p-4 mb-0 flex-grow-1" style={{ backgroundColor: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", display: "flex", justifyContent: "center", alignItems: "center", transition: "all 0.3s ease", height: "100%" }}>
@@ -366,7 +520,7 @@ export default function ProductDetailsClient({ id }) {
                                                             }}>
                                                                 <img src={`/assets/img/brands/${feature.iconImg}`} alt={feature.title} style={{ maxWidth: "24px", height: "auto", display: "block", margin: "0 auto", filter: "invert(1)" }} />
                                                             </div>
-                                                            <div style={{ flex: 1, paddingRight: "80px" }}>
+                                                            <div className="feature-title-wrapper" style={{ flex: 1, paddingRight: "80px" }}>
                                                                 <h5 className="tp-ff-jakarta fw-600 tp-text-common-white" style={{ fontSize: "16px", letterSpacing: "-0.2px", marginBottom: "4px" }}>{feature.title}</h5>
                                                                 <p className="tp-ff-dm" style={{ fontSize: "14px", lineHeight: 1.4, color: "rgba(255,255,255,0.6)", marginBottom: "0" }}>{feature.desc}</p>
                                                             </div>

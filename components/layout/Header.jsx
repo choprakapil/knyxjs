@@ -40,13 +40,10 @@ const Header = () => {
       <header 
         className="main-header tp-header-area tp-header-ai-wrap"
         style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
+          position: 'relative',
           zIndex: 999,
           padding: '10px 5%',
-          background: 'transparent',
+          background: '#030303',
           borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
           display: 'flex',
           alignItems: 'center',

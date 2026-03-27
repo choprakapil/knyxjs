@@ -82,14 +82,13 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
     return (
         <section 
             ref={sectionRef} 
-            className={`tp-tech-section ${isHero ? "pt-100 pb-80" : "pt-80 pb-80"} p-relative z-index-1`}
-            style={{ maxHeight: "90vh" }}
+            className={`tp-tech-section technology-responsive-section ${isHero ? "pt-100 pb-80" : "pt-80 pb-80"} p-relative z-index-1`}
         >
             <div className="container-fluid container-1524 h-100">
                 <div className={`row align-items-stretch ${reverse ? "flex-row-reverse" : ""}`}>
                     
                     {/* Image/Video Area */}
-                    <div className="col-lg-6 mb-40 mb-lg-0 tech-reveal d-flex">
+                    <div className="col-lg-6 mb-40 mb-lg-0 tech-reveal d-flex justify-content-center">
                         <div 
                             className="tech-image-wrapper p-relative overflow-hidden tp-round-24 w-100"
                             style={{ 
@@ -104,7 +103,7 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
                             }}
                         >
                             {video ? (
-                                <>
+                                <div className="video-inner-container p-relative w-100 h-100">
                                     <video 
                                         ref={videoRef}
                                         src={withBasePath(video)} 
@@ -133,32 +132,18 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
                                             e.stopPropagation();
                                             toggleMute();
                                         }}
-                                        style={{
-                                            position: "absolute",
-                                            bottom: "20px",
-                                            right: "20px",
-                                            background: "rgba(0,0,0,0.5)",
-                                            border: "1px solid rgba(255,255,255,0.2)",
-                                            borderRadius: "50%",
-                                            width: "40px",
-                                            height: "40px",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            color: "#fff",
-                                            zIndex: 20,
-                                            cursor: "pointer"
-                                        }}
+                                        className="tech-mute-btn"
                                         aria-label={isMuted ? "Unmute" : "Mute"}
                                     >
                                         <i className={`fa-solid ${isMuted ? "fa-volume-mute" : "fa-volume-high"}`}></i>
                                     </button>
-                                </>
+                                </div>
                             ) : (
                                 <img 
                                     src={withBasePath(image)} 
                                     alt={imageAlt} 
                                     className="img-fluid" 
+                                    style={{ maxHeight: "400px", objectFit: "contain" }}
                                 />
                             )}
                         </div>
@@ -166,17 +151,17 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
                     
                     {/* Content Area */}
                     <div className="col-lg-6 tech-reveal d-flex align-items-center">
-                        <div className={`tech-content ${reverse ? "pl-50" : "pr-50"}`}>
+                        <div className={`tech-content ${reverse ? "pl-50" : "pr-50"} w-100`}>
                             {isHero && (
-                                <span className="tp-ff-jakarta fw-600 fs-16 tp-text-common-white mb-30 d-inline-block text-uppercase ls-1 title-slide-gradient">
+                                <span className="tp-ff-jakarta fw-600 fs-16 tp-text-common-white mb-30 d-inline-block text-uppercase ls-1 title-slide-gradient tech-badge">
                                     {badge}
                                 </span>
                             )}
-                            <h2 className="tp-ff-jakarta fw-600 fs-42 fs-md-36 mb-25 tp-text-common-white">
+                            <h2 className="tp-ff-jakarta fw-600 fs-42 fs-md-36 mb-25 tp-text-common-white tech-title">
                                 {title}
                             </h2>
                             <div 
-                                className="tp-ff-dm fw-400 fs-18 lh-160-per tp-text-grey-2"
+                                className="tp-ff-dm fw-400 fs-18 lh-160-per tp-text-grey-2 tech-para"
                                 dangerouslySetInnerHTML={{ __html: content }}
                             />
                         </div>
@@ -185,6 +170,7 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
 
                 </div>
             </div>
+
 
             {/* Full Screen Video Modal */}
             {isVideoModalOpen && mounted && createPortal(
@@ -235,7 +221,11 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
                 document.body
             )}
 
+
             <style jsx>{`
+                .technology-responsive-section {
+                    max-height: 90vh;
+                }
                 .tech-image-wrapper {
                     background: rgba(255, 255, 255, 0.02);
                     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -264,11 +254,67 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
                 .tech-content {
                     max-width: 550px;
                 }
+                .tech-mute-btn {
+                    position: absolute;
+                    bottom: 20px;
+                    right: 20px;
+                    background: rgba(0,0,0,0.5);
+                    border: 1px solid rgba(255,255,255,0.2);
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #fff;
+                    z-index: 20;
+                    cursor: pointer;
+                }
                 @media (max-width: 1200px) {
                     .tech-content { padding: 0 !important; }
                 }
                 @media (max-width: 991px) {
-                    .tech-image-wrapper { height: 380px; margin-bottom: 40px; }
+                    .technology-responsive-section { 
+                        max-height: none !important; 
+                        padding-top: 60px !important;
+                        padding-bottom: 60px !important;
+                    }
+                    .tech-image-wrapper { 
+                        height: auto !important; 
+                        min-height: 280px !important;
+                        max-height: none !important;
+                        margin-bottom: 40px; 
+                        padding: 20px !important;
+                    }
+                    .tech-image-wrapper video {
+                        height: auto !important;
+                    }
+                    .tech-title {
+                        font-size: 30px !important;
+                        margin-bottom: 15px !important;
+                        text-align: center;
+                    }
+                    .tech-para {
+                        font-size: 16px !important;
+                        text-align: center;
+                        line-height: 1.5 !important;
+                    }
+                    .tech-content {
+                        max-width: 100% !important;
+                        text-align: center;
+                    }
+                    .tech-badge {
+                        margin-bottom: 15px !important;
+                    }
+                }
+                @media (max-width: 767px) {
+                    .technology-responsive-section {
+                        padding-top: 40px !important;
+                        padding-bottom: 40px !important;
+                    }
+                    .tech-image-wrapper {
+                        min-height: 220px !important;
+                    }
                 }
             `}</style>
         </section>

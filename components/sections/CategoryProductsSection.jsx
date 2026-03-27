@@ -316,17 +316,100 @@ const CategoryProductsSection = ({ category, categorySlugFilter }) => {
                     pointer-events: auto; /* enable buttons on inactive but rendering cards if needed, though they fade in/out */
                 }
 
-                @media (max-width: 1200px) {
+                @media (max-width: 1199px) {
                     .products-sidebar { width: 220px; }
+                    .product-image { height: 300px !important; }
+                    .fs-36 { font-size: 28px !important; }
                 }
 
                 @media (max-width: 991px) {
-                    #category-products-section { height: auto; }
-                    .products-wrapper { position: relative; top: 0; height: auto; overflow: visible; }
-                    .products-inner { flex-direction: column; }
-                    .products-sidebar { width: 100%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 30px; margin-bottom: 30px; }
-                    .products-stage { display: block; overflow: visible; }
-                    .helmet-product-card { position: relative; top: 0; left: 0; transform: none !important; width: 100%; opacity: 1 !important; margin-bottom: 30px; pointer-events: auto; }
+                    #category-products-section { height: auto !important; min-height: auto !important; }
+                    .products-wrapper { position: relative !important; top: 0 !important; height: auto !important; overflow: visible !important; }
+                    .products-inner { flex-direction: column !important; padding: 20px 0 !important; }
+                    
+                    .products-sidebar { 
+                        width: 100% !important; 
+                        border-right: none !important; 
+                        border-bottom: 1px solid rgba(255,255,255,0.05) !important; 
+                        padding-bottom: 30px !important; 
+                        margin-bottom: 30px !important; 
+                        padding-right: 0 !important;
+                        text-align: center !important;
+                    }
+
+                    .sidebar-group .category-group {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    }
+
+                    .sidebar-group ul {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        gap: 15px;
+                    }
+
+                    .sidebar-group li {
+                        padding: 0 !important;
+                    }
+
+                    .products-stage { display: block !important; overflow: visible !important; }
+                    .helmet-product-card { 
+                        position: relative !important; 
+                        top: 0 !important; 
+                        left: 0 !important; 
+                        transform: none !important; 
+                        width: 100% !important; 
+                        opacity: 1 !important; 
+                        margin-bottom: 40px !important; 
+                        pointer-events: auto !important; 
+                    }
+
+                    .product-item {
+                        flex-direction: column !important;
+                        padding: 20px !important;
+                        text-align: center !important;
+                    }
+
+                    .product-item .row {
+                        flex-direction: column !important;
+                    }
+
+                    .product-item .col-lg-6 {
+                        width: 100% !important;
+                        order: 0 !important;
+                        padding: 0 !important;
+                        margin-bottom: 25px !important;
+                    }
+
+                    .product-content {
+                        padding: 0 !important;
+                    }
+
+                    .product-image {
+                        height: 250px !important;
+                    }
+
+                    .fs-36 {
+                        font-size: 24px !important;
+                    }
+
+                    .fs-18 {
+                        font-size: 16px !important;
+                    }
+                }
+
+                @media (max-width: 767px) {
+                    .fs-28 {
+                        font-size: 22px !important;
+                    }
+                    .sidebar-group ul {
+                        gap: 10px;
+                    }
+                    .sidebar-group a {
+                        font-size: 16px !important;
+                    }
                 }
             `}</style>
         </section>

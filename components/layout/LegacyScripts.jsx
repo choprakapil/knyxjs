@@ -56,10 +56,18 @@ const LegacyScripts = () => {
         onLoad={() => setJqueryLoaded(true)} 
       />
 
+      {/* Swiper must be loaded before slider-init */}
+      {jqueryLoaded && (
+        <>
+          <Script src={withBasePath("/assets/js/swiper-bundle.js")} strategy="afterInteractive" onLoad={() => console.log("Swiper bundle loaded")} />
+          <Script src={withBasePath("/assets/js/swiper-gl.js")} strategy="afterInteractive" />
+        </>
+      )}
+
       {/* Plugins that depend on jQuery */}
       {jqueryLoaded && (
         <>
-          {localScripts.slice(1, -1).map((src, idx) => (
+          {localScripts.slice(1, -1).filter(src => !src.includes("swiper")).map((src, idx) => (
             <Script 
               key={src} 
               src={withBasePath(src)} 

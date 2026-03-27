@@ -17,7 +17,7 @@ const StockistsSection = () => {
         : stockistsData.list.filter(s => s.country === selectedCountry);
 
     return (
-        <section className="tp-stockists-section pt-150 pb-100" style={{ backgroundColor: "#030303", minHeight: "100vh" }}>
+        <section className="tp-stockists-section pt-50 pb-100" style={{ backgroundColor: "#030303", minHeight: "100vh" }}>
             <div className="container-fluid container-1524">
                 
                 {/* Section Header */}
