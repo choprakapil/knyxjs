@@ -3,12 +3,14 @@ import React, { useRef, useState, useEffect } from "react";
 import { withBasePath } from "@/lib/asset";
 import { homeData } from "@/lib/data/home";
 
-const HeroSection = () => {
+const HeroSection = ({ startPlay = true }) => {
   const videoRef = useRef(null);
   // Default to muted true to satisfy most browser autoplay policies
   const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
+    if (!startPlay) return;
+
     const playVideo = async () => {
       if (videoRef.current) {
         try {
@@ -30,10 +32,10 @@ const HeroSection = () => {
       }
     };
     
-    // Slight delay to ensure DOM is ready and potentially bypass some initial blocks
-    const timer = setTimeout(playVideo, 100);
+    // Tiny delay to ensure DOM is ready
+    const timer = setTimeout(playVideo, 150);
     return () => clearTimeout(timer);
-  }, []);
+  }, [startPlay]);
 
   const toggleMute = (e) => {
     e.stopPropagation();

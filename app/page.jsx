@@ -45,7 +45,7 @@ export default function HomePage() {
       {/* <LoaderInit /> */}
       {/* <SnapSliderInit /> */}
       <main>
-        <HeroSection />
+        <HeroSection startPlay={hideLoader} />
         <AboutSection />
       </main>
       <Footer />
