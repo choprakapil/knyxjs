@@ -289,7 +289,7 @@ export default function ProductDetailsClient({ id }) {
                                                                 display: "flex",
                                                                 alignItems: "center",
                                                                 justifyContent: "flex-start",
-                                                                cursor: "pointer",
+                                                                cursor: "default",
                                                                 transition: "all 0.3s",
                                                                 padding: "0",
                                                                 marginRight: "0",
