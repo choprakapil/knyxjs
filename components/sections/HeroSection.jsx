@@ -4,7 +4,7 @@ import { homeData } from "@/lib/data/home";
 
 const HeroSection = () => (
   <section className="hero-section"
-    style={{ width: "100%", position: "relative" }}
+    style={{ width: "100%", position: "relative", paddingTop: "0px", minHeight: "80vh", lineHeight: 0, background: "#030303", overflow: "hidden" }}
     data-background={homeData.hero.bgImage}>
 
     <video
@@ -16,7 +16,7 @@ const HeroSection = () => (
       style={{
         width: "100%",
         height: "auto",
-        display: "block"
+        display: "block",
       }}
     >
       <source src={withBasePath(homeData.hero.videoSrc)} type="video/mp4" />

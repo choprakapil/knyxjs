@@ -96,7 +96,7 @@
 /*----------------------------------------*/
 /*  1.1 Theme Default
 /*----------------------------------------*/
-@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Space+Grotesk:wght@300..700&family=Teko:wght@300..700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sora:wght@100..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet');
+/* Google Fonts are now pre-loaded via Next.js next/font/google in layout.jsx to eliminate CLS from FOUT/FOIT */
 
 a,
 button,
@@ -152,19 +152,19 @@ li,
   /**
   @font family declaration
   */
-  --tp-ff-body: 'Kanit', sans-serif;
-  --tp-ff-heading: 'Space Grotesk', sans-serif;
-  --tp-ff-p: 'Kanit', sans-serif;
-  --tp-ff-teko: 'Teko', sans-serif;
+  --tp-ff-body: var(--font-kanit, 'Kanit'), sans-serif;
+  --tp-ff-heading: var(--font-space-grotesk, 'Space Grotesk'), sans-serif;
+  --tp-ff-p: var(--font-kanit, 'Kanit'), sans-serif;
+  --tp-ff-teko: var(--font-teko, 'Teko'), sans-serif;
   --tp-ff-funnel: 'Funnel Display', sans-serif;
-  --tp-ff-sora: 'Sora', sans-serif;
-  --tp-ff-dm: 'DM Sans', sans-serif;
-  --tp-ff-inter: 'Inter', sans-serif;
-  --tp-ff-poppins: 'Poppins', sans-serif;
-  --tp-ff-playfair: 'Playfair Display', serif;
-  --tp-ff-jakarta: 'Plus Jakarta Sans', sans-serif;
-  --tp-ff-brand: 'Space Grotesk', sans-serif;
-  --tp-ff-familjen: 'Familjen Grotesk', sans-serif;
+  --tp-ff-sora: var(--font-sora, 'Sora'), sans-serif;
+  --tp-ff-dm: var(--font-dm-sans, 'DM Sans'), sans-serif;
+  --tp-ff-inter: var(--font-inter, 'Inter'), sans-serif;
+  --tp-ff-poppins: var(--font-poppins, 'Poppins'), sans-serif;
+  --tp-ff-playfair: var(--font-playfair, 'Playfair Display'), serif;
+  --tp-ff-jakarta: var(--font-jakarta, 'Plus Jakarta Sans'), sans-serif;
+  --tp-ff-brand: var(--font-space-grotesk, 'Space Grotesk'), sans-serif;
+  --tp-ff-familjen: var(--font-familjen, 'Familjen Grotesk'), sans-serif;
   --tp-ff-morganite-bold: 'Morganite-Bold', sans-serif;
   --tp-ff-morganite-semibold: 'Morganite-SemiBold', sans-serif;
   --tp-ff-fontawesome: "Font Awesome 6 Pro";
@@ -33621,9 +33621,12 @@ section.pt-80.pb-100.tp-breadcrumb-area.tp-bg-common-black.p-relative.z-index-1 
 }
 
 
-section.hero-section {
-  padding-top: 95px;
-}
+
 .tp-brand-font {
   font-family: var(--tp-ff-brand) !important;
+}
+
+
+div#thumbnails-container {
+  overflow-y: scroll;
 }

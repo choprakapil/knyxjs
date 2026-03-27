@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { withBasePath } from "@/lib/asset";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -9,8 +10,24 @@ gsap.registerPlugin(ScrollTrigger);
 const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, isHero = false, video = null }) => {
     const sectionRef = useRef(null);
     const videoRef = useRef(null);
-    const [isMuted, setIsMuted] = React.useState(true);
-    const [isVideoModalOpen, setIsVideoModalOpen] = React.useState(false);
+    const [isMuted, setIsMuted] = useState(true);
+    const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (isVideoModalOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, [isVideoModalOpen]);
 
     const toggleMute = () => {
         if (videoRef.current) {
@@ -18,6 +35,17 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
             setIsMuted(videoRef.current.muted);
         }
     };
+
+    useEffect(() => {
+        if (isVideoModalOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, [isVideoModalOpen]);
 
     useEffect(() => {
         if (typeof window === "undefined" || !sectionRef.current) return;
@@ -159,13 +187,13 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
             </div>
 
             {/* Full Screen Video Modal */}
-            {isVideoModalOpen && (
+            {isVideoModalOpen && mounted && createPortal(
                 <div 
                     className="video-modal-overlay"
                     style={{
                         position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
                         background: "rgba(0,0,0,0.95)", backdropFilter: "blur(20px)",
-                        zIndex: 1000000, display: "flex", alignItems: "center", justifyContent: "center",
+                        zIndex: 10000000, display: "flex", alignItems: "center", justifyContent: "center",
                         padding: "20px"
                     }}
                     onClick={() => {
@@ -177,7 +205,7 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
                         style={{
                             position: "absolute", top: "30px", right: "30px",
                             background: "transparent", border: "none", color: "#fff",
-                            fontSize: "40px", cursor: "pointer", zIndex: 1000001
+                            fontSize: "40px", cursor: "pointer", zIndex: 10000001
                         }}
                         onClick={() => {
                             setIsVideoModalOpen(false);
@@ -192,12 +220,19 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
                             autoPlay
                             loop
                             // controls
-                            style={{ maxWidth: "100%", maxHeight: "90vh", objectFit: "contain", borderRadius: "8px", boxShadow: "0 0 50px rgba(27, 59, 138, 0.3)" }}
+                            style={{ 
+                                maxWidth: "100%", 
+                                maxHeight: "90vh", 
+                                objectFit: "contain", 
+                                borderRadius: "8px", 
+                                boxShadow: "0 0 50px rgba(27, 59, 138, 0.3)" 
+                            }}
                             onMouseEnter={(e) => e.target.controls = true}
                             onMouseLeave={(e) => e.target.controls = false}
                         />
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             <style jsx>{`

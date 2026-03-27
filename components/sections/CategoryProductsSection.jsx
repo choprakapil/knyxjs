@@ -9,7 +9,7 @@ import { siteData } from "@/lib/data/site";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CategoryProductsSection = ({ category }) => {
+const CategoryProductsSection = ({ category, categorySlugFilter }) => {
     const sectionRef = useRef(null);
     const [activeIndex, setActiveIndex] = useState(0);
 
@@ -185,7 +185,7 @@ const CategoryProductsSection = ({ category }) => {
                 <div className={`col-lg-6 mb-4 mb-lg-0 ${isAlternate ? "order-lg-2" : ""}`}>
                     <div className="product-image p-relative overflow-hidden tp-round-10" style={{ backgroundColor: "rgba(0,0,0,0.5)", mixBlendMode: "screen", height: "350px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <img
-                            src={withBasePath(`/assets/img/products/${product.image}`)}
+                            src={withBasePath(`/assets/img/products_images/${product.imageFolder}/${product.image}`)}
                             alt={product.name}
                             className="img-fluid"
                             style={{ maxHeight: "100%", objectFit: "contain" }}
@@ -215,7 +215,7 @@ const CategoryProductsSection = ({ category }) => {
     );
 
     return (
-        <section id="category-products-section" ref={sectionRef}>
+        <section id="category-products-section" className="products-section-root" ref={sectionRef} style={{ background: "#030303" }}>
             <div className="products-wrapper">
                 <div className="container-fluid container-1524 h-100">
                     <div className="products-inner">
@@ -248,8 +248,8 @@ const CategoryProductsSection = ({ category }) => {
             <style jsx>{`
                 #category-products-section {
                     position: relative;
-                    height: 500vh; /* Increased for smoother control over more cards */
-                    background: #030303;
+                    height: 500vh;
+                    min-height: 500vh;
                 }
 
                 /* Fix for clicked text turning black */
@@ -273,6 +273,7 @@ const CategoryProductsSection = ({ category }) => {
                     position: sticky;
                     top: 120px;
                     height: calc(100vh - 120px);
+                    min-height: 80vh;
                     overflow: hidden;
                     width: 100%;
                 }

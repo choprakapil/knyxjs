@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { withBasePath } from "@/lib/asset";
 import {
     allProducts,
@@ -29,7 +30,7 @@ export default function ProductDetailsClient({ id }) {
     }, [product.id]);
 
     const [activeFeature, setActiveFeature] = useState(null);
-    const [activeNeckShieldImage, setActiveNeckShieldImage] = useState(null);
+    const [activeNeckShieldIdx, setActiveNeckShieldIdx] = useState(null);
     const contentRef = useRef(null);
 
     // Safely resolve features from featureIds
@@ -57,6 +58,9 @@ export default function ProductDetailsClient({ id }) {
                 .custom-scrollbar::-webkit-scrollbar-track {
                     background: transparent;
                 }
+                #thumbnails-container::-webkit-scrollbar {
+                    display: none;
+                }
                 @keyframes featureSlideIn {
                     from { opacity: 0; transform: translateY(20px); }
                     to { opacity: 1; transform: translateY(0); }
@@ -71,47 +75,105 @@ export default function ProductDetailsClient({ id }) {
                 <div className="row">
                     <div className="col-lg-12">
                         <div className="product-main-content">
+                            <div className="mb-40">
+                                <Link 
+                                    href={`/products/${product.categorySlug}`} 
+                                    className="tp-ff-inter fw-600 fs-14 tp-text-common-white d-inline-block" 
+                                    style={{ textDecoration: 'none', opacity: 0.8, transition: 'all 0.2s' }}
+                                    onMouseEnter={(e) => { e.target.style.opacity = 1; e.target.style.color = '#3257ff'; }}
+                                    onMouseLeave={(e) => { e.target.style.opacity = 0.8; e.target.style.color = '#ffffff'; }}
+                                >
+                                    <i className="fa-solid fa-arrow-left me-2"></i> Back to {product.categorySlug.charAt(0).toUpperCase() + product.categorySlug.slice(1)}s
+                                </Link>
+                            </div>
                             <div className="row mb-60">
                                 {/* Left column: Gallery + Accordions */}
                                 <div className="col-lg-6 mb-4 mb-lg-0">
                                     <div className="sticky-column">
-                                        <div className="product-gallery d-flex gap-3 mb-4" style={{ height: "450px" }}>
-                                            {/* Thumbnails */}
-                                            <div className="thumbnails d-flex flex-column gap-3 overflow-y-auto pr-2 custom-scrollbar" style={{ width: "100px", flexShrink: 0 }}>
-                                                {(galleryImages || []).map((img, idx) => (
-                                                    <div
-                                                        key={idx}
-                                                        onClick={() => setActiveIdx(idx)}
-                                                        className="thumbnail-wrapper p-relative tp-round-10"
-                                                        style={{
-                                                            width: "100px",
-                                                            height: "100px",
-                                                            backgroundColor: "rgba(255,255,255,0.02)",
-                                                            border: activeIdx === idx ? "2px solid #3257ff" : "1px solid rgba(255,255,255,0.05)",
-                                                            display: "flex",
-                                                            justifyContent: "center",
-                                                            alignItems: "center",
-                                                            cursor: "pointer",
-                                                            transition: "all 0.2s ease",
-                                                            opacity: activeIdx === idx ? 1 : 0.6,
-                                                            flexShrink: 0
+                                        <div className="product-gallery d-flex gap-3 mb-4" style={{ height: "550px" }}>
+                                            {/* Thumbnails Slider Container */}
+                                            <div className="thumbnails-slider-wrapper p-relative" style={{ width: "100px", flexShrink: 0, height: "100%", display: "flex", flexDirection: "column" }}>
+                                                {/* Nav Up */}
+                                                {(galleryImages?.length > 4) && (
+                                                    <button 
+                                                        className="nav-btn-v up" 
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            const el = document.getElementById("thumbnails-container");
+                                                            if (el) el.scrollTop -= 120;
+                                                        }}
+                                                        style={{ 
+                                                            position: 'absolute', top: '0', left: '0', right: '0', 
+                                                            height: '30px', background: 'linear-gradient(to bottom, rgba(6,8,13,1) 0%, rgba(6,8,13,0) 100%)', 
+                                                            border: 'none', color: '#fff', cursor: 'pointer', zIndex: 100,
+                                                            display: 'flex', alignItems: 'center', justifyContent: 'center'
                                                         }}
                                                     >
-                                                        <img
-                                                            src={`/assets/img/products/${img}`}
-                                                            alt={`${product.name} thumbnail ${idx + 1}`}
-                                                            className="img-fluid p-relative z-index-1"
-                                                            style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain", filter: "drop-shadow(0 5px 10px rgba(0,0,0,0.5))" }}
-                                                        />
-                                                    </div>
-                                                ))}
+                                                        <i className="fa-solid fa-chevron-up fs-12"></i>
+                                                    </button>
+                                                )}
+
+                                                {/* Thumbnails Container */}
+                                                <div 
+                                                    id="thumbnails-container"
+                                                    className="thumbnails d-flex flex-column gap-3 overflow-y-auto pr-0 custom-scrollbar" 
+                                                    style={{ width: "100px", height: "100%", scrollBehavior: 'smooth', scrollbarWidth: 'none', msOverflowStyle: 'none', paddingTop: "30px", paddingBottom: "30px" }}
+                                                >
+                                                    {(galleryImages || []).map((img, idx) => (
+                                                        <div
+                                                            key={idx}
+                                                            onClick={() => setActiveIdx(idx)}
+                                                            className="thumbnail-wrapper p-relative tp-round-10"
+                                                            style={{
+                                                                width: "100px",
+                                                                height: "100px",
+                                                                backgroundColor: "rgba(255,255,255,0.02)",
+                                                                border: activeIdx === idx ? "2px solid #3257ff" : "1px solid rgba(255,255,255,0.05)",
+                                                                display: "flex",
+                                                                justifyContent: "center",
+                                                                alignItems: "center",
+                                                                cursor: "pointer",
+                                                                transition: "all 0.2s ease",
+                                                                opacity: activeIdx === idx ? 1 : 0.6,
+                                                                flexShrink: 0
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src={`/assets/img/products_images/${product.imageFolder}/${img}`}
+                                                                alt={`${product.name} thumbnail ${idx + 1}`}
+                                                                className="img-fluid p-relative z-index-1"
+                                                                style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain", filter: "drop-shadow(0 5px 10px rgba(0,0,0,0.5))" }}
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                {/* Nav Down */}
+                                                {(galleryImages?.length > 4) && (
+                                                    <button 
+                                                        className="nav-btn-v down" 
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            const el = document.getElementById("thumbnails-container");
+                                                            if (el) el.scrollTop += 120;
+                                                        }}
+                                                        style={{ 
+                                                            position: 'absolute', bottom: '0', left: '0', right: '0', 
+                                                            height: '30px', background: 'linear-gradient(to top, rgba(6,8,13,1) 0%, rgba(6,8,13,0) 100%)', 
+                                                            border: 'none', color: '#fff', cursor: 'pointer', zIndex: 100,
+                                                            display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                                        }}
+                                                    >
+                                                        <i className="fa-solid fa-chevron-down fs-12"></i>
+                                                    </button>
+                                                )}
                                             </div>
 
                                             {/* Main image */}
                                             <div className="product-image-wrapper p-relative tp-round-10 p-4 mb-0 flex-grow-1" style={{ backgroundColor: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", display: "flex", justifyContent: "center", alignItems: "center", transition: "all 0.3s ease", height: "100%" }}>
                                                 <div className="glow-effect" style={{ position: "absolute", width: "80%", height: "80%", background: "radial-gradient(circle, rgba(27,59,138,0.1) 0%, rgba(0,0,0,0) 70%)", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 0 }}></div>
                                                 <img
-                                                    src={`/assets/img/products/${galleryImages[activeIdx]}`}
+                                                    src={`/assets/img/products_images/${product.imageFolder}/${galleryImages[activeIdx]}`}
                                                     alt={product.name}
                                                     className="img-fluid p-relative z-index-1"
                                                     style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", filter: "drop-shadow(0 20px 30px rgba(0,0,0,0.5))", transition: "opacity 0.3s ease" }}
@@ -146,9 +208,9 @@ export default function ProductDetailsClient({ id }) {
                                                             {product.neckShieldGallery.map((imgFile, i) => (
                                                                 <div key={i} className="col-6 col-sm-3">
                                                                     <div
-                                                                        className="tp-round-10 overflow-hidden cursor-pointer"
+                                                                        className="tp-round-10 overflow-hidden cursor-pointer p-relative"
                                                                         style={{ border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.02)", aspectRatio: "1/1", display: "flex", alignItems: "center", justifyContent: "center" }}
-                                                                        onClick={() => setActiveNeckShieldImage(`/assets/img/Neck_Shield_Pro/${product.neckShieldFolder}/${imgFile}`)}
+                                                                        onClick={() => setActiveNeckShieldIdx(i)}
                                                                     >
                                                                         <img
                                                                             src={`/assets/img/Neck_Shield_Pro/${product.neckShieldFolder}/${imgFile}`}
@@ -180,14 +242,16 @@ export default function ProductDetailsClient({ id }) {
                                                     </p>
                                                 </div>
                                             </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
                                 {/* Right column: main info + features + CTA */}
                                 <div className="col-lg-6">
                                     <div className="product-info pl-lg-30">
-                                        <span className="title-slide-gradient d-inline-block px-3 py-1 tp-round-10 tp-ff-inter fw-600 fs-12 text-uppercase mb-20">{product.category}</span>
+                                        <div className="mb-10">
+                                            <span className="title-slide-gradient d-inline-block px-3 py-1 tp-round-10 tp-ff-inter fw-600 fs-12 text-uppercase">{product.category}</span>
+                                        </div>
                                         <h2 className="tp-ff-jakarta fw-700 fs-40 tp-text-common-white mb-20">{product.name}</h2>
                                         <p className="tp-ff-dm fw-400 fs-18 lh-150-per tp-text-grey-2 mb-30">
                                             {product.description}
@@ -244,9 +308,9 @@ export default function ProductDetailsClient({ id }) {
                                                 <span className="tp-ff-dm fs-15 tp-text-grey-2 fw-600">{product.grilleType}</span>
                                             </div>
                                             <div
-                                                className="d-flex align-items-center flex-grow-1 border-left border-secondary justify-content-between pl-3"
-                                                onClick={() => setIsCertificateOpen(true)}
-                                                style={{ cursor: "pointer", borderLeft: "1px solid rgba(255,255,255,0.1)", minWidth: "180px", padding: "5px 10px" }}
+                                                className="d-flex align-items-center flex-grow-1 border-left border-secondary justify-content-between pl-3 disabled-opacity"
+                                                onClick={() => {}}
+                                                style={{ cursor: "not-allowed", borderLeft: "1px solid rgba(255,255,255,0.1)", minWidth: "180px", padding: "5px 10px", opacity: 0.4 }}
                                             >
                                                 <h5 className="tp-ff-jakarta fw-600 fs-14 tp-text-common-white m-0" style={{ opacity: 0.6 }}>{siteData.ui.certLabel}</h5>
                                                 <span className="tp-ff-dm fs-15 cert-text fw-600" style={{ color: "#3257ff" }}>{product.certification}</span>
@@ -489,8 +553,8 @@ export default function ProductDetailsClient({ id }) {
                 </div>
             )}
 
-            {/* Neck Shield Lightbox Modal */}
-            {activeNeckShieldImage && (
+            {/* Neck Shield Lightbox Modal / Gallery */}
+            {activeNeckShieldIdx !== null && product.neckShieldGallery && (
                 <div
                     style={{
                         position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
@@ -498,7 +562,7 @@ export default function ProductDetailsClient({ id }) {
                         zIndex: 100000, display: "flex", alignItems: "center", justifyContent: "center",
                         padding: "40px", transition: "all 0.3s ease"
                     }}
-                    onClick={() => setActiveNeckShieldImage(null)}
+                    onClick={() => setActiveNeckShieldIdx(null)}
                 >
                     <button
                         style={{
@@ -509,28 +573,53 @@ export default function ProductDetailsClient({ id }) {
                         }}
                         onMouseEnter={(e) => e.target.style.opacity = 1}
                         onMouseLeave={(e) => e.target.style.opacity = 0.7}
-                        onClick={() => setActiveNeckShieldImage(null)}
+                        onClick={() => setActiveNeckShieldIdx(null)}
                     >
                         &times;
                     </button>
+
+                    {/* Navigation Buttons */}
+                    <button 
+                        onClick={(e) => { 
+                            e.stopPropagation(); 
+                            setActiveNeckShieldIdx((prev) => (prev > 0 ? prev - 1 : product.neckShieldGallery.length - 1));
+                        }}
+                        style={{ position: 'absolute', left: '40px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', width: '60px', height: '60px', borderRadius: '50%', cursor: 'pointer', zIndex: 100002 }}
+                    >
+                        <i className="fa-solid fa-chevron-left"></i>
+                    </button>
+
+                    <button 
+                        onClick={(e) => { 
+                            e.stopPropagation(); 
+                            setActiveNeckShieldIdx((prev) => (prev < product.neckShieldGallery.length - 1 ? prev + 1 : 0));
+                        }}
+                        style={{ position: 'absolute', right: '40px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', width: '60px', height: '60px', borderRadius: '50%', cursor: 'pointer', zIndex: 100002 }}
+                    >
+                        <i className="fa-solid fa-chevron-right"></i>
+                    </button>
+
                     <div
                         style={{
                             maxWidth: "1000px", width: "100%", height: "auto",
-                            display: "flex", alignItems: "center", justifyContent: "center",
+                            display: "flex", flexDirection: 'column', alignItems: "center", justifyContent: "center",
                             animation: "modalZoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)"
                         }}
                     >
                         <img
-                            src={activeNeckShieldImage}
+                            src={`/assets/img/Neck_Shield_Pro/${product.neckShieldFolder}/${product.neckShieldGallery[activeNeckShieldIdx]}`}
                             alt="Neck Shield Detail View"
                             style={{
-                                maxWidth: "100%", maxHeight: "85vh",
+                                maxWidth: "100%", maxHeight: "75vh",
                                 objectFit: "contain",
                                 filter: "drop-shadow(0 0 30px rgba(0,0,0,0.5))",
                                 borderRadius: "8px"
                             }}
                             onClick={(e) => e.stopPropagation()}
                         />
+                        <div className="mt-20 tp-ff-inter text-white fs-14 opacity-50">
+                            Image {activeNeckShieldIdx + 1} of {product.neckShieldGallery.length}
+                        </div>
                     </div>
                 </div>
             )}
