@@ -46,3 +46,16 @@ model Product {
   @@index([categoryId])
   @@map("products")
 }
+
+model Setting {
+  id           Int      @id @default(1)
+  logoPath     String?  @default("/assets/img/logo/logo-white-2.png")
+  siteEmail    String?  @default("contact@knyxsports.com")
+  sitePhone    String?  @default("")
+  instagramUrl String?  @default("https://www.instagram.com/knyxsports/")
+  facebookUrl  String?  @default("")
+  twitterUrl   String?  @default("")
+  linkedinUrl  String?  @default("")
+
+  @@map("settings")
+}

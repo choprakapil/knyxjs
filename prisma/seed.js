@@ -1,5 +1,5 @@
 import mysql from "mysql2/promise";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 async function main() {
   const connection = await mysql.createConnection("mysql://root:@localhost:3306/knyx_db");

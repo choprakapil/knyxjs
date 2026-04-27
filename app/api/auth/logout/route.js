@@ -7,7 +7,7 @@ export async function POST() {
 
   cookieStore.set("token", "", {
     httpOnly: true,
-    secure: true, // Forces secure header invalidation
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     path: "/",
     expires: new Date(0), // FORCE DELETE
