@@ -1,233 +1,516 @@
-"use client";
-import React, { useState } from "react";
+﻿"use client";
+import React, { useState, useEffect } from "react";
 
-export default function StockistsManagement() {
-  const [activeTab, setActiveTab] = useState("all");
-  const [editingLoc, setEditingLoc] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  // --- MOCK DATA ---
-  const [stockists, setStockists] = useState([
-    { id: 1, name: "Premium Sports Hub", country: "United Kingdom", address: "125 Oxford Street, London", phone: "+44 20 7946 0958", email: "info@premiumsports.uk", website: "https://premiumsports.uk", status: "Verified" },
-    { id: 2, name: "Tactical Gear Inc", country: "Australia", address: "42 George St, Sydney", phone: "+61 2 5550 0123", email: "contact@tacticalgear.au", website: "https://tacticalgear.au", status: "Pending" },
-    { id: 3, name: "Cricket Central", country: "India", address: "Marine Drive, Mumbai", phone: "+91 22 1234 5678", email: "sales@cricketcentral.in", website: "https://cricketcentral.in", status: "Verified" }
-  ]);
-
-  const countries = ["All", ...new Set(stockists.map(s => s.country))];
-
-  // --- HANDLERS ---
-  const handleEdit = (loc) => {
-    setEditingLoc(loc || { name: "", country: "United Kingdom", address: "", phone: "", email: "", website: "", status: "Pending" });
-  };
-
-  const saveLoc = (id, data) => {
-    if (id) {
-      setStockists(stockists.map(s => s.id === id ? { ...s, ...data } : s));
-    } else {
-      setStockists([...stockists, { id: Date.now(), ...data }]);
-    }
-    setEditingLoc(null);
-  };
-
-  const deleteLoc = (id) => {
-    if (confirm("De-register this stockist from the KNYX network?")) {
-      setStockists(stockists.filter(s => s.id !== id));
-    }
-  };
-
-  const filtered = stockists.filter(s => {
-    const matchesSearch = s.name.toLowerCase().includes(searchQuery.toLowerCase()) || s.city?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesTab = activeTab === "all" || s.country === activeTab;
-    return matchesSearch && matchesTab;
+export default function StockistsPage() {
+  const [stockists, setStockists] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editingStockist, setEditingStockist] = useState(null);
+  const [message, setMessage] = useState({ text: "", type: "" });
+  const [searchTerm, setSearchTerm] = useState("");
+  
+  const [formData, setFormData] = useState({
+    name: "",
+    country: "",
+    address: "",
+    phone: "",
+    email: "",
+    website: ""
   });
 
+  // Fetch stockists
+  useEffect(() => {
+    fetchStockists();
+  }, []);
+
+  const fetchStockists = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/admin/stockists");
+      const data = await res.json();
+      if (data.success) {
+        setStockists(data.stockists || []);
+      }
+    } catch (err) {
+      setMessage({ text: "Failed to load stockists", type: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddNew = () => {
+    setEditingStockist(null);
+    setFormData({
+      name: "",
+      country: "",
+      address: "",
+      phone: "",
+      email: "",
+      website: ""
+    });
+    setShowForm(true);
+  };
+
+  const handleEdit = (stockist) => {
+    setEditingStockist(stockist);
+    setFormData({
+      name: stockist.name || "",
+      country: stockist.country || "",
+      address: stockist.address || "",
+      phone: stockist.phone || "",
+      email: stockist.email || "",
+      website: stockist.website || ""
+    });
+    setShowForm(true);
+  };
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    setMessage({ text: "", type: "" });
+
+    if (!formData.name.trim() || !formData.country.trim()) {
+      setMessage({ text: "Name and Country are required", type: "error" });
+      return;
+    }
+
+    try {
+      if (editingStockist) {
+        const res = await fetch("/api/admin/stockists", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: editingStockist.id, ...formData })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          setMessage({ text: "Stockist updated successfully", type: "success" });
+          fetchStockists();
+          setShowForm(false);
+        } else {
+          setMessage({ text: data.error || "Failed to update stockist", type: "error" });
+        }
+      } else {
+        const res = await fetch("/api/admin/stockists", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          setMessage({ text: "Stockist created successfully", type: "success" });
+          fetchStockists();
+          setShowForm(false);
+        } else {
+          setMessage({ text: data.error || "Failed to create stockist", type: "error" });
+        }
+      }
+    } catch (err) {
+      setMessage({ text: "An error occurred", type: "error" });
+    }
+  };
+
+  const handleDelete = async (stockistId) => {
+    if (!confirm("Are you sure you want to delete this stockist?")) return;
+
+    try {
+      const res = await fetch(`/api/admin/stockists?id=${stockistId}`, {
+        method: "DELETE"
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setMessage({ text: "Stockist deleted successfully", type: "success" });
+        fetchStockists();
+      } else {
+        setMessage({ text: data.error || "Failed to delete stockist", type: "error" });
+      }
+    } catch (err) {
+      setMessage({ text: "Failed to delete stockist", type: "error" });
+    }
+  };
+
+  const filteredStockists = stockists.filter(s =>
+    s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    s.country.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div style={{ animation: "fadeIn 0.5s ease" }}>
-      
-      {/* 🧭 Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "24px", animation: "fadeSlideIn 0.4s ease-out both" }}>
+      {/* Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div>
-          <h1 style={{ fontSize: "32px", fontWeight: 800, color: "#1e293b", margin: 0 }}>Network Distribution</h1>
-          <p style={{ color: "#64748b", fontSize: "15px", marginTop: "6px" }}>Manage official KNYX stockists, contact details, and regional status.</p>
+          <h1 style={{ fontSize: "28px", fontWeight: 800, color: "#1e293b", margin: 0 }}>Stockists</h1>
+          <p style={{ color: "#64748b", fontSize: "14px", marginTop: "4px" }}>Manage your official distribution partners and stockists.</p>
         </div>
-        <button onClick={() => handleEdit(null)} style={primaryBtnStyle}>
-           <i className="fa-solid fa-store"></i> Register Partner
-        </button>
-      </div>
-
-      {/* 📦 Management Hub */}
-      <div style={panelStyle}>
-        
-        {/* Filters & Search */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "35px" }}>
-           <div style={{ display: "flex", gap: "10px", overflowX: "auto", paddingBottom: "10px", maxWidth: "60%" }}>
-              {countries.map(c => (
-                 <button 
-                    key={c} 
-                    onClick={() => setActiveTab(c.toLowerCase())} 
-                    style={{ 
-                      padding: "10px 20px", 
-                      fontSize: "13px", 
-                      fontWeight: 700, 
-                      borderRadius: "10px", 
-                      border: "none", 
-                      cursor: "pointer", 
-                      whiteSpace: "nowrap",
-                      background: activeTab === c.toLowerCase() ? "#3257ff" : "#f8faff",
-                      color: activeTab === c.toLowerCase() ? "#fff" : "#64748b"
-                    }}
-                 >
-                    {c}
-                 </button>
-              ))}
-           </div>
-           <div style={{ position: "relative", width: "260px" }}>
-              <i className="fa-solid fa-magnifying-glass" style={{ position: "absolute", left: "15px", top: "50%", transform: "translateY(-50%)", color: "#94a3b8", fontSize: "13px" }}></i>
-              <input 
-                type="text" 
-                placeholder="Find outlet..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ ...inputStyle, paddingLeft: "42px" }} 
-              />
-           </div>
-        </div>
-
-        {/* Dynamic Table */}
-        <table style={{ width: "100%", borderCollapse: "separate", borderSpacing: "0 10px" }}>
-           <thead>
-              <tr style={{ textAlign: "left" }}>
-                 <th style={thStyle}>Stockist Identity</th>
-                 <th style={thStyle}>Contact Access</th>
-                 <th style={thStyle}>Status</th>
-                 <th style={thStyle}>Action</th>
-              </tr>
-           </thead>
-           <tbody>
-              {filtered.map(s => (
-                 <tr key={s.id}>
-                    <td style={{ ...tdStyle, borderRadius: "16px 0 0 16px" }}>
-                       <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-                          <div style={{ width: "48px", height: "48px", background: "#ffffff", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #e2e8f0" }}>
-                             <i className="fa-solid fa-location-arrow" style={{ color: "#3257ff" }}></i>
-                          </div>
-                          <div>
-                             <p style={{ margin: 0, fontWeight: 800, color: "#1e293b" }}>{s.name}</p>
-                             <p style={{ margin: 0, fontSize: "11px", color: "#94a3b8" }}>{s.country}</p>
-                          </div>
-                       </div>
-                    </td>
-                    <td style={tdStyle}>
-                       <div style={{ fontSize: "13px", color: "#64748b" }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-                             <i className="fa-solid fa-phone" style={{ fontSize: "10px", color: "#cbd5e1" }}></i> {s.phone}
-                          </div>
-                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                             <i className="fa-solid fa-envelope" style={{ fontSize: "10px", color: "#cbd5e1" }}></i> {s.email}
-                          </div>
-                       </div>
-                    </td>
-                    <td style={tdStyle}>
-                       <span style={{ fontSize: "11px", fontWeight: 800, background: s.status === "Verified" ? "#ecfdf5" : "#fff7ed", color: s.status === "Verified" ? "#10b981" : "#f97316", padding: "5px 12px", borderRadius: "100px" }}>{s.status.toUpperCase()}</span>
-                    </td>
-                    <td style={{ ...tdStyle, borderRadius: "0 16px 16px 0" }}>
-                       <div style={{ display: "flex", gap: "10px" }}>
-                          <button onClick={() => handleEdit(s)} style={actionBtnStyle}><i className="fa-solid fa-sliders"></i></button>
-                          <button onClick={() => deleteLoc(s.id)} style={{ ...actionBtnStyle, color: "#ef4444" }}><i className="fa-solid fa-trash"></i></button>
-                       </div>
-                    </td>
-                 </tr>
-              ))}
-           </tbody>
-        </table>
-
-        {filtered.length === 0 && (
-          <div style={{ textAlign: "center", padding: "60px", color: "#94a3b8" }}>
-             <i className="fa-solid fa-map-location-dot" style={{ fontSize: "40px", marginBottom: "15px", opacity: 0.3 }}></i>
-             <p>No distribution partners found for this region.</p>
-          </div>
+        {!showForm && (
+          <button
+            onClick={handleAddNew}
+            style={{
+              padding: "12px 24px",
+              background: "#3257ff",
+              border: "none",
+              borderRadius: "12px",
+              color: "#ffffff",
+              fontWeight: 700,
+              fontSize: "14px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              boxShadow: "0 8px 20px rgba(50, 87, 255, 0.2)"
+            }}
+          >
+            <i className="fa-solid fa-plus"></i> Add Stockist
+          </button>
         )}
-
       </div>
 
-      {/* --- STOCKIST REGISTRATION MODAL --- */}
-      {editingLoc && (
-        <div style={modalOverlayStyle}>
-           <div style={modalStyle}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
-                 <h3 style={{ margin: 0, fontSize: "22px", fontWeight: 800 }}>Partner Configuration</h3>
-                 <button onClick={() => setEditingLoc(null)} style={{ background: "transparent", border: "none", color: "#94a3b8", cursor: "pointer" }}><i className="fa-solid fa-xmark"></i></button>
-              </div>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                 <div>
-                    <label style={labelStyle}>Outlet Name</label>
-                    <input id="locName" type="text" defaultValue={editingLoc.name} style={inputStyle} />
-                 </div>
-                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" }}>
-                    <div>
-                       <label style={labelStyle}>Region / Country</label>
-                       <input id="locCountry" type="text" defaultValue={editingLoc.country} style={inputStyle} />
-                    </div>
-                    <div>
-                       <label style={labelStyle}>Status</label>
-                       <select id="locStatus" defaultValue={editingLoc.status} style={inputStyle}>
-                          <option>Verified</option>
-                          <option>Pending</option>
-                          <option>Restricted</option>
-                       </select>
-                    </div>
-                 </div>
-                 <div>
-                    <label style={labelStyle}>Full Physical Address</label>
-                    <textarea id="locAddress" defaultValue={editingLoc.address} rows="3" style={{ ...inputStyle, height: "auto", resize: "none" }} />
-                 </div>
-                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" }}>
-                    <div><label style={labelStyle}>Contact Number</label><input id="locPhone" type="text" defaultValue={editingLoc.phone} style={inputStyle} /></div>
-                    <div><label style={labelStyle}>Email Address</label><input id="locEmail" type="text" defaultValue={editingLoc.email} style={inputStyle} /></div>
-                 </div>
-                 <div>
-                    <label style={labelStyle}>Official Website</label>
-                    <input id="locWeb" type="text" defaultValue={editingLoc.website} style={inputStyle} />
-                 </div>
-                 <div style={{ display: "flex", gap: "15px", marginTop: "15px" }}>
-                    <button onClick={() => setEditingLoc(null)} style={{ flex: 1, padding: "16px", background: "#f1f5f9", borderRadius: "12px", border: "none", color: "#64748b", fontWeight: 700, cursor: "pointer" }}>Dismiss</button>
-                    <button 
-                      onClick={() => {
-                        saveLoc(editingLoc.id === undefined ? null : editingLoc.id, {
-                          name: document.getElementById("locName").value,
-                          country: document.getElementById("locCountry").value,
-                          status: document.getElementById("locStatus").value,
-                          address: document.getElementById("locAddress").value,
-                          phone: document.getElementById("locPhone").value,
-                          email: document.getElementById("locEmail").value,
-                          website: document.getElementById("locWeb").value
-                        });
-                      }}
-                      style={{ flex: 1, padding: "16px", background: "#3257ff", borderRadius: "12px", border: "none", color: "#ffffff", fontWeight: 700, cursor: "pointer", boxShadow: "0 8px 20px rgba(50, 87, 255, 0.2)" }}
-                    >
-                      Authenticate Partner
-                    </button>
-                 </div>
-              </div>
-           </div>
+      {/* Message */}
+      {message.text && (
+        <div style={{
+          padding: "16px",
+          borderRadius: "12px",
+          background: message.type === "success" ? "#ecfdf5" : "#fef2f2",
+          color: message.type === "success" ? "#047857" : "#dc2626",
+          fontSize: "14px",
+          border: `1px solid ${message.type === "success" ? "#d1fae5" : "#fee2e2"}`
+        }}>
+          <i className={`fa-solid ${message.type === "success" ? "fa-check-circle" : "fa-exclamation-circle"}`}></i> {message.text}
         </div>
       )}
 
-      <style jsx>{`
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-      `}</style>
+      {/* Form */}
+      {showForm && (
+        <div style={{
+          background: "#fff",
+          borderRadius: "16px",
+          border: "1px solid #f1f5f9",
+          padding: "32px",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.03)"
+        }}>
+          <h2 style={{ fontSize: "20px", fontWeight: 800, marginBottom: "24px", color: "#1e293b" }}>
+            {editingStockist ? "Edit Stockist" : "Add New Stockist"}
+          </h2>
+
+          <form onSubmit={handleSave}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "24px" }}>
+              {/* Name */}
+              <div>
+                <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "8px", color: "#334155" }}>
+                  Store Name *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleFormChange}
+                  placeholder="e.g., ABC Sports Store"
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "10px",
+                    fontSize: "14px",
+                    fontFamily: "inherit",
+                    boxSizing: "border-box"
+                  }}
+                />
+              </div>
+
+              {/* Country */}
+              <div>
+                <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "8px", color: "#334155" }}>
+                  Country *
+                </label>
+                <input
+                  type="text"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleFormChange}
+                  placeholder="e.g., India"
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "10px",
+                    fontSize: "14px",
+                    fontFamily: "inherit",
+                    boxSizing: "border-box"
+                  }}
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "8px", color: "#334155" }}>
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleFormChange}
+                  placeholder="e.g., +91 9876543210"
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "10px",
+                    fontSize: "14px",
+                    fontFamily: "inherit",
+                    boxSizing: "border-box"
+                  }}
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "8px", color: "#334155" }}>
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleFormChange}
+                  placeholder="e.g., contact@store.com"
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "10px",
+                    fontSize: "14px",
+                    fontFamily: "inherit",
+                    boxSizing: "border-box"
+                  }}
+                />
+              </div>
+
+              {/* Website */}
+              <div>
+                <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "8px", color: "#334155" }}>
+                  Website
+                </label>
+                <input
+                  type="url"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleFormChange}
+                  placeholder="https://example.com"
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "10px",
+                    fontSize: "14px",
+                    fontFamily: "inherit",
+                    boxSizing: "border-box"
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Address */}
+            <div style={{ marginBottom: "24px" }}>
+              <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "8px", color: "#334155" }}>
+                Address
+              </label>
+              <textarea
+                name="address"
+                value={formData.address}
+                onChange={handleFormChange}
+                placeholder="Full address"
+                rows={3}
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: "10px",
+                  fontSize: "14px",
+                  fontFamily: "inherit",
+                  boxSizing: "border-box",
+                  resize: "none"
+                }}
+              />
+            </div>
+
+            {/* Buttons */}
+            <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
+              <button
+                type="button"
+                onClick={() => setShowForm(false)}
+                style={{
+                  padding: "12px 24px",
+                  background: "#e2e8f0",
+                  color: "#1e293b",
+                  border: "none",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  fontSize: "14px"
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                style={{
+                  padding: "12px 24px",
+                  background: "#3257ff",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  boxShadow: "0 8px 20px rgba(50, 87, 255, 0.2)"
+                }}
+              >
+                {editingStockist ? "Update Stockist" : "Add Stockist"}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* Stockists List */}
+      {!showForm && (
+        <div style={{
+          background: "#ffffff",
+          border: "1px solid #f1f5f9",
+          borderRadius: "20px",
+          padding: "24px",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.03)"
+        }}>
+          {/* Search Bar */}
+          <div style={{ marginBottom: "20px" }}>
+            <input
+              type="text"
+              placeholder="Search by name or country..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: "100%",
+                maxWidth: "400px",
+                padding: "12px 16px",
+                border: "1px solid #e2e8f0",
+                borderRadius: "10px",
+                fontSize: "14px",
+                fontFamily: "inherit"
+              }}
+            />
+          </div>
+
+          {loading ? (
+            <div style={{ padding: "60px", textAlign: "center", color: "#64748b" }}>
+              <i className="fa-solid fa-spinner fa-spin" style={{ fontSize: "24px", marginBottom: "12px" }}></i>
+              <p>Loading stockists...</p>
+            </div>
+          ) : filteredStockists.length === 0 ? (
+            <div style={{ padding: "60px", textAlign: "center", color: "#64748b" }}>
+              <i className="fa-solid fa-store" style={{ fontSize: "32px", marginBottom: "12px", opacity: 0.2 }}></i>
+              <p>{searchTerm ? "No stockists found." : "No stockists added yet."}</p>
+            </div>
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "16px" }}>
+              {filteredStockists.map((stockist) => (
+                <div
+                  key={stockist.id}
+                  style={{
+                    padding: "20px",
+                    background: "#f9fafb",
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "12px",
+                    transition: "all 0.3s ease"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "#f1f5f9";
+                    e.currentTarget.style.borderColor = "#cbd5e1";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "#f9fafb";
+                    e.currentTarget.style.borderColor = "#e2e8f0";
+                  }}
+                >
+                  <h3 style={{ fontSize: "16px", fontWeight: 700, color: "#1e293b", margin: "0 0 12px 0" }}>
+                    {stockist.name}
+                  </h3>
+
+                  <div style={{ fontSize: "13px", color: "#64748b", marginBottom: "12px", lineHeight: "1.6" }}>
+                    <div style={{ marginBottom: "4px" }}>
+                      <i className="fa-solid fa-globe" style={{ marginRight: "6px" }}></i> {stockist.country}
+                    </div>
+                    {stockist.address && (
+                      <div style={{ marginBottom: "4px" }}>
+                        <i className="fa-solid fa-location-dot" style={{ marginRight: "6px" }}></i> {stockist.address}
+                      </div>
+                    )}
+                    {stockist.phone && (
+                      <div style={{ marginBottom: "4px" }}>
+                        <i className="fa-solid fa-phone" style={{ marginRight: "6px" }}></i> {stockist.phone}
+                      </div>
+                    )}
+                    {stockist.email && (
+                      <div style={{ marginBottom: "4px" }}>
+                        <i className="fa-solid fa-envelope" style={{ marginRight: "6px" }}></i> {stockist.email}
+                      </div>
+                    )}
+                    {stockist.website && (
+                      <div>
+                        <i className="fa-solid fa-link" style={{ marginRight: "6px" }}></i>
+                        <a href={stockist.website} target="_blank" rel="noopener noreferrer" style={{ color: "#3257ff", textDecoration: "none" }}>
+                          Visit Website
+                        </a>
+                      </div>
+                    )}
+                  </div>
+
+                  <div style={{ display: "flex", gap: "8px", marginTop: "16px" }}>
+                    <button
+                      onClick={() => handleEdit(stockist)}
+                      style={{
+                        flex: 1,
+                        padding: "8px 12px",
+                        background: "#3257ff",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        fontSize: "13px",
+                        fontWeight: 600
+                      }}
+                    >
+                      <i className="fa-solid fa-pen-to-square"></i> Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(stockist.id)}
+                      style={{
+                        flex: 1,
+                        padding: "8px 12px",
+                        background: "#ef4444",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        fontSize: "13px",
+                        fontWeight: 600
+                      }}
+                    >
+                      <i className="fa-solid fa-trash"></i> Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
-
-// STYLES
-const primaryBtnStyle = { padding: "14px 28px", background: "#3257ff", color: "#ffffff", border: "none", borderRadius: "14px", fontWeight: 800, fontSize: "14px", cursor: "pointer", display: "flex", alignItems: "center", gap: "10px", boxShadow: "0 10px 20px rgba(50, 87, 255, 0.25)" };
-const panelStyle = { background: "#ffffff", borderRadius: "28px", padding: "40px", border: "1px solid #f1f5f9", boxShadow: "0 4px 25px rgba(0,0,0,0.02)", minHeight: "600px" };
-const thStyle = { padding: "15px", color: "#94a3b8", fontSize: "11px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "1.5px" };
-const tdStyle = { padding: "24px 15px", background: "#f8faff", verticalAlign: "middle" };
-const inputStyle = { width: "100%", padding: "14px 18px", background: "#f8faff", border: "1px solid #e2e8f0", borderRadius: "12px", color: "#1e293b", fontSize: "14px", outline: "none", fontWeight: 600 };
-const labelStyle = { display: "block", fontSize: "12px", fontWeight: 700, color: "#64748b", marginBottom: "8px", textTransform: "uppercase" };
-const actionBtnStyle = { width: "42px", height: "42px", borderRadius: "12px", background: "#ffffff", border: "1px solid #e2e8f0", color: "#64748b", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" };
-const modalOverlayStyle = { position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 };
-const modalStyle = { width: "560px", background: "#ffffff", borderRadius: "30px", padding: "40px", boxShadow: "0 30px 70px rgba(0,0,0,0.15)" };

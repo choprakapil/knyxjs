@@ -2,38 +2,73 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { withBasePath } from "@/lib/asset";
-import {
-    allProducts,
-    getFeature,
-} from "@/lib/data/products";
-import { siteData } from "@/lib/data/site";
+import { getFeature } from "@/lib/data/products";
+import { useSiteSettings } from "@/components/providers/SiteSettingsProvider";
+import { findProductBySlug } from "@/lib/catalog";
+import { getProductAssetSrc } from "@/lib/mapProduct";
 
 export default function ProductDetailsClient({ id }) {
-    const product = allProducts.find((p) => p.slug === id) || {
-        id: id,
-        name: "Custom KNYX Product",
-        image: "1.png",
-        category: "Custom Edition",
-    };
-
+    const { site: siteData } = useSiteSettings();
+    const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [isCertificateOpen, setIsCertificateOpen] = useState(false);
     const [isSizingOpen, setIsSizingOpen] = useState(false);
     const [isAccessoriesOpen, setIsAccessoriesOpen] = useState(false);
-    const [selectedSize, setSelectedSize] = useState(product.sizes ? product.sizes[0] : "");
-
-    const galleryImages = product.gallery || [product.image];
+    const [selectedSize, setSelectedSize] = useState("");
     const [activeIdx, setActiveIdx] = useState(0);
-
-    useEffect(() => {
-        setActiveIdx(0);
-        setSelectedSize(product.sizes ? product.sizes[0] : "");
-    }, [product.id]);
-
     const [activeFeature, setActiveFeature] = useState(null);
     const [activeNeckShieldIdx, setActiveNeckShieldIdx] = useState(null);
     const contentRef = useRef(null);
 
-    // Safely resolve features from featureIds
+    useEffect(() => {
+        const load = async () => {
+            try {
+                const res = await fetch("/api/products");
+                const data = await res.json();
+                if (data.success) {
+                    const found = findProductBySlug(data.data, id);
+                    setProduct(
+                        found || {
+                            id,
+                            slug: id,
+                            name: "Custom KNYX Product",
+                            image: "1.png",
+                            category: "Custom Edition",
+                        }
+                    );
+                    return;
+                }
+            } catch (err) {
+                console.error("Failed to load product:", err);
+            }
+            setProduct(
+                findProductBySlug([], id) || {
+                    id,
+                    slug: id,
+                    name: "Custom KNYX Product",
+                    image: "1.png",
+                    category: "Custom Edition",
+                }
+            );
+        };
+        load().finally(() => setLoading(false));
+    }, [id]);
+
+    useEffect(() => {
+        if (!product) return;
+        setActiveIdx(0);
+        setSelectedSize(product.sizes ? product.sizes[0] : "");
+    }, [product?.id]);
+
+    if (loading || !product) {
+        return (
+            <section className="product-details-area pt-120 pb-120" style={{ backgroundColor: "#06080D", minHeight: "50vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <p className="tp-text-grey-2">Loading product...</p>
+            </section>
+        );
+    }
+
+    const galleryImages = product.gallery || [product.image];
     const resolvedFeatures = (product.featureIds || []).map((fid) => getFeature(fid)).filter(Boolean);
 
     return (
@@ -293,7 +328,7 @@ export default function ProductDetailsClient({ id }) {
                                                              }}
                                                          >
                                                              <img
-                                                                 src={`/assets/img/products_images/${product.imageFolder}/${img}`}
+                                                                 src={getProductAssetSrc(product, withBasePath, img)}
                                                                  alt={`${product.name} thumbnail ${idx + 1}`}
                                                                  className="img-fluid p-relative z-index-1"
                                                                  style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain", filter: "drop-shadow(0 5px 10px rgba(0,0,0,0.5))" }}
@@ -327,7 +362,7 @@ export default function ProductDetailsClient({ id }) {
                                             <div className="product-image-wrapper p-relative tp-round-10 p-4 mb-0 flex-grow-1" style={{ backgroundColor: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", display: "flex", justifyContent: "center", alignItems: "center", transition: "all 0.3s ease", height: "100%" }}>
                                                 <div className="glow-effect" style={{ position: "absolute", width: "80%", height: "80%", background: "radial-gradient(circle, rgba(27,59,138,0.1) 0%, rgba(0,0,0,0) 70%)", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 0 }}></div>
                                                 <img
-                                                    src={`/assets/img/products_images/${product.imageFolder}/${galleryImages[activeIdx]}`}
+                                                    src={getProductAssetSrc(product, withBasePath, galleryImages[activeIdx])}
                                                     alt={product.name}
                                                     className="img-fluid p-relative z-index-1"
                                                     style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", filter: "drop-shadow(0 20px 30px rgba(0,0,0,0.5))", transition: "opacity 0.3s ease" }}

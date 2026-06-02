@@ -1,6 +1,7 @@
 import "./globals.css";
 import { withBasePath } from "@/lib/asset";
 import ScrollCleanup from "@/components/layout/ScrollCleanup";
+import { SiteSettingsProvider } from "@/components/providers/SiteSettingsProvider";
 
 const cssAssets = [
   "/assets/css/bootstrap.css",
@@ -121,8 +122,10 @@ export default function RootLayout({ children }) {
         ))}
       </head>
       <body className={`${inter.className}`} suppressHydrationWarning>
-        <ScrollCleanup />
-        {children}
+        <SiteSettingsProvider>
+          <ScrollCleanup />
+          {children}
+        </SiteSettingsProvider>
       </body>
     </html>
   );

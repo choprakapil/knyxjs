@@ -7,6 +7,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const resolveAsset = (src) => {
+  if (!src) return "";
+  if (/^(data:|https?:|\/\/)/.test(src)) return src;
+  return withBasePath(src);
+};
+
 const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, isHero = false, video = null }) => {
     const sectionRef = useRef(null);
     const videoRef = useRef(null);
@@ -106,7 +112,7 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
                                 <div className="video-inner-container p-relative w-100 h-100">
                                     <video 
                                         ref={videoRef}
-                                        src={withBasePath(video)} 
+                                        src={resolveAsset(video)} 
                                         autoPlay 
                                         loop 
                                         muted={isMuted} 
@@ -140,7 +146,7 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
                                 </div>
                             ) : (
                                 <img 
-                                    src={withBasePath(image)} 
+                                    src={resolveAsset(image)} 
                                     alt={imageAlt} 
                                     className="img-fluid" 
                                     style={{ maxHeight: "400px", objectFit: "contain" }}
@@ -202,7 +208,7 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
                     </button>
                     <div style={{ maxWidth: "1200px", width: "100%", maxHeight: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
                         <video 
-                            src={withBasePath(video)}
+                            src={resolveAsset(video)}
                             autoPlay
                             loop
                             // controls

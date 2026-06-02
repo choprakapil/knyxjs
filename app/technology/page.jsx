@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BackToTop from "@/components/layout/BackToTop";
 import ClientRuntime from "@/components/layout/ClientRuntime";
 import Footer from "@/components/layout/Footer";
@@ -10,7 +10,28 @@ import TechnologySection from "@/components/sections/TechnologySection";
 import { technologyContent } from "@/lib/data/technology";
 
 export default function TechnologyPage() {
-    const { hero, sections } = technologyContent;
+    const [hero, setHero] = useState(technologyContent.hero);
+    const [sections, setSections] = useState(technologyContent.sections);
+
+    useEffect(() => {
+        const loadTechnology = async () => {
+            try {
+                const res = await fetch("/api/admin/settings");
+                const data = await res.json();
+                if (data.success) {
+                    const tech = data.settings?.content?.technology;
+                    if (tech) {
+                        setHero({ ...technologyContent.hero, ...tech.hero });
+                        setSections(tech.sections || technologyContent.sections);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to load technology content:", error);
+            }
+        };
+
+        loadTechnology();
+    }, []);
 
     return (
         <div style={{ backgroundColor: "#030303" }}>

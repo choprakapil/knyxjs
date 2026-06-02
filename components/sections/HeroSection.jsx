@@ -1,41 +1,81 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { withBasePath } from "@/lib/asset";
 import { homeData } from "@/lib/data/home";
 
+const resolveAsset = (src) => {
+  if (!src) return "";
+  if (/^(data:|https?:|\/\/)/.test(src)) return src;
+  return withBasePath(src);
+};
+
+const videoMime = (src) => {
+  if (!src) return "video/mp4";
+  const lower = src.toLowerCase();
+  if (lower.endsWith(".webm")) return "video/webm";
+  if (lower.endsWith(".mov")) return "video/quicktime";
+  return "video/mp4";
+};
+
 const HeroSection = ({ startPlay = true }) => {
   const videoRef = useRef(null);
-  // Default to muted true to satisfy most browser autoplay policies
+  const [hero, setHero] = useState(homeData.hero);
   const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const res = await fetch("/api/admin/settings", {
+          cache: "no-store",
+          credentials: "include",
+        });
+        const data = await res.json();
+        if (data.success) {
+          const homeHero = data.settings?.content?.home?.hero || {};
+          setHero({
+            videoSrc: homeHero.videoSrc || homeData.hero.videoSrc,
+            bgImage:
+              homeHero.bgImage ||
+              homeHero.posterImg ||
+              homeData.hero.bgImage,
+            posterImg: homeHero.posterImg || homeData.hero.posterImg,
+          });
+        }
+      } catch (error) {
+        console.error("Failed to load hero content:", error);
+      }
+    };
+
+    fetchContent();
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !hero.videoSrc) return;
+
+    video.load();
+
     if (!startPlay) return;
 
     const playVideo = async () => {
-      if (videoRef.current) {
+      try {
+        video.muted = false;
+        await video.play();
+        setIsMuted(false);
+      } catch {
+        video.muted = true;
         try {
-          // Attempt to play with sound if possible (may fail based on browser policy)
-          videoRef.current.muted = false; 
-          await videoRef.current.play();
-          setIsMuted(false);
-        } catch (error) {
-          // Fallback to muted autoplay if sound is blocked
-          console.log("Autoplay with sound blocked, falling back to muted autoplay.");
-          videoRef.current.muted = true;
-          try {
-            await videoRef.current.play();
-            setIsMuted(true);
-          } catch (autoplayError) {
-            console.error("Autoplay failed completely:", autoplayError);
-          }
+          await video.play();
+          setIsMuted(true);
+        } catch (autoplayError) {
+          console.error("Autoplay failed:", autoplayError);
         }
       }
     };
-    
-    // Tiny delay to ensure DOM is ready
+
     const timer = setTimeout(playVideo, 150);
     return () => clearTimeout(timer);
-  }, [startPlay]);
+  }, [startPlay, hero.videoSrc]);
 
   const toggleMute = (e) => {
     e.stopPropagation();
@@ -43,33 +83,35 @@ const HeroSection = ({ startPlay = true }) => {
       const nextMuteState = !videoRef.current.muted;
       videoRef.current.muted = nextMuteState;
       setIsMuted(nextMuteState);
-      
-      // Ensure it's playing when unmuting
+
       if (!nextMuteState) {
-        videoRef.current.play().catch(err => console.error("Could not play on unmute:", err));
+        videoRef.current.play().catch((err) => console.error("Could not play on unmute:", err));
       }
     }
   };
 
-  return (
-    <section className="hero-section hero-section-ai"
-      data-background={homeData.hero.bgImage}>
+  const videoUrl = resolveAsset(hero.videoSrc);
+  const posterUrl = resolveAsset(hero.posterImg || hero.bgImage);
 
-      {/* Relative container ensures the mute button stays positioned on the video itself */}
+  return (
+    <section
+      className="hero-section hero-section-ai"
+      data-background={resolveAsset(hero.bgImage)}
+    >
       <div className="video-container">
         <video
+          key={videoUrl}
           ref={videoRef}
-          // autoPlay attribute removed to handle play() manually via useEffect for better control over sound policies
           loop
           muted={isMuted}
           playsInline
+          poster={posterUrl}
           className="bg_video"
         >
-          <source src={withBasePath(homeData.hero.videoSrc)} type="video/mp4" />
+          <source src={videoUrl} type={videoMime(hero.videoSrc)} />
         </video>
 
-        {/* Mute/Unmute Toggle Button */}
-        <button 
+        <button
           onClick={toggleMute}
           className="mute-btn"
           onMouseEnter={(e) => {
@@ -84,7 +126,10 @@ const HeroSection = ({ startPlay = true }) => {
           }}
           aria-label={isMuted ? "Unmute" : "Mute"}
         >
-          <i className={`fa-solid ${isMuted ? "fa-volume-mute" : "fa-volume-high"}`} style={{ fontSize: "18px" }}></i>
+          <i
+            className={`fa-solid ${isMuted ? "fa-volume-mute" : "fa-volume-high"}`}
+            style={{ fontSize: "18px" }}
+          ></i>
         </button>
       </div>
 
@@ -125,10 +170,10 @@ const HeroSection = ({ startPlay = true }) => {
           position: absolute;
           bottom: 30px;
           right: 30px;
-          background: "rgba(0,0,0,0.4)";
+          background: rgba(0, 0, 0, 0.4);
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(255,255,255,0.15);
+          border: 1px solid rgba(255, 255, 255, 0.15);
           border-radius: 50%;
           width: 46px;
           height: 46px;
@@ -139,7 +184,7 @@ const HeroSection = ({ startPlay = true }) => {
           z-index: 100;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
         .scroll-indicator {
           display: flex;
@@ -166,7 +211,7 @@ const HeroSection = ({ startPlay = true }) => {
         .wheel {
           width: 4px;
           height: 8px;
-          background-color: #1B3B8A;
+          background-color: #1b3b8a;
           border-radius: 2px;
           position: absolute;
           top: 8px;
@@ -197,16 +242,29 @@ const HeroSection = ({ startPlay = true }) => {
           animation-delay: 0.4s;
         }
         @keyframes scrollWheel {
-          0% { transform: translateY(0); opacity: 1; }
-          100% { transform: translateY(15px); opacity: 0; }
+          0% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(15px);
+            opacity: 0;
+          }
         }
         @keyframes chevronBounce {
-          0% { opacity: 0; transform: rotate(45deg) translate(-5px, -5px); }
-          50% { opacity: 1; }
-          100% { opacity: 0; transform: rotate(45deg) translate(5px, 5px); }
+          0% {
+            opacity: 0;
+            transform: rotate(45deg) translate(-5px, -5px);
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+            transform: rotate(45deg) translate(5px, 5px);
+          }
         }
 
-        /* Responsive Fixes */
         @media (max-width: 767px) {
           .hero-section-ai {
             padding-top: 30px;
@@ -244,4 +302,3 @@ const HeroSection = ({ startPlay = true }) => {
 };
 
 export default HeroSection;
-

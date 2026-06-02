@@ -1,20 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import StockistCard from "@/components/ui/StockistCard";
 import ComingSoon from "@/components/common/ComingSoon";
 import { stockistsData } from "@/lib/data/stockists";
 
 const StockistsSection = () => {
     const [selectedCountry, setSelectedCountry] = useState("All");
-    
-    if (!stockistsData.list || stockistsData.list.length === 0) {
+    const [stockists, setStockists] = useState(stockistsData.list || []);
+    const [header, setHeader] = useState(stockistsData.header || { title: "Our Stockists", description: "Find official distributors and official stockists delivering KNYX equipment in your region." });
+
+    useEffect(() => {
+        const loadStockists = async () => {
+            try {
+                const res = await fetch("/api/admin/stockists");
+                const data = await res.json();
+                if (data.success) {
+                    const stockistsPayload = data.stockists || [];
+                    setStockists(stockistsPayload.length > 0 ? stockistsPayload : stockistsData.list || []);
+                    setHeader(stockistsData.header || header);
+                }
+            } catch (error) {
+                console.error("Failed to load stockists content:", error);
+            }
+        };
+
+        loadStockists();
+    }, []);
+
+    if (!stockists || stockists.length === 0) {
         return <ComingSoon message="Our global network of official stockists is currently expanding. Check back soon." />;
     }
 
-    const countries = ["All", ...new Set(stockistsData.list.map(s => s.country))];
+    const countries = ["All", ...new Set(stockists.map((s) => s.country))];
 
-    const filteredStockists = selectedCountry === "All" 
-        ? stockistsData.list 
-        : stockistsData.list.filter(s => s.country === selectedCountry);
+    const filteredStockists = selectedCountry === "All"
+        ? stockists
+        : stockists.filter((s) => s.country === selectedCountry);
 
     return (
         <section className="tp-stockists-section pt-50 pb-100" style={{ backgroundColor: "#030303", minHeight: "100vh" }}>
@@ -23,8 +43,8 @@ const StockistsSection = () => {
                 {/* Section Header */}
                 <div className="row mb-50">
                     <div className="col-12">
-                        <h1 className="tp-ff-jakarta fw-600 fs-48 fs-md-36 tp-text-common-white mb-15">{stockistsData.header.title}</h1>
-                        <p className="tp-ff-dm fw-400 fs-18 tp-text-grey-2 max-w-600">{stockistsData.header.description}</p>
+                        <h1 className="tp-ff-jakarta fw-600 fs-48 fs-md-36 tp-text-common-white mb-15">{header.title}</h1>
+                        <p className="tp-ff-dm fw-400 fs-18 tp-text-grey-2 max-w-600">{header.description}</p>
                     </div>
                 </div>
 

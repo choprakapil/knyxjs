@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -35,9 +35,9 @@ model Product {
   id          Int      @id @default(autoincrement())
   name        String
   slug        String   @unique
-  description String   @db.Text
+  description String
   image       String?
-  specs       Json?
+  specs       String?
   createdAt   DateTime @default(now())
   
   categoryId  Int
@@ -56,6 +56,8 @@ model Setting {
   facebookUrl  String?  @default("")
   twitterUrl   String?  @default("")
   linkedinUrl  String?  @default("")
+  stockists    String?  @default("[]")
+  content      String?  @default("{}")
 
   @@map("settings")
 }

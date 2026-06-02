@@ -2,10 +2,11 @@
 import React from "react";
 import { withBasePath } from "@/lib/asset";
 import gsap from "gsap";
-import { siteData } from "@/lib/data/site";
+import { useSiteSettings } from "@/components/providers/SiteSettingsProvider";
 import { usePathname } from "next/navigation";
 
 const Footer = () => {
+  const { site: siteData } = useSiteSettings();
   const pathname = usePathname();
 
   const handleNavClick = (e, href) => {

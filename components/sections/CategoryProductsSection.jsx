@@ -4,18 +4,36 @@ import { withBasePath } from "@/lib/asset";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { slugify } from "@/lib/utils";
-import { allProducts, productCategories } from "@/lib/data/products";
-import { siteData } from "@/lib/data/site";
+import { useSiteSettings } from "@/components/providers/SiteSettingsProvider";
+import { mergeCatalogForCategory } from "@/lib/catalog";
+import { getProductImageSrc } from "@/lib/mapProduct";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const CategoryProductsSection = ({ category, categorySlugFilter }) => {
     const sectionRef = useRef(null);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [categoryProducts, setCategoryProducts] = useState([]);
+    const { site: siteData } = useSiteSettings();
 
     const getProductSlug = (product) => slugify(product?.slug ?? product?.name);
 
-    const categoryProducts = allProducts.filter(p => (p.categorySlug || "helmet") === category);
+    useEffect(() => {
+        const load = async () => {
+            try {
+                const res = await fetch("/api/products");
+                const data = await res.json();
+                if (data.success) {
+                    setCategoryProducts(mergeCatalogForCategory(data.data, category));
+                    return;
+                }
+            } catch (err) {
+                console.error("Failed to load products:", err);
+            }
+            setCategoryProducts(mergeCatalogForCategory([], category));
+        };
+        load();
+    }, [category]);
 
     // Group products dynamically (e.g., "Professional", "Amateur")
     const groupedProducts = categoryProducts.reduce((acc, product) => {
@@ -185,7 +203,7 @@ const CategoryProductsSection = ({ category, categorySlugFilter }) => {
                 <div className={`col-lg-6 mb-4 mb-lg-0 ${isAlternate ? "order-lg-2" : ""}`}>
                     <div className="product-image p-relative overflow-hidden tp-round-10" style={{ backgroundColor: "rgba(0,0,0,0.5)", mixBlendMode: "screen", height: "350px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <img
-                            src={withBasePath(`/assets/img/products_images/${product.imageFolder}/${product.image}`)}
+                            src={getProductImageSrc(product, withBasePath)}
                             alt={product.name}
                             className="img-fluid"
                             style={{ maxHeight: "100%", objectFit: "contain" }}

@@ -2,12 +2,14 @@
 import React, { useState, useEffect } from "react";
 import { withBasePath } from "@/lib/asset";
 import Offcanvas from "./Offcanvas";
-import { siteData } from "@/lib/data/site";
+import { siteData as staticSiteData } from "@/lib/data/site";
+import { useSiteSettings } from "@/components/providers/SiteSettingsProvider";
 
-export const MENU_ITEMS = siteData.menus.main;
+export const MENU_ITEMS = staticSiteData.menus.main;
 
 
 const Header = () => {
+  const { site: siteData } = useSiteSettings();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchInputRef = React.useRef(null);
