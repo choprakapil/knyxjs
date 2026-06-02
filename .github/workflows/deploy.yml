@@ -26,6 +26,10 @@ jobs:
               cd /home/kapil/knyxjs
             elif [ -d "/home/kapil/knyx" ]; then
               cd /home/kapil/knyx
+            elif [ -d "/home/kapil/apps/knyxjs" ]; then
+              cd /home/kapil/apps/knyxjs
+            elif [ -d "/home/kapil/apps/knyx" ]; then
+              cd /home/kapil/apps/knyx
             elif [ -d "/var/www/knyxjs" ]; then
               cd /var/www/knyxjs
             else
@@ -34,15 +38,16 @@ jobs:
               ls -la /root || true
               echo "Listing /home/kapil:"
               ls -la /home/kapil || true
+              echo "Listing /home/kapil/apps (if exists):"
+              ls -la /home/kapil/apps || true
               echo "Listing /var/www:"
               ls -la /var/www || true
               exit 1
             fi
-            
+
             echo "Working directory is $(pwd)"
             git fetch origin
             git reset --hard origin/live
             npm install
             npm run build
             pm2 restart nextjs-app || pm2 restart all || pm2 start npm --name "nextjs-app" -- run start
-
