@@ -22,16 +22,20 @@ jobs:
               cd /root/knyxjs
             elif [ -d "/root/knyx" ]; then
               cd /root/knyx
+            elif [ -d "/home/kapil/knyxjs" ]; then
+              cd /home/kapil/knyxjs
+            elif [ -d "/home/kapil/knyx" ]; then
+              cd /home/kapil/knyx
             elif [ -d "/var/www/knyxjs" ]; then
               cd /var/www/knyxjs
             else
               echo "Error: Project directory not found on VPS!"
               echo "Listing /root:"
               ls -la /root || true
+              echo "Listing /home/kapil:"
+              ls -la /home/kapil || true
               echo "Listing /var/www:"
               ls -la /var/www || true
-              echo "Listing /home:"
-              ls -la /home || true
               exit 1
             fi
             
