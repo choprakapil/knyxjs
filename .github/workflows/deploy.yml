@@ -17,9 +17,28 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /root/knyxjs
+            # Find project directory dynamically
+            if [ -d "/root/knyxjs" ]; then
+              cd /root/knyxjs
+            elif [ -d "/root/knyx" ]; then
+              cd /root/knyx
+            elif [ -d "/var/www/knyxjs" ]; then
+              cd /var/www/knyxjs
+            else
+              echo "Error: Project directory not found on VPS!"
+              echo "Listing /root:"
+              ls -la /root || true
+              echo "Listing /var/www:"
+              ls -la /var/www || true
+              echo "Listing /home:"
+              ls -la /home || true
+              exit 1
+            fi
+            
+            echo "Working directory is $(pwd)"
             git fetch origin
             git reset --hard origin/live
             npm install
             npm run build
-            pm2 restart nextjs-app
+            pm2 restart nextjs-app || pm2 restart all || pm2 start npm --name "nextjs-app" -- run start
+
