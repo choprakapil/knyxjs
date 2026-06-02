@@ -17,35 +17,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            # Find project directory dynamically
-            if [ -d "/root/knyxjs" ]; then
-              cd /root/knyxjs
-            elif [ -d "/root/knyx" ]; then
-              cd /root/knyx
-            elif [ -d "/home/kapil/knyxjs" ]; then
-              cd /home/kapil/knyxjs
-            elif [ -d "/home/kapil/knyx" ]; then
-              cd /home/kapil/knyx
-            elif [ -d "/home/kapil/apps/knyxjs" ]; then
-              cd /home/kapil/apps/knyxjs
-            elif [ -d "/home/kapil/apps/knyx" ]; then
-              cd /home/kapil/apps/knyx
-            elif [ -d "/var/www/knyxjs" ]; then
-              cd /var/www/knyxjs
-            else
-              echo "Error: Project directory not found on VPS!"
-              echo "Listing /root:"
-              ls -la /root || true
-              echo "Listing /home/kapil:"
-              ls -la /home/kapil || true
-              echo "Listing /home/kapil/apps (if exists):"
-              ls -la /home/kapil/apps || true
-              echo "Listing /var/www:"
-              ls -la /var/www || true
-              exit 1
-            fi
-
-            echo "Working directory is $(pwd)"
+            cd /home/kapil/apps/knyxjs
             git fetch origin
             git reset --hard origin/live
             npm install
