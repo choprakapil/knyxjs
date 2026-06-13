@@ -5,6 +5,7 @@ import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 
 export const runtime = "nodejs";
+export const maxDuration = 120; // Allow up to 2 min for large video uploads
 
 async function checkAuth() {
   const cookieStore = await cookies();

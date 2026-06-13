@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useState, useEffect } from "react";
 
 export default function SiteSettings() {
@@ -14,7 +14,8 @@ export default function SiteSettings() {
     instagramUrl: "https://www.instagram.com/knyxsports/",
     facebookUrl: "",
     twitterUrl: "",
-    linkedinUrl: ""
+    linkedinUrl: "",
+    youtubeUrl: ""
   });
 
   // Fetch settings
@@ -35,7 +36,8 @@ export default function SiteSettings() {
           instagramUrl: data.settings?.instagramUrl || "https://www.instagram.com/knyxsports/",
           facebookUrl: data.settings?.facebookUrl || "",
           twitterUrl: data.settings?.twitterUrl || "",
-          linkedinUrl: data.settings?.linkedinUrl || ""
+          linkedinUrl: data.settings?.linkedinUrl || "",
+          youtubeUrl: data.settings?.youtubeUrl || ""
         });
       }
     } catch (err) {
@@ -329,7 +331,7 @@ export default function SiteSettings() {
                       />
                     </div>
 
-                    <div>
+                     <div>
                       <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "8px", color: "#334155" }}>
                         <i className="fa-brands fa-linkedin" style={{ marginRight: "8px", color: "#0a66c2" }}></i>
                         LinkedIn
@@ -340,6 +342,29 @@ export default function SiteSettings() {
                         value={formData.linkedinUrl}
                         onChange={handleChange}
                         placeholder="https://linkedin.com/company/yourcompany"
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: "10px",
+                          fontSize: "14px",
+                          fontFamily: "inherit",
+                          boxSizing: "border-box"
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "8px", color: "#334155" }}>
+                        <i className="fa-brands fa-youtube" style={{ marginRight: "8px", color: "#ff0000" }}></i>
+                        YouTube
+                      </label>
+                      <input
+                        type="url"
+                        name="youtubeUrl"
+                        value={formData.youtubeUrl}
+                        onChange={handleChange}
+                        placeholder="https://youtube.com/@yourchannel"
                         style={{
                           width: "100%",
                           padding: "12px",

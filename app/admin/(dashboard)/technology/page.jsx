@@ -63,6 +63,14 @@ const defaultTechnologyState = {
   ]
 };
 
+const resolvePreviewUrl = (path) => {
+  if (!path) return "";
+  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("/")) {
+    return path;
+  }
+  return `/${path}`;
+};
+
 export default function TechnologyCMS() {
   const [activeTab, setActiveTab] = useState("hero");
   const [saving, setSaving] = useState(false);

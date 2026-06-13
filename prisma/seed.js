@@ -32,6 +32,7 @@ async function main() {
       facebookUrl: "",
       twitterUrl: "",
       linkedinUrl: "",
+      youtubeUrl: "",
       stockists: "[]",
     },
   });
