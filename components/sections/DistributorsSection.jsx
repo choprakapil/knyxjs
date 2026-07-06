@@ -1,43 +1,43 @@
 import React, { useEffect, useState } from "react";
-import StockistCard from "@/components/ui/StockistCard";
+import DistributorCard from "@/components/ui/DistributorCard";
 import ComingSoon from "@/components/common/ComingSoon";
-import { stockistsData } from "@/lib/data/stockists";
+import { distributorsData } from "@/lib/data/distributors";
 
-const StockistsSection = () => {
+const DistributorsSection = () => {
     const [selectedCountry, setSelectedCountry] = useState("All");
-    const [stockists, setStockists] = useState(stockistsData.list || []);
-    const [header, setHeader] = useState(stockistsData.header || { title: "Our Stockists", description: "Find official distributors and official stockists delivering KNYX equipment in your region." });
+    const [distributors, setDistributors] = useState(distributorsData.list || []);
+    const [header, setHeader] = useState(distributorsData.header || { title: "Our Distributors", description: "Find official distributors delivering KNYX equipment in your region." });
 
     useEffect(() => {
-        const loadStockists = async () => {
+        const loadDistributors = async () => {
             try {
-                const res = await fetch("/api/admin/stockists");
+                const res = await fetch("/api/admin/distributors");
                 const data = await res.json();
                 if (data.success) {
-                    const stockistsPayload = data.stockists || [];
-                    setStockists(stockistsPayload.length > 0 ? stockistsPayload : stockistsData.list || []);
-                    setHeader(stockistsData.header || header);
+                    const distributorsPayload = data.distributors || [];
+                    setDistributors(distributorsPayload.length > 0 ? distributorsPayload : distributorsData.list || []);
+                    setHeader(distributorsData.header || header);
                 }
             } catch (error) {
-                console.error("Failed to load stockists content:", error);
+                console.error("Failed to load distributors content:", error);
             }
         };
 
-        loadStockists();
+        loadDistributors();
     }, []);
 
-    if (!stockists || stockists.length === 0) {
-        return <ComingSoon message="Our global network of official stockists is currently expanding. Check back soon." />;
+    if (!distributors || distributors.length === 0) {
+        return <ComingSoon message="Our global network of official distributors is currently expanding. Check back soon." />;
     }
 
-    const countries = ["All", ...new Set(stockists.map((s) => s.country))];
+    const countries = ["All", ...new Set(distributors.map((d) => d.country))];
 
-    const filteredStockists = selectedCountry === "All"
-        ? stockists
-        : stockists.filter((s) => s.country === selectedCountry);
+    const filteredDistributors = selectedCountry === "All"
+        ? distributors
+        : distributors.filter((d) => d.country === selectedCountry);
 
     return (
-        <section className="tp-stockists-section pt-50 pb-100" style={{ backgroundColor: "#030303", minHeight: "100vh" }}>
+        <section className="tp-distributors-section pt-50 pb-100" style={{ backgroundColor: "#030303", minHeight: "100vh" }}>
             <div className="container-fluid container-1524">
                 
                 {/* Section Header */}
@@ -51,7 +51,7 @@ const StockistsSection = () => {
                 <div className="row">
                     {/* Sidebar Filters */}
                     <div className="col-lg-3 col-md-4 mb-40 mb-md-0">
-                        <div className="stockists-sidebar pr-30" style={{ borderRight: "1px solid rgba(255,255,255,0.05)" }}>
+                        <div className="distributors-sidebar pr-30" style={{ borderRight: "1px solid rgba(255,255,255,0.05)" }}>
                             <h5 className="tp-ff-jakarta fw-700 fs-20 tp-text-common-white mb-20 text-uppercase ls-1">Browse Locations</h5>
                             <div className="d-flex flex-row flex-md-column gap-3 overflow-auto pb-10 custom-scrollbar">
                                 {countries.map((country) => (
@@ -75,12 +75,12 @@ const StockistsSection = () => {
                         </div>
                     </div>
 
-                    {/* Stockists Grid */}
+                    {/* Distributors Grid */}
                     <div className="col-lg-9 col-md-8">
                         <div className="row">
-                            {filteredStockists.map((stockist, index) => (
+                            {filteredDistributors.map((distributor, index) => (
                                 <div key={index} className="col-lg-6 col-xl-4 col-md-6 mb-20">
-                                    <StockistCard {...stockist} />
+                                    <DistributorCard {...distributor} />
                                 </div>
                             ))}
                         </div>
@@ -89,9 +89,9 @@ const StockistsSection = () => {
             </div>
 
             <style jsx>{`
-                .stockists-sidebar { height: 100%; }
+                .distributors-sidebar { height: 100%; }
                 @media (max-width: 767px) {
-                    .stockists-sidebar { border-right: 0 !important; padding-right: 0 !important; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; }
+                    .distributors-sidebar { border-right: 0 !important; padding-right: 0 !important; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; }
                     .custom-scrollbar { -webkit-overflow-scrolling: touch; }
                     .max-w-600 { max-width: 100% !important; }
                 }
@@ -101,4 +101,4 @@ const StockistsSection = () => {
     );
 };
 
-export default StockistsSection;
+export default DistributorsSection;

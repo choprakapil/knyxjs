@@ -16,6 +16,7 @@ function buildSiteFromSettings(settings) {
   if (settings.facebookUrl) socials.push({ network: "facebook", url: settings.facebookUrl });
   if (settings.twitterUrl) socials.push({ network: "twitter", url: settings.twitterUrl });
   if (settings.linkedinUrl) socials.push({ network: "linkedin", url: settings.linkedinUrl });
+  if (settings.youtubeUrl) socials.push({ network: "youtube", url: settings.youtubeUrl });
 
   return {
     ...staticSiteData,

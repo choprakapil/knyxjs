@@ -1,8 +1,8 @@
 import React from "react";
 
-const StockistCard = ({ name, address, phone, email, website }) => {
+const DistributorCard = ({ name, address, phone, email, website }) => {
     return (
-        <div className="stockist-card p-4 tp-round-24 mb-20" style={{
+        <div className="distributor-card p-4 tp-round-24 mb-20" style={{
             background: "rgba(255, 255, 255, 0.03)",
             backdropFilter: "blur(20px)",
             borderRadius: "24px",
@@ -12,7 +12,7 @@ const StockistCard = ({ name, address, phone, email, website }) => {
             overflow: "hidden"
         }}>
             <h3 className="tp-ff-jakarta fw-600 fs-22 tp-text-common-white mb-15">{name}</h3>
-            <div className="stockist-details tp-text-grey-2 tp-ff-dm fs-15 lh-150-per">
+            <div className="distributor-details tp-text-grey-2 tp-ff-dm fs-15 lh-150-per">
                 <p className="mb-10 d-flex align-items-start gap-2">
                     <i className="fa-solid fa-location-dot mt-1" style={{ color: "#1B3B8A", minWidth: "16px" }}></i>
                     <span>{address}</span>
@@ -34,7 +34,7 @@ const StockistCard = ({ name, address, phone, email, website }) => {
             </div>
             
             <style jsx>{`
-                .stockist-card:hover {
+                .distributor-card:hover {
                     border-color: rgba(27, 59, 138, 0.3);
                     box-shadow: 0 0 30px rgba(27, 59, 138, 0.08);
                     transform: translateY(-5px);
@@ -51,4 +51,4 @@ const StockistCard = ({ name, address, phone, email, website }) => {
     );
 };
 
-export default StockistCard;
+export default DistributorCard;

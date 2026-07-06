@@ -20,7 +20,7 @@ export default function AdminDashboardLayout({ children }) {
     { title: "Technology", id: "technology", icon: "fa-bolt", href: "/admin/technology" },
     { title: "Products", id: "products", icon: "fa-helmet-safety", href: "/admin/products" },
     { title: "Categories", id: "categories", icon: "fa-folder-tree", href: "/admin/categories" },
-    { title: "Stockists", id: "stockists", icon: "fa-location-dot", href: "/admin/stockists" },
+    { title: "Distributors", id: "distributors", icon: "fa-location-dot", href: "/admin/distributors" },
     { title: "Site Settings", id: "settings", icon: "fa-sliders", href: "/admin/settings" },
     { title: "Docs Manager", id: "docs", icon: "fa-file-arrow-up", href: "/admin/docs" },
   ];

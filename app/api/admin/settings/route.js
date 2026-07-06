@@ -22,7 +22,7 @@ function formatSettings(settings) {
   if (!settings) return null;
   return {
     ...settings,
-    stockists: settings.stockists ? JSON.parse(settings.stockists) : [],
+    distributors: settings.distributors ? JSON.parse(settings.distributors) : [],
     content: parseContentJson(settings.content),
   };
 }
@@ -66,6 +66,7 @@ export async function POST(req) {
       facebookUrl,
       twitterUrl,
       linkedinUrl,
+      youtubeUrl,
       content,
     } = body;
 
@@ -90,6 +91,7 @@ export async function POST(req) {
         ...(facebookUrl !== undefined && { facebookUrl }),
         ...(twitterUrl !== undefined && { twitterUrl }),
         ...(linkedinUrl !== undefined && { linkedinUrl }),
+        ...(youtubeUrl !== undefined && { youtubeUrl }),
         ...(contentValue !== undefined && { content: contentValue }),
       },
       create: {
@@ -101,6 +103,7 @@ export async function POST(req) {
         facebookUrl: facebookUrl || "",
         twitterUrl: twitterUrl || "",
         linkedinUrl: linkedinUrl || "",
+        youtubeUrl: youtubeUrl || "",
         ...(contentValue !== undefined && { content: contentValue }),
       },
     });

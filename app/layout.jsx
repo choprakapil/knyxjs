@@ -117,6 +117,23 @@ export default function RootLayout({ children }) {
           rel="shortcut icon"
           href={withBasePath("/assets/img/logo/favicon.png")}
         />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href={withBasePath("/assets/img/logo/favicon-32x32.png")}
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href={withBasePath("/assets/img/logo/favicon-16x16.png")}
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href={withBasePath("/assets/img/logo/apple-touch-icon.png")}
+        />
         {cssAssets.map((href) => (
           <link key={href} rel="stylesheet" href={withBasePath(href)} />
         ))}

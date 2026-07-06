@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { withBasePath } from "@/lib/asset";
 import { MENU_ITEMS } from "./Header";
-import { siteData } from "@/lib/data/site";
+import { useSiteSettings } from "@/components/providers/SiteSettingsProvider";
 import { usePathname, useRouter } from "next/navigation";
 
 const MobileMenu = ({ onClose }) => {
@@ -100,6 +100,8 @@ const MobileMenu = ({ onClose }) => {
 };
 
 const Offcanvas = ({ open, onClose }) => {
+  const { site: siteData } = useSiteSettings();
+
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
