@@ -57,7 +57,7 @@ model Setting {
   twitterUrl   String?  @default("")
   linkedinUrl  String?  @default("")
   youtubeUrl   String?  @default("")
-  stockists    String?  @default("[]")
+  distributors String?  @default("[]")
   content      String?  @default("{}")
 
   @@map("settings")

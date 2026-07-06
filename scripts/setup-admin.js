@@ -65,7 +65,7 @@ async function setupAdminPanel() {
           twitterUrl: "",
           linkedinUrl: "",
           youtubeUrl: "",
-          stockists: []
+          distributors: "[]"
         }
       });
 

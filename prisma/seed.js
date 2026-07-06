@@ -33,7 +33,7 @@ async function main() {
       twitterUrl: "",
       linkedinUrl: "",
       youtubeUrl: "",
-      stockists: "[]",
+      distributors: "[]",
     },
   });
 

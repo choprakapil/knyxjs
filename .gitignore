@@ -57,3 +57,9 @@ Thumbs.db
 coverage/
 dist/
 /lib/generated/prisma
+
+# Database
+*.db
+*.db-journal
+*.db-shm
+*.db-wal

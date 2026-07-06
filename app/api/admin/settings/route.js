@@ -22,7 +22,7 @@ function formatSettings(settings) {
   if (!settings) return null;
   return {
     ...settings,
-    stockists: settings.stockists ? JSON.parse(settings.stockists) : [],
+    distributors: settings.distributors ? JSON.parse(settings.distributors) : [],
     content: parseContentJson(settings.content),
   };
 }

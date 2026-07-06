@@ -18,8 +18,15 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /home/kapil/apps/knyxjs
+            if [ -f prisma/prisma/dev.db ]; then
+              cp prisma/prisma/dev.db /home/kapil/apps/dev.db.bak
+            fi
             git fetch origin
             git reset --hard origin/live
+            if [ -f /home/kapil/apps/dev.db.bak ]; then
+              mkdir -p prisma/prisma
+              cp /home/kapil/apps/dev.db.bak prisma/prisma/dev.db
+            fi
             npm install
             npm run build
             pm2 restart nextjs-app || pm2 restart all || pm2 start npm --name "nextjs-app" -- run start

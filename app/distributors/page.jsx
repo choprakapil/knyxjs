@@ -6,9 +6,9 @@ import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import LegacyScripts from "@/components/layout/LegacyScripts";
 import Offcanvas from "@/components/layout/Offcanvas";
-import StockistsSection from "@/components/sections/StockistsSection";
+import DistributorsSection from "@/components/sections/DistributorsSection";
 
-export default function StockistsPage() {
+export default function DistributorsPage() {
     return (
         <div style={{ backgroundColor: "#030303" }}>
             <div className="tp-hero-ai-body-overlay"></div>
@@ -17,7 +17,7 @@ export default function StockistsPage() {
             <Header />
             <ClientRuntime />
             <main>
-                <StockistsSection />
+                <DistributorsSection />
             </main>
             <Footer />
             <LegacyScripts />

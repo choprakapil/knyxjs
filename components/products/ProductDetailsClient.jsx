@@ -74,6 +74,14 @@ export default function ProductDetailsClient({ id }) {
     return (
         <section ref={contentRef} className="product-details-area pt-120 pb-120" style={{ backgroundColor: "#06080D", minHeight: "100vh" }}>
             <style jsx>{`
+                .feature-card-item:hover {
+                    background: linear-gradient(145deg, rgba(50, 87, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+                    border-color: rgba(50, 87, 255, 0.3) !important;
+                    transform: translateY(-2px);
+                }
+                .feature-card-item:hover .feature-details-link {
+                    color: #4D9FFF !important;
+                }
                 .sticky-column {
                     position: relative;
                 }
@@ -455,7 +463,7 @@ export default function ProductDetailsClient({ id }) {
                                                             key={c.name}
                                                             className="color-circle"
                                                             title={c.name}
-                                                            style={{ width: "36px", height: "36px", borderRadius: "50%", backgroundColor: c.color, border: "2px solid rgba(255,255,255,0.2)", cursor: "pointer", transition: "all 0.2s" }}
+                                                            style={{ width: "36px", height: "36px", borderRadius: "50%", backgroundColor: c.color, border: "2px solid rgba(255,255,255,0.2)", cursor: "default", transition: "all 0.2s" }}
                                                         ></div>
                                                     ))}
                                                 </div>
@@ -526,9 +534,9 @@ export default function ProductDetailsClient({ id }) {
                                                             overflow: "hidden",
                                                             animation: `featureSlideIn 0.5s ease ${idx * 0.08}s both`,
                                                             transition: "all 0.35s ease",
-                                                            cursor: "default",
+                                                            cursor: "pointer",
                                                         }}
-                                                    // onClick={() => setActiveFeature(feature)}
+                                                        onClick={() => setActiveFeature(feature)}
                                                     >
                                                         <div style={{
                                                             position: "absolute",
@@ -559,9 +567,9 @@ export default function ProductDetailsClient({ id }) {
                                                                 <h5 className="tp-ff-jakarta fw-600 tp-text-common-white" style={{ fontSize: "16px", letterSpacing: "-0.2px", marginBottom: "4px" }}>{feature.title}</h5>
                                                                 <p className="tp-ff-dm" style={{ fontSize: "14px", lineHeight: 1.4, color: "rgba(255,255,255,0.6)", marginBottom: "0" }}>{feature.desc}</p>
                                                             </div>
-                                                            {/* <span className="tp-ff-inter fw-600 feature-details-link" style={{ position: "absolute", top: "22px", right: "20px", fontSize: "12px", color: "#3257ff" }}>
+                                                            <span className="tp-ff-inter fw-600 feature-details-link" style={{ position: "absolute", top: "22px", right: "20px", fontSize: "12px", color: "#3257ff" }}>
                                                                 Details <i className="fa-solid fa-arrow-right" style={{ fontSize: "10px" }}></i>
-                                                            </span> */}
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 ))}
