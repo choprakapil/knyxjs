@@ -16,20 +16,20 @@ const MobileMenu = ({ onClose }) => {
 
   const handleNavClick = (e, href) => {
     if (href.startsWith("/#")) {
-        e.preventDefault();
-        const targetId = href.replace("/#", "");
-        onClose && onClose();
-        
-        if (pathname === "/") {
-            const element = document.getElementById(targetId);
-            if (element) {
-                element.scrollIntoView({ behavior: "smooth" });
-            }
-        } else {
-            window.location.href = href;
+      e.preventDefault();
+      const targetId = href.replace("/#", "");
+      onClose && onClose();
+
+      if (pathname === "/") {
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
         }
+      } else {
+        window.location.href = href;
+      }
     } else {
-        onClose && onClose();
+      onClose && onClose();
     }
   };
 
@@ -59,9 +59,9 @@ const MobileMenu = ({ onClose }) => {
                 }}
               >
                 {item.label}
-                <span style={{ 
-                  transform: openDropdown === item.label ? 'rotate(180deg)' : 'rotate(0deg)', 
-                  transition: 'transform 0.3s ease' 
+                <span style={{
+                  transform: openDropdown === item.label ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.3s ease'
                 }}>
                   ▼
                 </span>
@@ -85,10 +85,10 @@ const MobileMenu = ({ onClose }) => {
               </ul>
             </>
           ) : (
-            <a 
-                href={withBasePath(item.href)} 
-                onClick={(e) => handleNavClick(e, item.href)}
-                style={{ display: 'block', padding: '0', fontSize: '20px', fontWeight: 600, color: '#ffffff' }}
+            <a
+              href={withBasePath(item.href)}
+              onClick={(e) => handleNavClick(e, item.href)}
+              style={{ display: 'block', padding: '0', fontSize: '20px', fontWeight: 600, color: '#ffffff' }}
             >
               {item.label}
             </a>
@@ -120,10 +120,10 @@ const Offcanvas = ({ open, onClose }) => {
           <div className="tp-offcanvas-top d-flex align-items-center justify-content-between mb-40">
             <div className="tp-offcanvas-logo" style={{ maxWidth: '120px' }}>
               <a href={withBasePath("/")} onClick={(e) => { e.preventDefault(); window.location.href = withBasePath("/"); }}>
-                <img 
-                  src={withBasePath(siteData.logo.light)} 
-                  alt={siteData.logo.alt} 
-                  style={{ width: '100%', height: 'auto' }} 
+                <img
+                  src={withBasePath(siteData.logo.light)}
+                  alt={siteData.logo.alt}
+                  style={{ width: '100%', height: 'auto' }}
                 />
               </a>
             </div>
@@ -136,7 +136,7 @@ const Offcanvas = ({ open, onClose }) => {
               </button>
             </div>
           </div>
-          
+
           <div className="tp-offcanvas-menu mb-40">
             <nav><MobileMenu onClose={onClose} /></nav>
           </div>
@@ -153,7 +153,7 @@ const Offcanvas = ({ open, onClose }) => {
               ))}
             </div>
           </div>
-          
+
         </div>
       </div>
       <div className={`body-overlay ${open ? "apply" : ""}`} onClick={onClose}></div>
