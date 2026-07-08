@@ -262,32 +262,33 @@ const MobileMenu = ({ onClose }) => {
                   />
                 )}
 
-                {/* Plain link list below the panel */}
-                <ul
-                  style={{
-                    paddingLeft: "4px",
-                    marginTop: "6px",
-                    listStyle: "none",
-                  }}
-                >
-                  {item.dropdown.map((sub, i) => (
-                    <li key={i} style={{ marginBottom: "8px" }}>
-                      <a
-                        href={withBasePath(sub.href)}
-                        onClick={() => onClose && onClose()}
-                        style={{
-                          color: "#aaa",
-                          fontSize: "15px",
-                          textDecoration: "none",
-                          display: "block",
-                          padding: "3px 0",
-                          transition: "color 0.2s ease",
-                        }}
-                        onMouseEnter={(e) =>
-                          (e.currentTarget.style.color = "#fff")
-                        }
-                        onMouseLeave={(e) =>
-                          (e.currentTarget.style.color = "#aaa")
+                {/* Plain link list — hidden for Products (handled by body-map panel above) */}
+                {item.label !== "Products" && (
+                  <ul
+                    style={{
+                      paddingLeft: "4px",
+                      marginTop: "6px",
+                      listStyle: "none",
+                    }}
+                  >
+                    {item.dropdown.map((sub, i) => (
+                      <li key={i} style={{ marginBottom: "8px" }}>
+                        <a
+                          href={withBasePath(sub.href)}
+                          onClick={() => onClose && onClose()}
+                          style={{
+                            color: "#aaa",
+                            fontSize: "15px",
+                            textDecoration: "none",
+                            display: "block",
+                            padding: "3px 0",
+                            transition: "color 0.2s ease",
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.currentTarget.style.color = "#fff")
+                          }
+                          onMouseLeave={(e) =>
+                            (e.currentTarget.style.color = "#aaa")
                         }
                       >
                         {sub.label}
