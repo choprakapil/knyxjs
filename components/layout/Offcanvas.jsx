@@ -16,7 +16,7 @@ import { usePathname } from "next/navigation";
    menu.jpeg shows a cricket batsman — helmet is at ~12% from top.
 ═══════════════════════════════════════════════════════ */
 
-const ITEM_POSITIONS = [12]; // one entry per product category (% from top)
+const ITEM_POSITIONS = [11]; // one entry per product category (% from top) — 11% aligns with helmet on menu.PNG
 const BRAND = "#3257ff";
 const BRAND_GLOW = "rgba(50,87,255,0.75)";
 
@@ -30,8 +30,8 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
         display: "flex",
         borderRadius: "14px",
         overflow: "hidden",
-        border: "1px solid rgba(255,255,255,0.08)",
-        background: "#07070d",
+        border: "1px solid rgba(255,255,255,0.06)",
+        background: "#0a0a12",
         margin: "14px 0 10px",
         // Height driven by the image on the right
       }}
@@ -41,9 +41,9 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
         style={{
           flex: "0 0 42%",
           position: "relative",
-          // gradient so text is readable over image edge
+          // solid-to-transparent gradient for text readability
           background:
-            "linear-gradient(90deg,rgba(7,7,13,1) 0%,rgba(7,7,13,0.92) 70%,rgba(7,7,13,0) 100%)",
+            "linear-gradient(90deg,rgba(10,10,18,1) 0%,rgba(10,10,18,0.96) 65%,rgba(10,10,18,0) 100%)",
           zIndex: 2,
           // items are absolutely positioned inside this column
         }}
@@ -124,32 +124,31 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
       </div>
 
       {/* ── RIGHT COLUMN: athlete image ───────────────── */}
-      <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
+      <div
+        style={{
+          flex: 1,
+          position: "relative",
+          overflow: "hidden",
+          background: "#0a0a12", // dark bg since menu.PNG has white/transparent bg
+          display: "flex",
+          alignItems: "stretch",
+        }}
+      >
         <img
-          src={withBasePath("/assets/img/menu.jpeg")}
+          src={withBasePath("/assets/img/menu.PNG")}
           alt="KNYX Cricket Player"
           style={{
             width: "100%",
             height: "100%",
-            objectFit: "cover",
+            objectFit: "contain",
             objectPosition: "top center",
             display: "block",
             filter:
               hovered !== null
-                ? "brightness(1.1) saturate(1.2)"
-                : "brightness(0.85) saturate(0.9)",
+                ? "brightness(1.05) drop-shadow(0 0 20px rgba(50,87,255,0.25))"
+                : "brightness(0.95)",
             transition: "filter 0.35s ease",
-          }}
-        />
-        {/* subtle blue sweep on hover */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: `rgba(50,87,255,0.07)`,
-            opacity: hovered !== null ? 1 : 0,
-            transition: "opacity 0.35s ease",
-            pointerEvents: "none",
+            mixBlendMode: "normal",
           }}
         />
       </div>
