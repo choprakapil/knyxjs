@@ -289,13 +289,14 @@ const MobileMenu = ({ onClose }) => {
                           }
                           onMouseLeave={(e) =>
                             (e.currentTarget.style.color = "#aaa")
-                        }
-                      >
-                        {sub.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                          }
+                        >
+                          {sub.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </>
           ) : (
