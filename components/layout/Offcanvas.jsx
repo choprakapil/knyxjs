@@ -26,31 +26,25 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
   return (
     <div
       style={{
-        position: "relative",
         display: "flex",
-        borderRadius: "14px",
-        overflow: "hidden",
-        border: "1px solid rgba(255,255,255,0.06)",
-        background: "#0a0a12",
-        margin: "14px 0 10px",
-        // Height driven by the image on the right
+        alignItems: "stretch",
+        margin: "14px 0 4px",
+        minHeight: "220px",
+        // NO border, NO box — open design
       }}
     >
-      {/* ── LEFT COLUMN: product links ────────────────── */}
+      {/* ── LEFT: product links on dark offcanvas bg ── */}
       <div
         style={{
-          flex: "0 0 42%",
+          flex: "0 0 44%",
           position: "relative",
-          // solid-to-transparent gradient for text readability
-          background:
-            "linear-gradient(90deg,rgba(10,10,18,1) 0%,rgba(10,10,18,0.96) 65%,rgba(10,10,18,0) 100%)",
-          zIndex: 2,
-          // items are absolutely positioned inside this column
+          // no background — inherits the offcanvas dark naturally
+          paddingTop: "4px",
         }}
       >
         {items.map((item, i) => {
           const isHov = hovered === i;
-          const topPct = ITEM_POSITIONS[i] ?? 10 + i * 18; // fallback spacing for future items
+          const topPct = ITEM_POSITIONS[i] ?? 10 + i * 18;
 
           return (
             <a
@@ -67,12 +61,12 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
                 display: "flex",
                 alignItems: "center",
                 textDecoration: "none",
-                padding: "5px 0 5px 14px",
+                padding: "5px 0 5px 4px",
                 gap: 0,
                 cursor: "pointer",
               }}
             >
-              {/* ── Product label ── */}
+              {/* Label */}
               <span
                 style={{
                   color: isHov ? BRAND : "#ffffff",
@@ -82,37 +76,37 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
                   textTransform: "uppercase",
                   transition: "color 0.22s ease",
                   whiteSpace: "nowrap",
-                  textShadow: "0 1px 6px rgba(0,0,0,0.9)",
                   userSelect: "none",
                 }}
               >
                 {item.label}
               </span>
 
-              {/* ── Arrow line ── */}
+              {/* Arrow line */}
               <div
                 style={{
                   flex: 1,
                   height: "1px",
-                  margin: "0 7px 0 10px",
+                  margin: "0 6px 0 10px",
                   background: isHov
                     ? `linear-gradient(90deg,${BRAND},#7a9bff)`
-                    : "rgba(255,255,255,0.22)",
+                    : "rgba(255,255,255,0.2)",
                   boxShadow: isHov ? `0 0 7px ${BRAND_GLOW}` : "none",
                   transition: "background 0.22s ease, box-shadow 0.22s ease",
                   borderRadius: "1px",
                 }}
               />
 
-              {/* ── Dot ── */}
+              {/* Dot */}
               <div
                 style={{
                   width: "9px",
                   height: "9px",
                   borderRadius: "50%",
                   flexShrink: 0,
-                  marginRight: "-4px", // nudge dot to sit at image edge
-                  background: isHov ? BRAND : "rgba(255,255,255,0.38)",
+                  marginRight: "-5px",
+                  zIndex: 3,
+                  background: isHov ? BRAND : "rgba(255,255,255,0.35)",
                   boxShadow: isHov ? `0 0 14px 4px ${BRAND_GLOW}` : "none",
                   transform: isHov ? "scale(1.5)" : "scale(1)",
                   transition: "all 0.22s ease",
@@ -123,17 +117,29 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
         })}
       </div>
 
-      {/* ── RIGHT COLUMN: athlete image ───────────────── */}
+      {/* ── RIGHT: white image area — no box, just the image ── */}
       <div
         style={{
           flex: 1,
           position: "relative",
+          background: "#ffffff",       // white bg matches menu.PNG
+          borderRadius: "10px",        // soft rounded corners on image side only
           overflow: "hidden",
-          background: "#0a0a12", // dark bg since menu.PNG has white/transparent bg
-          display: "flex",
-          alignItems: "stretch",
+          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06)",
         }}
       >
+        {/* Left-edge gradient: dark offcanvas → white image (seamless blend) */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0, left: 0, bottom: 0,
+            width: "32px",
+            background: "linear-gradient(90deg, rgba(3,3,12,0.7) 0%, transparent 100%)",
+            zIndex: 2,
+            pointerEvents: "none",
+          }}
+        />
+
         <img
           src={withBasePath("/assets/img/menu.PNG")}
           alt="KNYX Cricket Player"
@@ -143,54 +149,25 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
             objectFit: "contain",
             objectPosition: "top center",
             display: "block",
+            transition: "transform 0.4s ease, filter 0.35s ease",
+            transform: hovered !== null ? "scale(1.03)" : "scale(1)",
             filter:
               hovered !== null
-                ? "brightness(1.05) drop-shadow(0 0 20px rgba(50,87,255,0.25))"
-                : "brightness(0.95)",
-            transition: "filter 0.35s ease",
-            mixBlendMode: "normal",
+                ? "drop-shadow(0 4px 24px rgba(50,87,255,0.3))"
+                : "none",
           }}
         />
       </div>
 
-      {/* ── "Explore" label at bottom ─────────────────── */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          padding: "28px 14px 10px",
-          background:
-            "linear-gradient(to top, rgba(7,7,13,0.85) 0%, transparent 100%)",
-          pointerEvents: "none",
-          zIndex: 3,
-        }}
-      >
-        <span
-          style={{
-            color: "rgba(255,255,255,0.38)",
-            fontSize: "10px",
-            letterSpacing: "1.5px",
-            textTransform: "uppercase",
-            fontWeight: 600,
-          }}
-        >
-          Hover to explore →
-        </span>
-      </div>
-
-      {/* ── CSS for touch devices (mobile tap effect) ─── */}
       <style>{`
         @media (hover: none) {
-          .knyx-bodymap-link:active span {
-            color: ${BRAND} !important;
-          }
+          .knyx-bodymap-link:active span { color: ${BRAND} !important; }
         }
       `}</style>
     </div>
   );
 };
+
 
 /* ═══════════════════════════════════════════════════════
    Mobile Navigation Menu
