@@ -57,7 +57,7 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
                 position: "absolute",
                 top: `${topPct}%`,
                 left: 0,
-                right: 0,
+                right: "-20px",
                 display: "flex",
                 alignItems: "center",
                 textDecoration: "none",
