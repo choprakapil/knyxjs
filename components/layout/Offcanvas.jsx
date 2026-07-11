@@ -29,7 +29,7 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
         display: "flex",
         alignItems: "stretch",
         margin: "14px 0 4px",
-        minHeight: "220px",
+        minHeight: "340px",
         // NO border, NO box — open design
       }}
     >
