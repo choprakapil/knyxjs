@@ -117,29 +117,14 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
         })}
       </div>
 
-      {/* ── RIGHT: white image area — no box, just the image ── */}
+      {/* ── RIGHT: image — transparent, no bg, no zoom ── */}
       <div
         style={{
           flex: 1,
           position: "relative",
-          background: "#ffffff",       // white bg matches menu.PNG
-          borderRadius: "10px",        // soft rounded corners on image side only
           overflow: "hidden",
-          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06)",
         }}
       >
-        {/* Left-edge gradient: dark offcanvas → white image (seamless blend) */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0, left: 0, bottom: 0,
-            width: "32px",
-            background: "linear-gradient(90deg, rgba(3,3,12,0.7) 0%, transparent 100%)",
-            zIndex: 2,
-            pointerEvents: "none",
-          }}
-        />
-
         <img
           src={withBasePath("/assets/img/knyx.png")}
           alt="KNYX Cricket Player"
@@ -149,12 +134,6 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
             objectFit: "contain",
             objectPosition: "top center",
             display: "block",
-            transition: "transform 0.4s ease, filter 0.35s ease",
-            transform: hovered !== null ? "scale(1.03)" : "scale(1)",
-            filter:
-              hovered !== null
-                ? "drop-shadow(0 4px 24px rgba(50,87,255,0.3))"
-                : "none",
           }}
         />
       </div>
