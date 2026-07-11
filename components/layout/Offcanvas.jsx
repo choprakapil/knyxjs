@@ -141,7 +141,7 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
         />
 
         <img
-          src={withBasePath("/assets/img/menu.PNG")}
+          src={withBasePath("/assets/img/knyx.png")}
           alt="KNYX Cricket Player"
           style={{
             width: "100%",
