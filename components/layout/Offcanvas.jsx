@@ -16,7 +16,7 @@ import { usePathname } from "next/navigation";
    menu.jpeg shows a cricket batsman — helmet is at ~12% from top.
 ═══════════════════════════════════════════════════════ */
 
-const ITEM_POSITIONS = [11]; // one entry per product category (% from top) — 11% aligns with helmet on menu.PNG
+const ITEM_POSITIONS = [7]; // 7% from top aligns arrow closer to the helmet
 const BRAND = "#3257ff";
 const BRAND_GLOW = "rgba(50,87,255,0.75)";
 
