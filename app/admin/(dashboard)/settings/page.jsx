@@ -138,6 +138,7 @@ export default function SiteSettings() {
   const [newHighlight, setNewHighlight] = useState("");
   const [newSpecKey, setNewSpecKey] = useState("");
   const [newSpecVal, setNewSpecVal] = useState("");
+  const [featureImgUploading, setFeatureImgUploading] = useState(null);
 
   const [formData, setFormData] = useState({
     logoPath: "/assets/img/logo/logo-white-2.png",
@@ -714,8 +715,84 @@ export default function SiteSettings() {
                                   style={{ width: "100%", padding: "10px 12px", border: "1px solid #e2e8f0", borderRadius: "8px", fontSize: "13px", color: "#334155", fontFamily: "inherit", boxSizing: "border-box" }}
                                 />
                               </div>
+
+                              {/* Feature Image Upload */}
+                              <div>
+                                <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px", color: "#475569" }}>Feature Image (optional)</label>
+                                <p style={{ fontSize: "11px", color: "#94a3b8", marginBottom: "10px" }}>Displayed inside the popup below the intro text. Supports JPG, PNG, WebP.</p>
+                                <div style={{ display: "flex", gap: "10px", alignItems: "flex-start", flexWrap: "wrap" }}>
+                                  {f.detail?.image && (
+                                    <div style={{ position: "relative", flexShrink: 0 }}>
+                                      <img
+                                        src={f.detail.image}
+                                        alt="Feature"
+                                        style={{ width: "120px", height: "80px", objectFit: "cover", borderRadius: "8px", border: "1px solid #e2e8f0" }}
+                                      />
+                                      <button
+                                        type="button"
+                                        onClick={() => handleFeatureFieldChange(selectedFeatureId, "detail", "image", "")}
+                                        style={{ position: "absolute", top: "-6px", right: "-6px", width: "20px", height: "20px", background: "#ef4444", color: "#fff", border: "none", borderRadius: "50%", cursor: "pointer", fontSize: "11px", display: "flex", alignItems: "center", justifyContent: "center" }}
+                                      >
+                                        ✕
+                                      </button>
+                                    </div>
+                                  )}
+                                  <label
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      gap: "6px",
+                                      width: "120px",
+                                      height: "80px",
+                                      border: "2px dashed #e2e8f0",
+                                      borderRadius: "8px",
+                                      cursor: "pointer",
+                                      background: "#f8fafc",
+                                      fontSize: "11px",
+                                      color: "#94a3b8",
+                                      flexShrink: 0,
+                                      transition: "all 0.2s"
+                                    }}
+                                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#3257ff"; e.currentTarget.style.color = "#3257ff"; }}
+                                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.color = "#94a3b8"; }}
+                                  >
+                                    <i className="fa-solid fa-cloud-arrow-up" style={{ fontSize: "20px" }}></i>
+                                    {featureImgUploading === selectedFeatureId ? "Uploading..." : "Upload Image"}
+                                    <input
+                                      type="file"
+                                      accept="image/jpeg,image/png,image/webp,image/gif"
+                                      style={{ display: "none" }}
+                                      disabled={featureImgUploading === selectedFeatureId}
+                                      onChange={async (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
+                                        setFeatureImgUploading(selectedFeatureId);
+                                        try {
+                                          const fd = new FormData();
+                                          fd.append("file", file);
+                                          const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
+                                          const data = await res.json();
+                                          if (data.success) {
+                                            handleFeatureFieldChange(selectedFeatureId, "detail", "image", data.path);
+                                          } else {
+                                            alert("Upload failed: " + (data.error || "Unknown error"));
+                                          }
+                                        } catch (err) {
+                                          alert("Upload error: " + err.message);
+                                        } finally {
+                                          setFeatureImgUploading(null);
+                                          e.target.value = "";
+                                        }
+                                      }}
+                                    />
+                                  </label>
+                                </div>
+                              </div>
                             </div>
                           </div>
+
 
                           {/* Highlights List */}
                           <div style={{ borderTop: "1px solid #f1f5f9", paddingTop: "16px" }}>

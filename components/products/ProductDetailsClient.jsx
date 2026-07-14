@@ -85,6 +85,7 @@ export default function ProductDetailsClient({ id }) {
                 intro: dynamicF.detail?.intro || staticF.detail?.intro || "",
                 highlights: dynamicF.detail?.highlights || staticF.detail?.highlights || [],
                 specs: dynamicF.detail?.specs || staticF.detail?.specs || {},
+                image: dynamicF.detail?.image || staticF.detail?.image || "",
             }
         };
     }).filter(Boolean);
@@ -750,9 +751,24 @@ export default function ProductDetailsClient({ id }) {
                             </div>
                         </div>
 
-                        <p className="tp-ff-dm" style={{ fontSize: "15px", lineHeight: 1.8, color: "rgba(255,255,255,0.65)", marginBottom: "30px" }}>
+                        <p className="tp-ff-dm" style={{ fontSize: "15px", lineHeight: 1.8, color: "rgba(255,255,255,0.65)", marginBottom: activeFeature.detail.image ? "20px" : "30px" }}>
                             {activeFeature.detail.intro}
                         </p>
+
+                        {activeFeature.detail.image && (
+                            <div style={{ marginBottom: "30px", borderRadius: "14px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)" }}>
+                                <img
+                                    src={activeFeature.detail.image}
+                                    alt={activeFeature.detail.headline}
+                                    style={{
+                                        width: "100%",
+                                        maxHeight: "280px",
+                                        objectFit: "cover",
+                                        display: "block"
+                                    }}
+                                />
+                            </div>
+                        )}
 
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "30px" }}>
                             {activeFeature.detail.highlights.map((h, i) => (
