@@ -1,11 +1,142 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
+const DEFAULT_FEATURES = {
+  carbon_composite: {
+    id: "carbon_composite",
+    title: "CARBON COMPOSITE",
+    desc: "Carbon Composite Reinforced Shell with Matte Painted Finish",
+    detail: {
+      headline: "Carbon Composite Reinforced Shell",
+      intro: "Engineered for elite cricketers who demand ultra-lightweight construction and uncompromising protection.",
+      highlights: ["Carbon Composite Reinforced Shell", "Matte painted finish"],
+      specs: { Material: "Carbon Composite" }
+    }
+  },
+  impact_polymer: {
+    id: "impact_polymer",
+    title: "IMPACT POLYMER",
+    desc: "Impact Modified Polymer Shell with matte painted finish",
+    detail: {
+      headline: "Impact Modified Polymer Shell",
+      intro: "Lightweight and designed for maximum protection across every class of cricket.",
+      highlights: ["Impact Modified Polymer Shell", "Matte painted finish"],
+      specs: { Material: "Impact Modified Polymer" }
+    }
+  },
+  epp: {
+    id: "epp",
+    title: "EPP LINER",
+    desc: "High Density Impact Absorbing Layer",
+    detail: {
+      headline: "High Density EPP Liner",
+      intro: "Shock absorbing liner designed to mitigate extreme impacts.",
+      highlights: ["High Density EPP", "Multi-impact absorbing"],
+      specs: { Material: "Expanded Polypropylene" }
+    }
+  },
+  rim: {
+    id: "rim",
+    title: "RIM",
+    desc: "Radial Impact Mitigation System for Elastic Shock Deflection",
+    detail: {
+      headline: "Radial Impact Mitigation",
+      intro: "Handles impacts from every direction using elastic shock absorption.",
+      highlights: ["Elastic shock absorption", "Multi-directional protection"],
+      specs: { Technology: "RIM Elastic System" }
+    }
+  },
+  evs: {
+    id: "evs",
+    title: "EVS",
+    desc: "Engineered Ventilation System for Enhanced Air Flow",
+    detail: {
+      headline: "Engineered Ventilation System",
+      intro: "Continuous cooling airflow across the head ensuring maximum comfort.",
+      highlights: ["Enhanced air flow", "Strategic intake/exhaust routing"],
+      specs: { System: "EVS Channels" }
+    }
+  },
+  isofit: {
+    id: "isofit",
+    title: "ISOFIT",
+    desc: "Personalized Fit Adjustment System",
+    detail: {
+      headline: "Personalized Fit Adjustment System",
+      intro: "Micro-adjustable system that accommodates different head sizes in a single shell.",
+      highlights: ["Maximum size range cover", "Personalized comfort"],
+      specs: { Adjustment: "Dial-in Ratchet" }
+    }
+  },
+  koolform: {
+    id: "koolform",
+    title: "KOOLFORM",
+    desc: "Wide Surface and Cooling Comfort Liner Padding",
+    detail: {
+      headline: "Wide Surface and Cooling Comfort Liner Padding",
+      intro: "Included in varied thicknesses for your very own personalization and maximum comfort.",
+      highlights: ["Varied thickness options", "Moisture-wicking comfort"],
+      specs: { Material: "KoolForm Foam" }
+    }
+  },
+  titanium_grille: {
+    id: "titanium_grille",
+    title: "TACTICAL FACEGUARD",
+    desc: "Ultralight Titanium Facial Protection",
+    detail: {
+      headline: "Ultralight Titanium Facial Protection",
+      intro: "Unparalleled facial protection without compromising on weight or visibility.",
+      highlights: ["Aerospace-grade Titanium", "Ultra-lightweight"],
+      specs: { Material: "Titanium" }
+    }
+  },
+  steel_grille: {
+    id: "steel_grille",
+    title: "CARBON STEEL",
+    desc: "Carbon Steel Tactical Faceguard",
+    detail: {
+      headline: "Carbon Steel Tactical Faceguard",
+      intro: "High-grade carbon steel provides uncompromising strength and defense.",
+      highlights: ["High tensile strength", "Maximum impact resistance"],
+      specs: { Material: "Carbon Steel" }
+    }
+  },
+  maglock: {
+    id: "maglock",
+    title: "MAGLOCK",
+    desc: "Magnetic Quick Fastening and Release Buckle System",
+    detail: {
+      headline: "Maglock Buckle System",
+      intro: "Self-aligning magnetic buckle system you can fasten and release instantly.",
+      highlights: ["Magnetic quick-release", "Glove-compatible operation"],
+      specs: { Mechanism: "Magnetic" }
+    }
+  },
+  quick_release: {
+    id: "quick_release",
+    title: "QUICK RELEASE",
+    desc: "Quick release buckle system",
+    detail: {
+      headline: "Quick Release Buckle",
+      intro: "Fast and secure buckle system for immediate release.",
+      highlights: ["Rapid deployment", "High-tension secure hold"],
+      specs: { Mechanism: "Standard Clip" }
+    }
+  }
+};
+
 export default function SiteSettings() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
   const [activeTab, setActiveTab] = useState("general");
+  
+  // Custom Dynamic Features State
+  const [features, setFeatures] = useState(DEFAULT_FEATURES);
+  const [selectedFeatureId, setSelectedFeatureId] = useState("carbon_composite");
+  const [newHighlight, setNewHighlight] = useState("");
+  const [newSpecKey, setNewSpecKey] = useState("");
+  const [newSpecVal, setNewSpecVal] = useState("");
 
   const [formData, setFormData] = useState({
     logoPath: "/assets/img/logo/logo-white-2.png",
@@ -39,6 +170,15 @@ export default function SiteSettings() {
           linkedinUrl: data.settings?.linkedinUrl || "",
           youtubeUrl: data.settings?.youtubeUrl || ""
         });
+        
+        // Hydrate from DB or fallback
+        if (data.settings?.content?.features) {
+          // Merge to ensure no missing keys if new features are added statically in products.js
+          setFeatures({
+            ...DEFAULT_FEATURES,
+            ...data.settings.content.features
+          });
+        }
       }
     } catch (err) {
       setMessage({ text: "Failed to load settings", type: "error" });
@@ -52,16 +192,84 @@ export default function SiteSettings() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleFeatureFieldChange = (featureId, field, nestedField, value) => {
+    setFeatures(prev => {
+      const f = prev[featureId] || DEFAULT_FEATURES[featureId];
+      if (nestedField) {
+        return {
+          ...prev,
+          [featureId]: {
+            ...f,
+            [field]: {
+              ...f[field],
+              [nestedField]: value
+            }
+          }
+        };
+      } else {
+        return {
+          ...prev,
+          [featureId]: {
+            ...f,
+            [field]: value
+          }
+        };
+      }
+    });
+  };
+
+  const addHighlight = (featureId) => {
+    if (!newHighlight.trim()) return;
+    setFeatures(prev => {
+      const f = prev[featureId] || DEFAULT_FEATURES[featureId];
+      const highlights = [...(f.detail?.highlights || [])];
+      highlights.push(newHighlight.trim());
+      return {
+        ...prev,
+        [featureId]: {
+          ...f,
+          detail: { ...f.detail, highlights }
+        }
+      };
+    });
+    setNewHighlight("");
+  };
+
+  const addSpec = (featureId) => {
+    if (!newSpecKey.trim() || !newSpecVal.trim()) return;
+    setFeatures(prev => {
+      const f = prev[featureId] || DEFAULT_FEATURES[featureId];
+      const specs = { ...(f.detail?.specs || {}) };
+      specs[newSpecKey.trim()] = newSpecVal.trim();
+      return {
+        ...prev,
+        [featureId]: {
+          ...f,
+          detail: { ...f.detail, specs }
+        }
+      };
+    });
+    setNewSpecKey("");
+    setNewSpecVal("");
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
     setMessage({ text: "", type: "" });
 
     try {
       setSaving(true);
+      const payload = {
+        ...formData,
+        content: {
+          features: features
+        }
+      };
+      
       const res = await fetch("/api/admin/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
 
       const data = await res.json();
@@ -81,7 +289,8 @@ export default function SiteSettings() {
   const tabs = [
     { id: "general", label: "General", icon: "fa-gear" },
     { id: "contact", label: "Contact Info", icon: "fa-phone" },
-    { id: "social", label: "Social Media", icon: "fa-share-nodes" }
+    { id: "social", label: "Social Media", icon: "fa-share-nodes" },
+    { id: "features", label: "Key Features", icon: "fa-microchip" }
   ];
 
   return (
@@ -376,6 +585,204 @@ export default function SiteSettings() {
                         }}
                       />
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Key Features Tab */}
+              {activeTab === "features" && (
+                <div>
+                  <h3 style={{ fontSize: "18px", fontWeight: 700, marginBottom: "8px", color: "#1e293b" }}>
+                    Dynamic Key Features Editor
+                  </h3>
+                  <p style={{ color: "#64748b", fontSize: "14px", marginBottom: "24px" }}>
+                    Configure the detailed descriptions, icons, headlines, and specifications for each product feature.
+                  </p>
+
+                  <div style={{ display: "flex", gap: "24px", minHeight: "450px" }}>
+                    {/* Left Pane: Features List */}
+                    <div style={{ width: "220px", display: "flex", flexDirection: "column", gap: "6px", borderRight: "1px solid #e2e8f0", paddingRight: "20px", flexShrink: 0 }}>
+                      {Object.keys(features).map(fid => {
+                        const isSelected = selectedFeatureId === fid;
+                        const f = features[fid];
+                        return (
+                          <button
+                            key={fid}
+                            type="button"
+                            onClick={() => setSelectedFeatureId(fid)}
+                            style={{
+                              padding: "12px 14px",
+                              borderRadius: "8px",
+                              border: "none",
+                              background: isSelected ? "#eef1ff" : "transparent",
+                              color: isSelected ? "#3257ff" : "#475569",
+                              fontWeight: isSelected ? 700 : 500,
+                              fontSize: "13px",
+                              textAlign: "left",
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "8px",
+                              transition: "all 0.2s"
+                            }}
+                          >
+                            <img src={`/assets/img/brands/${f.iconImg}`} alt={f.title} style={{ width: "16px", height: "auto", filter: isSelected ? "none" : "grayscale(1) opacity(0.6)" }} />
+                            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                              {f.title || fid}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Right Pane: Editor Form */}
+                    {selectedFeatureId && features[selectedFeatureId] && (() => {
+                      const f = features[selectedFeatureId];
+                      return (
+                        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "20px" }}>
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                            <div>
+                              <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px", color: "#475569" }}>Feature Title</label>
+                              <input
+                                type="text"
+                                value={f.title || ""}
+                                onChange={(e) => handleFeatureFieldChange(selectedFeatureId, "title", null, e.target.value)}
+                                style={{ width: "100%", padding: "10px 12px", border: "1px solid #e2e8f0", borderRadius: "8px", fontSize: "13px", color: "#334155", boxSizing: "border-box" }}
+                              />
+                            </div>
+                            <div>
+                              <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px", color: "#475569" }}>Short Description (on Grid Card)</label>
+                              <input
+                                type="text"
+                                value={f.desc || ""}
+                                onChange={(e) => handleFeatureFieldChange(selectedFeatureId, "desc", null, e.target.value)}
+                                style={{ width: "100%", padding: "10px 12px", border: "1px solid #e2e8f0", borderRadius: "8px", fontSize: "13px", color: "#334155", boxSizing: "border-box" }}
+                              />
+                            </div>
+                          </div>
+
+                          <div style={{ borderTop: "1px solid #f1f5f9", paddingTop: "16px" }}>
+                            <h4 style={{ fontSize: "14px", fontWeight: 700, color: "#1e293b", marginBottom: "12px" }}>Modal Popup Details</h4>
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "16px" }}>
+                              <div style={{ marginBottom: "12px" }}>
+                                <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px", color: "#475569" }}>Modal Headline</label>
+                                <input
+                                  type="text"
+                                  value={f.detail?.headline || ""}
+                                  onChange={(e) => handleFeatureFieldChange(selectedFeatureId, "detail", "headline", e.target.value)}
+                                  style={{ width: "100%", padding: "10px 12px", border: "1px solid #e2e8f0", borderRadius: "8px", fontSize: "13px", color: "#334155", boxSizing: "border-box" }}
+                                />
+                              </div>
+                              <div>
+                                <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px", color: "#475569" }}>Modal Intro Text</label>
+                                <textarea
+                                  value={f.detail?.intro || ""}
+                                  onChange={(e) => handleFeatureFieldChange(selectedFeatureId, "detail", "intro", e.target.value)}
+                                  rows={3}
+                                  style={{ width: "100%", padding: "10px 12px", border: "1px solid #e2e8f0", borderRadius: "8px", fontSize: "13px", color: "#334155", fontFamily: "inherit", boxSizing: "border-box" }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Highlights List */}
+                          <div style={{ borderTop: "1px solid #f1f5f9", paddingTop: "16px" }}>
+                            <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px", color: "#475569" }}>Highlights Checklist</label>
+                            <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
+                              <input
+                                type="text"
+                                placeholder="Add key highlight point..."
+                                value={newHighlight}
+                                onChange={(e) => setNewHighlight(e.target.value)}
+                                style={{ flex: 1, padding: "8px 12px", border: "1px solid #e2e8f0", borderRadius: "8px", fontSize: "13px", color: "#334155", boxSizing: "border-box" }}
+                                onKeyDown={(e) => { if(e.key === "Enter") { e.preventDefault(); addHighlight(selectedFeatureId); } }}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => addHighlight(selectedFeatureId)}
+                                style={{ padding: "8px 16px", background: "#3257ff", color: "#fff", border: "none", borderRadius: "8px", fontWeight: 600, cursor: "pointer", fontSize: "13px" }}
+                              >
+                                Add
+                              </button>
+                            </div>
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                              {(f.detail?.highlights || []).map((h, idx) => (
+                                <div key={idx} style={{ display: "flex", alignItems: "center", gap: "6px", background: "#f1f5f9", padding: "6px 12px", borderRadius: "20px", fontSize: "12px", color: "#334155" }}>
+                                  <span>{h}</span>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const highlights = (f.detail?.highlights || []).filter((_, i) => i !== idx);
+                                      handleFeatureFieldChange(selectedFeatureId, "detail", "highlights", highlights);
+                                    }}
+                                    style={{ background: "none", border: "none", color: "#ef4444", fontWeight: "bold", cursor: "pointer", padding: "0 2px" }}
+                                  >
+                                    &times;
+                                  </button>
+                                </div>
+                              ))}
+                              {(f.detail?.highlights || []).length === 0 && (
+                                <span style={{ fontSize: "12px", color: "#94a3b8", fontStyle: "italic" }}>No highlight points added yet.</span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Specs Table */}
+                          <div style={{ borderTop: "1px solid #f1f5f9", paddingTop: "16px" }}>
+                            <label style={{ display: "block", fontSize: "12px", fontWeight: 600, marginBottom: "6px", color: "#475569" }}>Specifications Table</label>
+                            <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
+                              <input
+                                type="text"
+                                placeholder="Key (e.g. Material)"
+                                value={newSpecKey}
+                                onChange={(e) => setNewSpecKey(e.target.value)}
+                                style={{ flex: 1, padding: "8px 12px", border: "1px solid #e2e8f0", borderRadius: "8px", fontSize: "13px", color: "#334155", boxSizing: "border-box" }}
+                              />
+                              <input
+                                type="text"
+                                placeholder="Value (e.g. Titanium)"
+                                value={newSpecVal}
+                                onChange={(e) => setNewSpecVal(e.target.value)}
+                                style={{ flex: 1, padding: "8px 12px", border: "1px solid #e2e8f0", borderRadius: "8px", fontSize: "13px", color: "#334155", boxSizing: "border-box" }}
+                                onKeyDown={(e) => { if(e.key === "Enter") { e.preventDefault(); addSpec(selectedFeatureId); } }}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => addSpec(selectedFeatureId)}
+                                style={{ padding: "8px 16px", background: "#3257ff", color: "#fff", border: "none", borderRadius: "8px", fontWeight: 600, cursor: "pointer", fontSize: "13px" }}
+                              >
+                                Add
+                              </button>
+                            </div>
+                            <div style={{ border: "1px solid #e2e8f0", borderRadius: "8px", overflow: "hidden" }}>
+                              {Object.entries(f.detail?.specs || {}).map(([key, val]) => (
+                                <div key={key} style={{ display: "flex", borderBottom: "1px solid #f1f5f9", background: "#fff", fontSize: "12px" }}>
+                                  <div style={{ width: "150px", padding: "8px 12px", fontWeight: 600, color: "#475569", background: "#fafbff", borderRight: "1px solid #f1f5f9" }}>{key}</div>
+                                  <div style={{ flex: 1, padding: "8px 12px", color: "#334155", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                    <span>{val}</span>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const specs = { ...(f.detail?.specs || {}) };
+                                        delete specs[key];
+                                        handleFeatureFieldChange(selectedFeatureId, "detail", "specs", specs);
+                                      }}
+                                      style={{ background: "none", border: "none", color: "#ef4444", fontWeight: "bold", cursor: "pointer" }}
+                                    >
+                                      Remove
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                              {Object.keys(f.detail?.specs || {}).length === 0 && (
+                                <div style={{ padding: "12px", textAlign: "center", color: "#94a3b8", fontStyle: "italic", fontSize: "12px" }}>No specifications entered.</div>
+                              )}
+                            </div>
+                          </div>
+
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
               )}

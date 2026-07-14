@@ -69,7 +69,24 @@ export default function ProductDetailsClient({ id }) {
     }
 
     const galleryImages = product.gallery || [product.image];
-    const resolvedFeatures = (product.featureIds || []).map((fid) => getFeature(fid)).filter(Boolean);
+    const resolvedFeatures = (product.featureIds || []).map((fid) => {
+        const staticF = getFeature(fid);
+        const dynamicF = siteData.features?.[fid];
+        if (!staticF) return null;
+        if (!dynamicF) return staticF;
+        return {
+            ...staticF,
+            title: dynamicF.title || staticF.title,
+            desc: dynamicF.desc || staticF.desc,
+            detail: {
+                ...staticF.detail,
+                headline: dynamicF.detail?.headline || staticF.detail?.headline || "",
+                intro: dynamicF.detail?.intro || staticF.detail?.intro || "",
+                highlights: dynamicF.detail?.highlights || staticF.detail?.highlights || [],
+                specs: dynamicF.detail?.specs || staticF.detail?.specs || {},
+            }
+        };
+    }).filter(Boolean);
 
     return (
         <section ref={contentRef} className="product-details-area pt-120 pb-120" style={{ backgroundColor: "#06080D", minHeight: "100vh" }}>

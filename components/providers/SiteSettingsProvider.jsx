@@ -30,6 +30,7 @@ function buildSiteFromSettings(settings) {
       email: settings.siteEmail || staticSiteData.contact.email,
     },
     socials: socials.length > 0 ? socials : staticSiteData.socials,
+    features: settings.content?.features || null,
   };
 }
 
