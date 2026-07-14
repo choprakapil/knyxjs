@@ -32,6 +32,7 @@ function buildSiteFromSettings(settings) {
     socials: socials.length > 0 ? socials : staticSiteData.socials,
     features: settings.content?.features || null,
     featurePopupGlobal: settings.content?.featurePopupGlobal !== false,
+    showDocsMenu: settings.content?.showDocsMenu === true,
   };
 }
 

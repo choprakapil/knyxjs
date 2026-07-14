@@ -600,6 +600,43 @@ export default function ProductDetailsClient({ id }) {
                                             </div>
                                         </div>
 
+                                        {/* What's Inside / Tech Highlights */}
+                                        {((product.techText && product.techText.length > 0) || product.techSectionImage) && (
+                                            <div id="tab-whats-inside" className="tab-section mb-60">
+                                                <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-28 mb-20">What's Inside</h3>
+                                                
+                                                {product.techSectionImage && (
+                                                    <div className="mb-30 tp-round-10 overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+                                                        <img 
+                                                            src={withBasePath(product.techSectionImage)} 
+                                                            alt="What's inside" 
+                                                            style={{ width: "100%", height: "auto", display: "block" }} 
+                                                        />
+                                                    </div>
+                                                )}
+
+                                                {product.techText && product.techText.length > 0 && (
+                                                    <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "15px" }}>
+                                                        {product.techText.map((t, idx) => {
+                                                            const text = typeof t === "string" ? t : t.text;
+                                                            const icon = typeof t === "object" ? t.image : null;
+                                                            return (
+                                                                <li key={idx} className="d-flex align-items-start" style={{ gap: "15px" }}>
+                                                                    {icon ? (
+                                                                        <div style={{ width: "24px", height: "24px", flexShrink: 0, marginTop: "2px" }}>
+                                                                            <img src={withBasePath(icon)} alt="icon" style={{ width: "100%", height: "100%", objectFit: "contain", filter: "invert(1)" }} />
+                                                                        </div>
+                                                                    ) : (
+                                                                        <i className="fa-solid fa-circle-check tp-text-common-white mt-1" style={{ fontSize: "14px", opacity: 0.8 }}></i>
+                                                                    )}
+                                                                    <span className="tp-ff-dm tp-text-grey-2 fs-15">{text}</span>
+                                                                </li>
+                                                            );
+                                                        })}
+                                                    </ul>
+                                                )}
+                                            </div>
+                                        )}
 
                                     </div>
                                 </div>

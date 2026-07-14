@@ -154,6 +154,12 @@ const ProductsBodyMapPanel = ({ items, onClose }) => {
 const MobileMenu = ({ onClose }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const pathname = usePathname();
+  const { site: siteData } = useSiteSettings();
+
+  // Filter out docs link unless enabled in admin settings
+  const visibleMenuItems = MENU_ITEMS.filter(item =>
+    !item.docsOnly || siteData.showDocsMenu
+  );
 
   const toggleDropdown = (label) => {
     setOpenDropdown((prev) => (prev === label ? null : label));
@@ -177,7 +183,7 @@ const MobileMenu = ({ onClose }) => {
 
   return (
     <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-      {MENU_ITEMS.map((item, index) => (
+      {visibleMenuItems.map((item, index) => (
         <li
           key={index}
           style={{

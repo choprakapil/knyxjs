@@ -144,6 +144,7 @@ export default function SiteSettings() {
   
   // Custom Dynamic Features State
   const [featurePopupGlobal, setFeaturePopupGlobal] = useState(true);
+  const [showDocsMenu, setShowDocsMenu] = useState(false);
   const [features, setFeatures] = useState(DEFAULT_FEATURES);
   const [selectedFeatureId, setSelectedFeatureId] = useState("carbon_composite");
   const [newHighlight, setNewHighlight] = useState("");
@@ -188,6 +189,9 @@ export default function SiteSettings() {
         if (data.settings?.content) {
           if (data.settings.content.featurePopupGlobal !== undefined) {
             setFeaturePopupGlobal(data.settings.content.featurePopupGlobal);
+          }
+          if (data.settings.content.showDocsMenu !== undefined) {
+            setShowDocsMenu(data.settings.content.showDocsMenu);
           }
           if (data.settings.content.features) {
             // Merge to ensure no missing keys if new features are added statically in products.js
@@ -281,7 +285,8 @@ export default function SiteSettings() {
         ...formData,
         content: {
           features: features,
-          featurePopupGlobal: featurePopupGlobal
+          featurePopupGlobal: featurePopupGlobal,
+          showDocsMenu: showDocsMenu,
         }
       };
       
@@ -424,6 +429,27 @@ export default function SiteSettings() {
                       />
                     </div>
                   )}
+
+                  {/* Navigation Visibility */}
+                  <div style={{ borderTop: "1px solid #f1f5f9", paddingTop: "20px", marginTop: "8px" }}>
+                    <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#1e293b", marginBottom: "14px" }}>Navigation Visibility</h3>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 16px", background: "#f8fafc", borderRadius: "10px", border: "1px solid #e2e8f0" }}>
+                      <div>
+                        <h4 style={{ fontSize: "13px", fontWeight: 600, color: "#1e293b", margin: "0 0 3px 0" }}>Show Documents in Site Navigation</h4>
+                        <p style={{ fontSize: "11px", color: "#64748b", margin: 0 }}>Adds a "Documents" link to the main menu. Toggle OFF to hide it from the public site.</p>
+                      </div>
+                      <label style={{ position: "relative", display: "inline-block", width: "44px", height: "24px", flexShrink: 0 }}>
+                        <input
+                          type="checkbox"
+                          checked={showDocsMenu}
+                          onChange={(e) => setShowDocsMenu(e.target.checked)}
+                          style={{ opacity: 0, width: 0, height: 0 }}
+                        />
+                        <span style={{ position: "absolute", cursor: "pointer", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: showDocsMenu ? "#3257ff" : "#cbd5e1", transition: ".3s", borderRadius: "24px" }}></span>
+                        <span style={{ position: "absolute", cursor: "pointer", top: "3px", left: showDocsMenu ? "23px" : "3px", width: "18px", height: "18px", backgroundColor: "white", transition: ".3s", borderRadius: "50%", boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }}></span>
+                      </label>
+                    </div>
+                  </div>
                 </div>
               )}
 
