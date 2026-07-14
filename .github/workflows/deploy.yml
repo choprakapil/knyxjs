@@ -58,7 +58,11 @@ jobs:
               echo "   Run once: mkdir -p /home/kapil/apps/knyxjs_env_backup && cp $APP_DIR/.env.local $ENV_BACKUP"
             fi
 
-            # ── 5. Install deps + build (as kapil to avoid perm issues) ──
+            # ── 5. Fix .next ownership + install deps + build (as kapil) ──
+            # Previous root builds may have left .next owned by root — fix it
+            if [ -d "$APP_DIR/.next" ]; then
+              chown -R kapil:kapil "$APP_DIR/.next"
+            fi
             sudo -u kapil bash -c "cd $APP_DIR && npm install --prefer-offline 2>&1"
             echo "✅ npm install done"
 
