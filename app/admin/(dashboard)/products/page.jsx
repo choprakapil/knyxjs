@@ -753,10 +753,21 @@ export default function ProductsCRUDPage() {
             <label style={S.label}>Neck Shield Gallery Files</label>
             <p style={{ fontSize:"12px", color:"#94a3b8", marginBottom:"8px" }}>Filenames inside the folder, one per line (e.g. <code>Main Image.png</code>, <code>1.png</code>)</p>
             <textarea
-              style={{ ...S.input, minHeight:"100px", resize:"vertical", fontFamily:"monospace" }}
+              style={{ ...S.input, minHeight:"100px", resize:"vertical", fontFamily:"monospace", marginBottom:"14px" }}
               value={(form.neckShieldGallery||[]).join("\n")}
               onChange={e => set("neckShieldGallery", e.target.value.split("\n").map(x=>x.trim()).filter(Boolean))}
               placeholder={"Main Image.png\n1.png\n2.png\n3.png"} />
+
+            {/* Neck Shield Previews */}
+            {form.neckShieldFolder && form.neckShieldGallery && form.neckShieldGallery.length > 0 && (
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(80px, 1fr))", gap:"10px", marginTop:"10px", padding:"14px", background:"#f8faff", borderRadius:"10px", border:"1px solid #e2e8f0" }}>
+                {form.neckShieldGallery.map((img, i) => (
+                  <div key={i} style={{ aspectRatio:"1/1", borderRadius:"8px", overflow:"hidden", border:"1px solid #e2e8f0", background:"#fff" }} title={img}>
+                    <img src={`/assets/img/Neck_Shield_Pro/${form.neckShieldFolder}/${img}`} alt={`neck shield ${i}`} style={{ width:"100%", height:"100%", objectFit:"contain" }} />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
