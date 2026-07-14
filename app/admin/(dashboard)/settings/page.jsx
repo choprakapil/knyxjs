@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 const DEFAULT_FEATURES = {
   carbon_composite: {
     id: "carbon_composite",
+    iconImg: "logo-4.png",
     title: "CARBON COMPOSITE",
     desc: "Carbon Composite Reinforced Shell with Matte Painted Finish",
     detail: {
@@ -15,6 +16,7 @@ const DEFAULT_FEATURES = {
   },
   impact_polymer: {
     id: "impact_polymer",
+    iconImg: "logo-4.png",
     title: "IMPACT POLYMER",
     desc: "Impact Modified Polymer Shell with matte painted finish",
     detail: {
@@ -26,6 +28,7 @@ const DEFAULT_FEATURES = {
   },
   epp: {
     id: "epp",
+    iconImg: "logo-7.png",
     title: "EPP LINER",
     desc: "High Density Impact Absorbing Layer",
     detail: {
@@ -37,6 +40,7 @@ const DEFAULT_FEATURES = {
   },
   rim: {
     id: "rim",
+    iconImg: "logo-1.png",
     title: "RIM",
     desc: "Radial Impact Mitigation System for Elastic Shock Deflection",
     detail: {
@@ -48,6 +52,7 @@ const DEFAULT_FEATURES = {
   },
   evs: {
     id: "evs",
+    iconImg: "logo-5.png",
     title: "EVS",
     desc: "Engineered Ventilation System for Enhanced Air Flow",
     detail: {
@@ -59,6 +64,7 @@ const DEFAULT_FEATURES = {
   },
   isofit: {
     id: "isofit",
+    iconImg: "logo-8.png",
     title: "ISOFIT",
     desc: "Personalized Fit Adjustment System",
     detail: {
@@ -70,6 +76,7 @@ const DEFAULT_FEATURES = {
   },
   koolform: {
     id: "koolform",
+    iconImg: "logo-6.png",
     title: "KOOLFORM",
     desc: "Wide Surface and Cooling Comfort Liner Padding",
     detail: {
@@ -81,6 +88,7 @@ const DEFAULT_FEATURES = {
   },
   titanium_grille: {
     id: "titanium_grille",
+    iconImg: "logo.png",
     title: "TACTICAL FACEGUARD",
     desc: "Ultralight Titanium Facial Protection",
     detail: {
@@ -92,6 +100,7 @@ const DEFAULT_FEATURES = {
   },
   steel_grille: {
     id: "steel_grille",
+    iconImg: "logo.png",
     title: "CARBON STEEL",
     desc: "Carbon Steel Tactical Faceguard",
     detail: {
@@ -103,6 +112,7 @@ const DEFAULT_FEATURES = {
   },
   maglock: {
     id: "maglock",
+    iconImg: "logo-3.png",
     title: "MAGLOCK",
     desc: "Magnetic Quick Fastening and Release Buckle System",
     detail: {
@@ -114,6 +124,7 @@ const DEFAULT_FEATURES = {
   },
   quick_release: {
     id: "quick_release",
+    iconImg: "logo-3.png",
     title: "QUICK RELEASE",
     desc: "Quick release buckle system",
     detail: {
@@ -621,35 +632,71 @@ export default function SiteSettings() {
 
                   <div style={{ display: "flex", gap: "24px", minHeight: "450px" }}>
                     {/* Left Pane: Features List */}
-                    <div style={{ width: "220px", display: "flex", flexDirection: "column", gap: "6px", borderRight: "1px solid #e2e8f0", paddingRight: "20px", flexShrink: 0 }}>
-                      {Object.keys(features).map(fid => {
+                    <div style={{ width: "240px", display: "flex", flexDirection: "column", gap: "4px", borderRight: "1px solid #e2e8f0", paddingRight: "16px", flexShrink: 0 }}>
+                      <p style={{ fontSize: "11px", fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "1px", margin: "0 0 10px 0" }}>Select Feature</p>
+                      {Object.keys(features).map((fid, idx) => {
                         const isSelected = selectedFeatureId === fid;
                         const f = features[fid];
+                        const iconSrc = f.iconImg ? `/assets/img/brands/${f.iconImg}` : null;
                         return (
                           <button
                             key={fid}
                             type="button"
                             onClick={() => setSelectedFeatureId(fid)}
                             style={{
-                              padding: "12px 14px",
-                              borderRadius: "8px",
-                              border: "none",
-                              background: isSelected ? "#eef1ff" : "transparent",
+                              padding: "10px 12px",
+                              borderRadius: "10px",
+                              border: isSelected ? "1px solid #3257ff" : "1px solid transparent",
+                              background: isSelected ? "linear-gradient(135deg, #eef1ff 0%, #f0f4ff 100%)" : "transparent",
                               color: isSelected ? "#3257ff" : "#475569",
                               fontWeight: isSelected ? 700 : 500,
-                              fontSize: "13px",
+                              fontSize: "12px",
                               textAlign: "left",
                               cursor: "pointer",
                               display: "flex",
                               alignItems: "center",
-                              gap: "8px",
-                              transition: "all 0.2s"
+                              gap: "10px",
+                              transition: "all 0.2s",
+                              width: "100%",
+                              boxSizing: "border-box"
                             }}
                           >
-                            <img src={`/assets/img/brands/${f.iconImg}`} alt={f.title} style={{ width: "16px", height: "auto", filter: isSelected ? "none" : "grayscale(1) opacity(0.6)" }} />
-                            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            {/* Icon Badge */}
+                            <div style={{
+                              width: "32px",
+                              height: "32px",
+                              borderRadius: "8px",
+                              background: isSelected ? "#3257ff" : "#f1f5f9",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              flexShrink: 0,
+                              transition: "all 0.2s"
+                            }}>
+                              {iconSrc ? (
+                                <img
+                                  src={iconSrc}
+                                  alt={f.title}
+                                  style={{
+                                    width: "18px",
+                                    height: "18px",
+                                    objectFit: "contain",
+                                    filter: isSelected ? "invert(1) brightness(2)" : "invert(0.4)"
+                                  }}
+                                />
+                              ) : (
+                                <span style={{ fontSize: "11px", fontWeight: 700, color: isSelected ? "#fff" : "#94a3b8" }}>
+                                  {(idx + 1).toString().padStart(2, "0")}
+                                </span>
+                              )}
+                            </div>
+                            {/* Title */}
+                            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, fontSize: "12px" }}>
                               {f.title || fid}
                             </span>
+                            {isSelected && (
+                              <i className="fa-solid fa-chevron-right" style={{ fontSize: "10px", color: "#3257ff", flexShrink: 0 }}></i>
+                            )}
                           </button>
                         );
                       })}
