@@ -78,6 +78,7 @@ export default function ProductDetailsClient({ id }) {
             ...staticF,
             title: dynamicF.title || staticF.title,
             desc: dynamicF.desc || staticF.desc,
+            disablePopup: dynamicF.disablePopup === true,
             detail: {
                 ...staticF.detail,
                 headline: dynamicF.detail?.headline || staticF.detail?.headline || "",
@@ -538,7 +539,9 @@ export default function ProductDetailsClient({ id }) {
                                             <p className="tp-ff-dm tp-text-grey-2 fs-15 mb-30" style={{ maxWidth: "600px" }}>Every component of the {product.name} is designed for professional-level performance, protection, and comfort.</p>
 
                                             <div className="features-grid" style={{ display: "grid", gridTemplateColumns: "1fr", gap: "15px" }}>
-                                                {resolvedFeatures.map((feature, idx) => (
+                                                {resolvedFeatures.map((feature, idx) => {
+                                                    const canOpenPopup = siteData.featurePopupGlobal !== false && feature.disablePopup !== true;
+                                                    return (
                                                     <div
                                                         key={feature.id}
                                                         className="feature-card-item"
@@ -551,9 +554,9 @@ export default function ProductDetailsClient({ id }) {
                                                             overflow: "hidden",
                                                             animation: `featureSlideIn 0.5s ease ${idx * 0.08}s both`,
                                                             transition: "all 0.35s ease",
-                                                            cursor: "pointer",
+                                                            cursor: canOpenPopup ? "pointer" : "default",
                                                         }}
-                                                        onClick={() => setActiveFeature(feature)}
+                                                        onClick={() => { if(canOpenPopup) setActiveFeature(feature); }}
                                                     >
                                                         <div style={{
                                                             position: "absolute",
@@ -580,16 +583,19 @@ export default function ProductDetailsClient({ id }) {
                                                             }}>
                                                                 <img src={`/assets/img/brands/${feature.iconImg}`} alt={feature.title} style={{ maxWidth: "24px", height: "auto", display: "block", margin: "0 auto", filter: "invert(1)" }} />
                                                             </div>
-                                                            <div className="feature-title-wrapper" style={{ flex: 1, paddingRight: "80px" }}>
-                                                                <h5 className="tp-ff-jakarta fw-600 tp-text-common-white" style={{ fontSize: "16px", letterSpacing: "-0.2px", marginBottom: "4px" }}>{feature.title}</h5>
+                                                            <div className="feature-title-wrapper" style={{ flex: 1, paddingRight: canOpenPopup ? "80px" : "10px" }}>
+                                                                <h5 className="tp-ff-jakarta fw-600 tp-text-common-white" style={{ fontSize: "16px", letterSpacing: "-0.2px", margin: canOpenPopup ? "0 0 4px 0" : "0 0 4px 0" }}>{feature.title}</h5>
                                                                 <p className="tp-ff-dm" style={{ fontSize: "14px", lineHeight: 1.4, color: "rgba(255,255,255,0.6)", marginBottom: "0" }}>{feature.desc}</p>
                                                             </div>
-                                                            <span className="tp-ff-inter fw-600 feature-details-link" style={{ position: "absolute", top: "22px", right: "20px", fontSize: "12px", color: "#3257ff" }}>
-                                                                Details <i className="fa-solid fa-arrow-right" style={{ fontSize: "10px" }}></i>
-                                                            </span>
+                                                            {canOpenPopup && (
+                                                              <span className="tp-ff-inter fw-600 feature-details-link" style={{ position: "absolute", top: "22px", right: "20px", fontSize: "12px", color: "#3257ff" }}>
+                                                                  Details <i className="fa-solid fa-arrow-right" style={{ fontSize: "10px" }}></i>
+                                                              </span>
+                                                            )}
                                                         </div>
                                                     </div>
-                                                ))}
+                                                    );
+                                                })}
                                             </div>
                                         </div>
 
