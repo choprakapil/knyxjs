@@ -38,7 +38,9 @@ CREATE TABLE "settings" (
     "facebookUrl" TEXT DEFAULT '',
     "twitterUrl" TEXT DEFAULT '',
     "linkedinUrl" TEXT DEFAULT '',
-    "stockists" TEXT DEFAULT '[]'
+    "youtubeUrl" TEXT DEFAULT '',
+    "distributors" TEXT DEFAULT '[]',
+    "content" TEXT DEFAULT '{}'
 );
 
 -- CreateIndex
