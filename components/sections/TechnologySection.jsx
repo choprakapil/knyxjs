@@ -229,6 +229,26 @@ const TechnologySection = ({ title, content, image, imageAlt, reverse, badge, is
 
 
             <style jsx>{`
+                /* CSS reset for inner elements from CMS/RichText */
+                .tech-para :global(p),
+                .tech-para :global(span),
+                .tech-para :global(font) {
+                    font-family: inherit !important;
+                    font-size: inherit !important;
+                    line-height: inherit !important;
+                    font-weight: inherit !important;
+                    color: inherit !important;
+                    margin: 0 !important;
+                }
+                .tech-para :global(ul),
+                .tech-para :global(ol),
+                .tech-para :global(li) {
+                    font-family: inherit !important;
+                    font-size: inherit !important;
+                    line-height: inherit !important;
+                    color: inherit !important;
+                }
+
                 .technology-responsive-section {
                     max-height: 90vh;
                 }
