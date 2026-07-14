@@ -409,21 +409,21 @@ export default function TechnologyCMS() {
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
                   {sections.map((section, index) => (
-                    <div key={section.id} style={{ padding: "20px", background: "#f8faff", borderRadius: "18px", border: "1px solid #f1f5f9", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "25px", flex: 1, overflow: "hidden" }}>
-                        <div style={{ width: "60px", height: "60px", background: "#ffffff", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #e2e8f0", overflow: "hidden", position: "relative", flexShrink: 0 }}>
+                    <div key={section.id} style={{ padding: "15px 20px", background: "#f8faff", borderRadius: "18px", border: "1px solid #f1f5f9", display: "flex", flexWrap: "wrap", gap: "15px", justifyContent: "space-between", alignItems: "center" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "15px", flex: "1 1 200px", overflow: "hidden" }}>
+                        <div style={{ width: "50px", height: "50px", background: "#ffffff", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #e2e8f0", overflow: "hidden", position: "relative", flexShrink: 0 }}>
                           {section.video ? (
-                            <i className="fa-solid fa-circle-play" style={{ color: "#3257ff", fontSize: "24px" }}></i>
+                            <i className="fa-solid fa-circle-play" style={{ color: "#3257ff", fontSize: "20px" }}></i>
                           ) : section.image ? (
-                            <img src={resolvePreviewUrl(section.image)} style={{ width: "60px", height: "60px", objectFit: "cover" }} />
+                            <img src={resolvePreviewUrl(section.image)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                           ) : (
                             <i className="fa-solid fa-microchip" style={{ color: "#cbd5e1" }}></i>
                           )}
                           {section.reverse && <div style={{ position: "absolute", top: 0, right: 0, width: "12px", height: "12px", background: "#3257ff", borderRadius: "0 0 0 4px", display: "flex", alignItems: "center", justifyContent: "center" }}><i className="fa-solid fa-repeat" style={{ color: "#fff", fontSize: "6px" }}></i></div>}
                         </div>
                         <div style={{ flex: 1, overflow: "hidden" }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                            <p style={{ margin: 0, fontSize: "16px", fontWeight: 800, color: "#1e293b" }}>{section.title}</p>
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                            <p style={{ margin: 0, fontSize: "15px", fontWeight: 800, color: "#1e293b", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "100%" }}>{section.title}</p>
                             <span style={{ fontSize: "10px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase" }}>{section.video ? "Video" : "Image"}</span>
                           </div>
                           <p 
@@ -432,7 +432,7 @@ export default function TechnologyCMS() {
                           />
                         </div>
                       </div>
-                      <div style={{ display: "flex", gap: "10px", marginLeft: "20px" }}>
+                      <div style={{ display: "flex", gap: "10px", marginLeft: "auto" }}>
                         <button onClick={() => setEditingSection(section)} style={actionBtnStyle}><i className="fa-solid fa-sliders"></i></button>
                         <button onClick={() => deleteSection(section.id)} style={{ ...actionBtnStyle, color: "#ef4444" }}><i className="fa-solid fa-trash"></i></button>
                       </div>
