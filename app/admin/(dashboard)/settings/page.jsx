@@ -799,7 +799,7 @@ export default function SiteSettings() {
                                       <img
                                         src={f.detail.image}
                                         alt="Feature"
-                                        style={{ width: "120px", height: "80px", objectFit: "cover", borderRadius: "8px", border: "1px solid #e2e8f0" }}
+                                        style={{ width: "120px", height: "80px", objectFit: "contain", borderRadius: "8px", border: "1px solid #e2e8f0", backgroundColor: "#f8fafc" }}
                                       />
                                       <button
                                         type="button"

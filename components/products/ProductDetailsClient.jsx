@@ -799,8 +799,7 @@ export default function ProductDetailsClient({ id }) {
                                     alt={activeFeature.detail.headline}
                                     style={{
                                         width: "100%",
-                                        maxHeight: "280px",
-                                        objectFit: "cover",
+                                        height: "auto",
                                         display: "block"
                                     }}
                                 />
