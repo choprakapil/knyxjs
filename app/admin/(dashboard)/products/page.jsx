@@ -34,6 +34,23 @@ const safeJson = (v, fallback) => {
   try { return JSON.parse(v); } catch { return fallback; }
 };
 
+/**
+ * Resolve a product image to a displayable src URL for the admin panel.
+ * Handles both uploaded paths (/assets/uploads/...) and static product folder images.
+ */
+function getAdminImgSrc(imageField, imageFolder) {
+  if (!imageField) return "";
+  // Absolute: uploaded file or external URL — use as-is
+  if (imageField.startsWith("/") || imageField.startsWith("http") || imageField.startsWith("data:")) {
+    return imageField;
+  }
+  // Relative filename — resolve using product's imageFolder
+  if (imageFolder) {
+    return `/assets/img/products_images/${imageFolder}/${imageField}`;
+  }
+  return "";
+}
+
 const emptyForm = () => ({
   name: "", categoryId: "", description: "",
   level: "", grilleType: "", certification: "BS 7928:2013 + A1:2019",
@@ -41,6 +58,7 @@ const emptyForm = () => ({
   gallery: [],
   featureIds: [],
   techText: [],
+  techSectionImage: "",
   colors: [],
   sizes: ["Regular (54-61 cm)"],
   sizingTitle: "Helmet Sizing",
@@ -63,6 +81,7 @@ export default function ProductsCRUDPage() {
   const [search, setSearch]             = useState("");
   const [uploadingImg, setUploadingImg] = useState(false);
   const [uploadingGallery, setUploadingGallery] = useState(false);
+  const [uploadingTechImg, setUploadingTechImg] = useState(null); // index of tech item uploading
   const [newColorName, setNewColorName] = useState("");
   const [newColorHex, setNewColorHex]   = useState("#000000");
   const [newSize, setNewSize]           = useState("");
@@ -106,6 +125,7 @@ export default function ProductsCRUDPage() {
       gallery:          safeJson(sp.gallery, []),
       featureIds:       safeJson(sp.featureIds, []),
       techText:         safeJson(sp.techText, []),
+      techSectionImage: sp.techSectionImage || "",
       colors:           safeJson(sp.colors, []),
       sizes:            safeJson(sp.sizes, ["Regular (54-61 cm)"]),
       sizingTitle:      sp.sizingTitle || "Helmet Sizing",
@@ -158,7 +178,13 @@ export default function ProductsCRUDPage() {
   }
 
   function addSize() { if (newSize.trim()) { set("sizes", [...(form.sizes || []), newSize.trim()]); setNewSize(""); } }
-  function addTech() { if (newTech.trim()) { set("techText", [...(form.techText || []), newTech.trim()]); setNewTech(""); } }
+  function addTech() {
+    if (newTech.trim()) {
+      const newItem = { text: newTech.trim(), image: "" };
+      set("techText", [...(form.techText || []), newItem]);
+      setNewTech("");
+    }
+  }
   function addAccessory() { if (newAccessory.trim()) { set("accessories", [...(form.accessories || []), newAccessory.trim()]); setNewAccessory(""); } }
 
   async function handleSave(e) {
@@ -169,7 +195,7 @@ export default function ProductsCRUDPage() {
       const specs = {
         level: form.level, grilleType: form.grilleType, certification: form.certification,
         imageFolder: form.imageFolder,
-        gallery: form.gallery, featureIds: form.featureIds, techText: form.techText,
+        gallery: form.gallery, featureIds: form.featureIds, techText: form.techText, techSectionImage: form.techSectionImage,
         colors: form.colors, sizes: form.sizes,
         sizingTitle: form.sizingTitle, sizingText: form.sizingText,
         accessories: form.accessories,
@@ -277,7 +303,7 @@ export default function ProductsCRUDPage() {
                   {/* Image */}
                   <div style={{ height:"200px", background:"#f8faff", display:"flex", alignItems:"center", justifyContent:"center", overflow:"hidden", position:"relative" }}>
                     {img ? (
-                      <img src={img} alt={p.name} style={{ maxWidth:"100%", maxHeight:"100%", objectFit:"contain", padding:"16px" }} />
+                      <img src={getAdminImgSrc(img, p.imageFolder || safeJson(p.specs, {}).imageFolder)} alt={p.name} style={{ maxWidth:"100%", maxHeight:"100%", objectFit:"contain", padding:"16px" }} />
                     ) : (
                       <i className="fa-solid fa-helmet-safety" style={{ fontSize:"48px", color:"#cbd5e1" }} />
                     )}
@@ -430,7 +456,7 @@ export default function ProductsCRUDPage() {
                 {uploadingImg ? (
                   <><i className="fa-solid fa-spinner fa-spin" style={{ fontSize:"24px", color:"#3257ff" }} /><p style={{ fontSize:"13px", color:"#3257ff", marginTop:"8px" }}>Uploading...</p></>
                 ) : form.image ? (
-                  <img src={form.image} alt="main" style={{ maxWidth:"100%", maxHeight:"100%", objectFit:"contain", padding:"12px" }} />
+                  <img src={getAdminImgSrc(form.image, form.imageFolder)} alt="main" style={{ maxWidth:"100%", maxHeight:"100%", objectFit:"contain", padding:"12px" }} />
                 ) : (
                   <><i className="fa-solid fa-image" style={{ fontSize:"32px", color:"#cbd5e1" }} /><p style={{ fontSize:"13px", color:"#94a3b8", marginTop:"8px" }}>Click to upload main image</p></>
                 )}
@@ -454,7 +480,7 @@ export default function ProductsCRUDPage() {
               <div style={{ display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:"10px" }}>
                 {(form.gallery || []).map((img, i) => (
                   <div key={i} style={{ position:"relative", aspectRatio:"1/1", borderRadius:"10px", overflow:"hidden", border:"1px solid #e2e8f0" }}>
-                    <img src={img} alt={`gallery ${i}`} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+                    <img src={getAdminImgSrc(img, form.imageFolder)} alt={`gallery ${i}`} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
                     <button onClick={() => set("gallery", form.gallery.filter((_, j) => j !== i))}
                       style={{ position:"absolute", top:"4px", right:"4px", width:"22px", height:"22px", background:"rgba(239,68,68,0.9)", border:"none", borderRadius:"50%", color:"#fff", cursor:"pointer", fontSize:"11px", display:"flex", alignItems:"center", justifyContent:"center" }}>
                       <i className="fa-solid fa-xmark" />
@@ -504,8 +530,42 @@ export default function ProductsCRUDPage() {
           </div>
 
           <div style={S.card}>
-            <h2 style={{ fontSize:"18px", fontWeight:800, color:"#1e293b", marginBottom:"8px" }}>Tech Highlight Points</h2>
-            <p style={{ color:"#64748b", fontSize:"14px", marginBottom:"20px" }}>These appear as bullet points in the "What's Inside" section of the product page.</p>
+            <h2 style={{ fontSize:"18px", fontWeight:800, color:"#1e293b", marginBottom:"4px" }}>Tech Highlight Points</h2>
+            <p style={{ color:"#64748b", fontSize:"14px", marginBottom:"6px" }}>Bullet points in the "What's Inside" section. You can also attach a small icon image per point.</p>
+            <p style={{ color:"#94a3b8", fontSize:"12px", marginBottom:"20px", fontStyle:"italic" }}>You can also upload a single section-level image below — it appears at the top of the tech section.</p>
+
+            {/* Section-level tech image */}
+            <div style={{ marginBottom:"20px" }}>
+              <label style={S.label}>Section Image (shown at top of "What's Inside" area)</label>
+              <div style={{ display:"flex", gap:"10px", alignItems:"flex-start", flexWrap:"wrap" }}>
+                {form.techSectionImage && (
+                  <div style={{ position:"relative", flexShrink:0 }}>
+                    <img src={form.techSectionImage} alt="Tech section" style={{ width:"140px", height:"90px", objectFit:"cover", borderRadius:"8px", border:"1px solid #e2e8f0" }} />
+                    <button type="button" onClick={() => set("techSectionImage", "")} style={{ position:"absolute", top:"-6px", right:"-6px", width:"20px", height:"20px", background:"#ef4444", color:"#fff", border:"none", borderRadius:"50%", cursor:"pointer", fontSize:"11px", display:"flex", alignItems:"center", justifyContent:"center" }}>✕</button>
+                  </div>
+                )}
+                <label style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:"6px", width:"140px", height:"90px", border:"2px dashed #e2e8f0", borderRadius:"8px", cursor:"pointer", background:"#f8fafc", fontSize:"11px", color:"#94a3b8", flexShrink:0 }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor="#3257ff"; e.currentTarget.style.color="#3257ff"; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor="#e2e8f0"; e.currentTarget.style.color="#94a3b8"; }}>
+                  <i className="fa-solid fa-cloud-arrow-up" style={{ fontSize:"22px" }}></i>
+                  Upload Section Image
+                  <input type="file" accept="image/*" style={{ display:"none" }}
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0]; if (!file) return;
+                      try {
+                        const fd = new FormData(); fd.append("file", file);
+                        const res = await fetch("/api/admin/upload", { method:"POST", body:fd });
+                        const d = await res.json();
+                        if (d.success) set("techSectionImage", d.path);
+                        else alert("Upload failed: " + (d.error || "Unknown error"));
+                      } catch (err) { alert("Upload error: " + err.message); }
+                      finally { e.target.value = ""; }
+                    }} />
+                </label>
+              </div>
+            </div>
+
+            {/* Individual points */}
             <div style={{ display:"flex", gap:"10px", marginBottom:"14px" }}>
               <input style={{ ...S.input, flex:1 }} value={newTech} onChange={e => setNewTech(e.target.value)}
                 placeholder="e.g. Carbon Composite Reinforced Shell with matte painted finish"
@@ -513,13 +573,56 @@ export default function ProductsCRUDPage() {
               <button onClick={addTech} style={{ ...S.btn, padding:"13px 18px", flexShrink:0 }}><i className="fa-solid fa-plus" /></button>
             </div>
             <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
-              {(form.techText || []).map((t, i) => (
-                <div key={i} style={{ display:"flex", alignItems:"center", gap:"10px", padding:"10px 14px", background:"#f8faff", borderRadius:"10px", border:"1px solid #f1f5f9" }}>
-                  <i className="fa-solid fa-circle-check" style={{ color:"#3257ff", flexShrink:0, fontSize:"14px" }} />
-                  <span style={{ flex:1, fontSize:"14px", color:"#334155" }}>{t}</span>
-                  <button onClick={() => set("techText", form.techText.filter((_,j)=>j!==i))} style={{ background:"none", border:"none", color:"#ef4444", cursor:"pointer", padding:"4px" }}><i className="fa-solid fa-xmark" /></button>
-                </div>
-              ))}
+              {(form.techText || []).map((t, i) => {
+                const item = typeof t === "string" ? { text: t, image: "" } : t;
+                return (
+                  <div key={i} style={{ display:"flex", alignItems:"center", gap:"10px", padding:"10px 14px", background:"#f8faff", borderRadius:"10px", border:"1px solid #f1f5f9" }}>
+                    {/* Icon thumbnail or upload */}
+                    <label style={{ width:"40px", height:"40px", borderRadius:"8px", border:item.image ? "none" : "2px dashed #e2e8f0", background:item.image ? "transparent" : "#f1f5f9", display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", flexShrink:0, overflow:"hidden" }}
+                      title={item.image ? "Click to change icon" : "Click to add icon"}>
+                      {uploadingTechImg === i ? (
+                        <i className="fa-solid fa-spinner fa-spin" style={{ color:"#3257ff", fontSize:"14px" }} />
+                      ) : item.image ? (
+                        <img src={item.image} alt="icon" style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+                      ) : (
+                        <i className="fa-solid fa-image" style={{ color:"#cbd5e1", fontSize:"16px" }} />
+                      )}
+                      <input type="file" accept="image/*" style={{ display:"none" }}
+                        disabled={uploadingTechImg !== null}
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0]; if (!file) return;
+                          setUploadingTechImg(i);
+                          try {
+                            const fd = new FormData(); fd.append("file", file);
+                            const res = await fetch("/api/admin/upload", { method:"POST", body:fd });
+                            const d = await res.json();
+                            if (d.success) {
+                              const updated = (form.techText || []).map((tt, j) => {
+                                const curr = typeof tt === "string" ? { text: tt, image: "" } : tt;
+                                return j === i ? { ...curr, image: d.path } : curr;
+                              });
+                              set("techText", updated);
+                            } else { alert("Upload failed: " + (d.error || "Unknown")); }
+                          } catch(err) { alert("Upload error: " + err.message); }
+                          finally { setUploadingTechImg(null); e.target.value = ""; }
+                        }} />
+                    </label>
+                    <span style={{ flex:1, fontSize:"14px", color:"#334155" }}>{item.text}</span>
+                    {item.image && (
+                      <button title="Remove icon" onClick={() => {
+                        const updated = (form.techText || []).map((tt, j) => {
+                          const curr = typeof tt === "string" ? { text: tt, image: "" } : tt;
+                          return j === i ? { ...curr, image: "" } : curr;
+                        });
+                        set("techText", updated);
+                      }} style={{ background:"none", border:"none", color:"#94a3b8", cursor:"pointer", padding:"4px", fontSize:"12px" }}>
+                        <i className="fa-solid fa-image-slash" />
+                      </button>
+                    )}
+                    <button onClick={() => set("techText", form.techText.filter((_,j)=>j!==i))} style={{ background:"none", border:"none", color:"#ef4444", cursor:"pointer", padding:"4px" }}><i className="fa-solid fa-xmark" /></button>
+                  </div>
+                );
+              })}
               {!(form.techText||[]).length && <p style={{ color:"#94a3b8", fontSize:"13px" }}>No tech points added yet.</p>}
             </div>
           </div>
@@ -650,10 +753,21 @@ export default function ProductsCRUDPage() {
             <label style={S.label}>Neck Shield Gallery Files</label>
             <p style={{ fontSize:"12px", color:"#94a3b8", marginBottom:"8px" }}>Filenames inside the folder, one per line (e.g. <code>Main Image.png</code>, <code>1.png</code>)</p>
             <textarea
-              style={{ ...S.input, minHeight:"100px", resize:"vertical", fontFamily:"monospace" }}
+              style={{ ...S.input, minHeight:"100px", resize:"vertical", fontFamily:"monospace", marginBottom:"14px" }}
               value={(form.neckShieldGallery||[]).join("\n")}
               onChange={e => set("neckShieldGallery", e.target.value.split("\n").map(x=>x.trim()).filter(Boolean))}
               placeholder={"Main Image.png\n1.png\n2.png\n3.png"} />
+
+            {/* Neck Shield Previews */}
+            {form.neckShieldFolder && form.neckShieldGallery && form.neckShieldGallery.length > 0 && (
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(80px, 1fr))", gap:"10px", marginTop:"10px", padding:"14px", background:"#f8faff", borderRadius:"10px", border:"1px solid #e2e8f0" }}>
+                {form.neckShieldGallery.map((img, i) => (
+                  <div key={i} style={{ aspectRatio:"1/1", borderRadius:"8px", overflow:"hidden", border:"1px solid #e2e8f0", background:"#fff" }} title={img}>
+                    <img src={`/assets/img/Neck_Shield_Pro/${form.neckShieldFolder}/${img}`} alt={`neck shield ${i}`} style={{ width:"100%", height:"100%", objectFit:"contain" }} />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

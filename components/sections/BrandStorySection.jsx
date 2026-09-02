@@ -145,6 +145,26 @@ const BrandStorySection = ({ isHomePage = false }) => {
                 </div>
             </div>
             <style jsx global>{`
+                /* CSS reset for inner tags from CMS/RichText to match original layout fonts */
+                .tp-about-ai-para p,
+                .tp-about-ai-para span,
+                .tp-about-ai-para font {
+                    font-family: inherit !important;
+                    font-size: inherit !important;
+                    line-height: inherit !important;
+                    font-weight: inherit !important;
+                    color: inherit !important;
+                    margin: 0 !important;
+                }
+                .tp-about-ai-para ul,
+                .tp-about-ai-para ol,
+                .tp-about-ai-para li {
+                    font-family: inherit !important;
+                    font-size: inherit !important;
+                    line-height: inherit !important;
+                    color: inherit !important;
+                }
+
                 /* Override display: none on br tags to make line breaks work */
                 .tp-about-ai-para br {
                     display: inline !important;

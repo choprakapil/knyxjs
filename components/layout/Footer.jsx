@@ -56,7 +56,7 @@ const Footer = () => {
             <div className="col-lg-7 col-md-12 col-12 footer-menu-col">
               <div className="tp-footer-ai-menu mb-40 tp_fade_anim text-center" data-delay=".5">
                 <ul className="footer-menu-list d-flex flex-wrap align-items-center justify-content-center" style={{ gap: '25px', listStyle: 'none', padding: 0, margin: 0 }}>
-                  {siteData.menus.main.map((item, i) => {
+                  {siteData.menus.main.filter(item => !item.docsOnly || siteData.showDocsMenu).map((item, i) => {
                     const isDropdown = item.href === "javascript:void(0)" && item.dropdown;
                     const href = isDropdown ? withBasePath(item.dropdown[0].href) : withBasePath(item.href);
                     const label = isDropdown ? item.dropdown[0].label : item.label;
