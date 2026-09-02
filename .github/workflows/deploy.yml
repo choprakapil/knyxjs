@@ -17,16 +17,77 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /home/kapil/apps/knyxjs
-            if [ -f prisma/prisma/dev.db ]; then
-              cp prisma/prisma/dev.db /home/kapil/apps/dev.db.bak
+            set -e
+
+            APP_DIR=/home/kapil/apps/knyxjs
+            DB_PATH=$APP_DIR/prisma/prisma/dev.db
+            DB_BACKUP=/home/kapil/apps/knyxjs_db_backup.db
+            ENV_BACKUP=/home/kapil/apps/knyxjs_env_backup/.env.local
+
+            # ── 1. Backup the live database ──────────────────────────────
+            if [ -f "$DB_PATH" ]; then
+              cp "$DB_PATH" "$DB_BACKUP"
+              echo "✅ DB backed up to $DB_BACKUP"
             fi
-            git fetch origin
-            git reset --hard origin/live
-            if [ -f /home/kapil/apps/dev.db.bak ]; then
-              mkdir -p prisma/prisma
-              cp /home/kapil/apps/dev.db.bak prisma/prisma/dev.db
+
+            # ── 2. Pull latest code as kapil (prevents ownership issues) ─
+            cd $APP_DIR
+            sudo -u kapil git fetch origin
+            sudo -u kapil git reset --hard origin/live
+            echo "✅ Code updated"
+
+            # ── 3. Restore DB (git reset clears untracked files, not *.db ─
+            #    but we restore anyway to be safe)
+            if [ -f "$DB_BACKUP" ]; then
+              mkdir -p "$APP_DIR/prisma/prisma"
+              cp "$DB_BACKUP" "$DB_PATH"
+              chown kapil:kapil "$DB_PATH"
+              chmod 664 "$DB_PATH"
+              echo "✅ DB restored"
             fi
-            npm install
-            npm run build
-            pm2 restart nextjs-app || pm2 restart all || pm2 start npm --name "nextjs-app" -- run start
+
+            # ── 4. Restore .env.local from server-side backup ─────────────
+            #    First time: create this file manually at $ENV_BACKUP
+            if [ -f "$ENV_BACKUP" ]; then
+              cp "$ENV_BACKUP" "$APP_DIR/.env.local"
+              chown kapil:kapil "$APP_DIR/.env.local"
+              chmod 600 "$APP_DIR/.env.local"
+              echo "✅ .env.local restored"
+            else
+              echo "⚠️  WARNING: $ENV_BACKUP not found. JWT_SECRET may be missing."
+              echo "   Run once: mkdir -p /home/kapil/apps/knyxjs_env_backup && cp $APP_DIR/.env.local $ENV_BACKUP"
+            fi
+
+            # ── 5. Fix .next ownership + install deps + build (as kapil) ──
+            # Previous root builds may have left .next owned by root — fix it
+            if [ -d "$APP_DIR/.next" ]; then
+              chown -R kapil:kapil "$APP_DIR/.next"
+            fi
+            sudo -u kapil bash -c "cd $APP_DIR && npm install --prefer-offline 2>&1"
+            echo "✅ npm install done"
+
+            # npm run build runs: prisma generate + prisma migrate deploy + next build
+            # This auto-applies any pending DB migrations safely
+            sudo -u kapil bash -c "cd $APP_DIR && npm run build 2>&1"
+            echo "✅ Build complete"
+
+            # ── 6. Ensure correct DB file ownership after build ───────────
+            if [ -f "$DB_PATH" ]; then
+              chown kapil:kapil "$DB_PATH"
+              chmod 664 "$DB_PATH"
+            fi
+
+            # ── 7. Restart app via PM2 ────────────────────────────────────
+            # If knyxjs is registered in PM2 (run setup-pm2.sh once to register):
+            if sudo -u kapil pm2 describe knyxjs > /dev/null 2>&1; then
+              sudo -u kapil pm2 restart knyxjs
+              echo "✅ PM2 app 'knyxjs' restarted"
+            else
+              # First deploy or PM2 not set up — start it
+              sudo -u kapil bash -c "cd $APP_DIR && pm2 start npm --name knyxjs -- run start"
+              sudo -u kapil pm2 save
+              echo "✅ PM2 app 'knyxjs' started and saved"
+            fi
+
+            echo ""
+            echo "🚀 Deployment complete!"

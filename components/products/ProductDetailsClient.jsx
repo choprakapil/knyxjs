@@ -69,7 +69,26 @@ export default function ProductDetailsClient({ id }) {
     }
 
     const galleryImages = product.gallery || [product.image];
-    const resolvedFeatures = (product.featureIds || []).map((fid) => getFeature(fid)).filter(Boolean);
+    const resolvedFeatures = (product.featureIds || []).map((fid) => {
+        const staticF = getFeature(fid);
+        const dynamicF = siteData.features?.[fid];
+        if (!staticF) return null;
+        if (!dynamicF) return staticF;
+        return {
+            ...staticF,
+            title: dynamicF.title || staticF.title,
+            desc: dynamicF.desc || staticF.desc,
+            disablePopup: dynamicF.disablePopup === true,
+            detail: {
+                ...staticF.detail,
+                headline: dynamicF.detail?.headline || staticF.detail?.headline || "",
+                intro: dynamicF.detail?.intro || staticF.detail?.intro || "",
+                highlights: dynamicF.detail?.highlights || staticF.detail?.highlights || [],
+                specs: dynamicF.detail?.specs || staticF.detail?.specs || {},
+                image: dynamicF.detail?.image || staticF.detail?.image || "",
+            }
+        };
+    }).filter(Boolean);
 
     return (
         <section ref={contentRef} className="product-details-area pt-120 pb-120" style={{ backgroundColor: "#06080D", minHeight: "100vh" }}>
@@ -521,7 +540,9 @@ export default function ProductDetailsClient({ id }) {
                                             <p className="tp-ff-dm tp-text-grey-2 fs-15 mb-30" style={{ maxWidth: "600px" }}>Every component of the {product.name} is designed for professional-level performance, protection, and comfort.</p>
 
                                             <div className="features-grid" style={{ display: "grid", gridTemplateColumns: "1fr", gap: "15px" }}>
-                                                {resolvedFeatures.map((feature, idx) => (
+                                                {resolvedFeatures.map((feature, idx) => {
+                                                    const canOpenPopup = siteData.featurePopupGlobal !== false && feature.disablePopup !== true;
+                                                    return (
                                                     <div
                                                         key={feature.id}
                                                         className="feature-card-item"
@@ -534,9 +555,9 @@ export default function ProductDetailsClient({ id }) {
                                                             overflow: "hidden",
                                                             animation: `featureSlideIn 0.5s ease ${idx * 0.08}s both`,
                                                             transition: "all 0.35s ease",
-                                                            cursor: "pointer",
+                                                            cursor: canOpenPopup ? "pointer" : "default",
                                                         }}
-                                                        onClick={() => setActiveFeature(feature)}
+                                                        onClick={() => { if(canOpenPopup) setActiveFeature(feature); }}
                                                     >
                                                         <div style={{
                                                             position: "absolute",
@@ -563,19 +584,59 @@ export default function ProductDetailsClient({ id }) {
                                                             }}>
                                                                 <img src={`/assets/img/brands/${feature.iconImg}`} alt={feature.title} style={{ maxWidth: "24px", height: "auto", display: "block", margin: "0 auto", filter: "invert(1)" }} />
                                                             </div>
-                                                            <div className="feature-title-wrapper" style={{ flex: 1, paddingRight: "80px" }}>
-                                                                <h5 className="tp-ff-jakarta fw-600 tp-text-common-white" style={{ fontSize: "16px", letterSpacing: "-0.2px", marginBottom: "4px" }}>{feature.title}</h5>
+                                                            <div className="feature-title-wrapper" style={{ flex: 1, paddingRight: canOpenPopup ? "80px" : "10px" }}>
+                                                                <h5 className="tp-ff-jakarta fw-600 tp-text-common-white" style={{ fontSize: "16px", letterSpacing: "-0.2px", margin: canOpenPopup ? "0 0 4px 0" : "0 0 4px 0" }}>{feature.title}</h5>
                                                                 <p className="tp-ff-dm" style={{ fontSize: "14px", lineHeight: 1.4, color: "rgba(255,255,255,0.6)", marginBottom: "0" }}>{feature.desc}</p>
                                                             </div>
-                                                            <span className="tp-ff-inter fw-600 feature-details-link" style={{ position: "absolute", top: "22px", right: "20px", fontSize: "12px", color: "#3257ff" }}>
-                                                                Details <i className="fa-solid fa-arrow-right" style={{ fontSize: "10px" }}></i>
-                                                            </span>
+                                                            {canOpenPopup && (
+                                                              <span className="tp-ff-inter fw-600 feature-details-link" style={{ position: "absolute", top: "22px", right: "20px", fontSize: "12px", color: "#3257ff" }}>
+                                                                  Details <i className="fa-solid fa-arrow-right" style={{ fontSize: "10px" }}></i>
+                                                              </span>
+                                                            )}
                                                         </div>
                                                     </div>
-                                                ))}
+                                                    );
+                                                })}
                                             </div>
                                         </div>
 
+                                        {/* What's Inside / Tech Highlights */}
+                                        {((product.techText && product.techText.length > 0) || product.techSectionImage) && (
+                                            <div id="tab-whats-inside" className="tab-section mb-60">
+                                                <h3 className="tp-ff-jakarta fw-600 tp-text-common-white fs-28 mb-20">What's Inside</h3>
+                                                
+                                                {product.techSectionImage && (
+                                                    <div className="mb-30 tp-round-10 overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+                                                        <img 
+                                                            src={withBasePath(product.techSectionImage)} 
+                                                            alt="What's inside" 
+                                                            style={{ width: "100%", height: "auto", display: "block" }} 
+                                                        />
+                                                    </div>
+                                                )}
+
+                                                {product.techText && product.techText.length > 0 && (
+                                                    <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "15px" }}>
+                                                        {product.techText.map((t, idx) => {
+                                                            const text = typeof t === "string" ? t : t.text;
+                                                            const icon = typeof t === "object" ? t.image : null;
+                                                            return (
+                                                                <li key={idx} className="d-flex align-items-start" style={{ gap: "15px" }}>
+                                                                    {icon ? (
+                                                                        <div style={{ width: "24px", height: "24px", flexShrink: 0, marginTop: "2px" }}>
+                                                                            <img src={withBasePath(icon)} alt="icon" style={{ width: "100%", height: "100%", objectFit: "contain", filter: "invert(1)" }} />
+                                                                        </div>
+                                                                    ) : (
+                                                                        <i className="fa-solid fa-circle-check tp-text-common-white mt-1" style={{ fontSize: "14px", opacity: 0.8 }}></i>
+                                                                    )}
+                                                                    <span className="tp-ff-dm tp-text-grey-2 fs-15">{text}</span>
+                                                                </li>
+                                                            );
+                                                        })}
+                                                    </ul>
+                                                )}
+                                            </div>
+                                        )}
 
                                     </div>
                                 </div>
@@ -727,9 +788,23 @@ export default function ProductDetailsClient({ id }) {
                             </div>
                         </div>
 
-                        <p className="tp-ff-dm" style={{ fontSize: "15px", lineHeight: 1.8, color: "rgba(255,255,255,0.65)", marginBottom: "30px" }}>
+                        <p className="tp-ff-dm" style={{ fontSize: "15px", lineHeight: 1.8, color: "rgba(255,255,255,0.65)", marginBottom: activeFeature.detail.image ? "20px" : "30px" }}>
                             {activeFeature.detail.intro}
                         </p>
+
+                        {activeFeature.detail.image && (
+                            <div style={{ marginBottom: "30px", borderRadius: "14px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)" }}>
+                                <img
+                                    src={activeFeature.detail.image}
+                                    alt={activeFeature.detail.headline}
+                                    style={{
+                                        width: "100%",
+                                        height: "auto",
+                                        display: "block"
+                                    }}
+                                />
+                            </div>
+                        )}
 
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "30px" }}>
                             {activeFeature.detail.highlights.map((h, i) => (
